@@ -18,7 +18,7 @@ export default class Edit extends React.Component {
     render() {
         return (
             <div>
-                <div class="info">
+                <div className="info">
                     <div><b>pitches:</b> {this.d.pitches.toString()}</div>
                     {this._multiphonic(this.d.multi)}
                     {this._other(this.d.other)}

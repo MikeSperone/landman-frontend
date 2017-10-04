@@ -21,8 +21,9 @@ export default class FingeringDisplay extends React.Component {
     }
 
     handleClick(i) {
-        const keyState = this.state.keyState.slice();
-        const newState = keyState[i] ? "1" : "0";
+        const keyState = this.state.keyState;
+        console.log("keyState", keyState);
+        const newState = (keyState[i] == 0) ? "1" : "0";
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
         this.setState({keyState: newKeyState});
     }
