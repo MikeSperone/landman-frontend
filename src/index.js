@@ -1,67 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery';
+import styles from './index.css';
+import Browse from './components/Browse';
 
-import FingeringDisplay from './components/FingeringDisplay';
-import Edit from './components/Edit';
-import Slider from 'react-slick';
+const Browser = () => ( <Browse />);
+const Edit = () => <Edit />
 
-class SimpleSlider extends React.Component {
+class App extends React.Component {
 
-    listItems() {
+    handleClick(name) {
+        console.log(name + " clicked");
+    }
 
-        return this.props.data.map((d) => {
-            return (
-                <div key={d._id.toString()}>  
-                    <FingeringDisplay bin={d.bin} />
-                    <Edit data={d} />
+    render() {
+        return (
+            <div className="container">
+                <h1>Geoffery Landman Saxophone Fingerings</h1>
+                <div className="index-btns">
+                    <div className="pure-u-1-3">
+                        <button className="pure-button pure-button-primary" onClick={() => this.handleClick("search")}>SEARCH</button>
+                    </div>
+                    <div className="pure-u-1-3">
+                        <button className="pure-button pure-button-primary" onClick={() => this.handleClick("new")}>NEW</button>
+                    </div>
+                    <div className="pure-u-1-3">
+                        <button className="pure-button pure-button-primary" onClick={() => this.handleClick("browse")}>BROWSE</button>
+                    </div>
                 </div>
-            );
-        });
-
-    }
-
-    render() {
-
-        var settings = {
-            dots: true,
-            infinite: true,
-            speed: 500,
-            slidesToShow: 1,
-            slidesToScroll: 1
-        };
-        
-        return (
-            <Slider { ... settings}>
-                {this.listItems()}
-            </Slider>
-        );
-    }
-}
-
-class List extends React.Component {
-
-    constructor() {
-        super();
-        this.data = [];
-        this.state = {
-            data: this.data
-        };
-    }
-    componentWillMount() {
-        const url = "http://api.mikesperone.com/landman/v1/alto";
-        $.getJSON(url, (d) => this.setState({data:d}));
-    }
-
-    render() {
-        return (
-            <SimpleSlider data={this.state.data} />
+            </div>
         );
     }
 }
 
 ReactDOM.render(
-    <List />,
+    <App />,
     document.getElementById('root')
 );
 
