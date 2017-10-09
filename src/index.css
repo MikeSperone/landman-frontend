@@ -1,0 +1,20 @@
+.menu {
+    margin: 1rem;
+    padding: 1rem;
+}
+
+#container {
+    display: block;
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+}
+.index-btns button {
+    padding: 1rem;
+}    
+.index-btns > div {
+    text-align: center;
+}
+

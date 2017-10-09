@@ -15,8 +15,9 @@ class SaxKey extends React.Component {
 export default class FingeringDisplay extends React.Component {
     constructor(props) {
         super();
+        this.bin = (props.editing) ? "00000000000000000000000000" : props.bin;
         this.state = {
-            keyState: props.bin,
+            keyState: this.bin,
         };
     }
 

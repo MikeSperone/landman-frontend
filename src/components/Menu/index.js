@@ -1,30 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import styles from './index.css';
 
-import Browse from './containers/Browse';
-import NewData from './containers/New';
-import Search from './containers/Search';
+import Browse from '../containers/Browse';
+// import Edit from './containers/Edit';
+// import Search from './containers/Search';
+
+const Browser = () => ( <Browse />);
+// const Editor = () => <Edit />
+// const Searcher = () => <Search />
 
 class App extends React.Component {
 
     handleClick(name) {
         console.log(name + " clicked");
-        switch (name) {
-            case "search":
-                ReactDOM.render(<Search />,document.getElementById('container'));
-                break;
-            case "new":
-                ReactDOM.render(<NewData />,document.getElementById('container'));
-                break;
-            case "browse":
-                ReactDOM.render(<Browse />,document.getElementById('container'));
-                break;
-            default:
-                console.log("nope, this isn't a thing");
-                break;
-        }
-                
     }
 
     render() {
@@ -51,3 +40,4 @@ ReactDOM.render(
     <App />,
     document.getElementById('root')
 );
+
