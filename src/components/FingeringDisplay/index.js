@@ -15,25 +15,24 @@ class SaxKey extends React.Component {
 export default class FingeringDisplay extends React.Component {
     constructor(props) {
         super();
-        this.bin = (props.editing) ? "00000000000000000000000000" : props.bin;
+        this.props = props;
+        this.bin = (props.editing && !props.bin) ? "00000000000000000000000000" : props.bin;
         this.state = {
             keyState: this.bin,
         };
     }
 
     handleClick(i) {
-        const keyState = this.state.keyState;
-        console.log("keyState", keyState);
-        const newState = (keyState[i] == 0) ? "1" : "0";
-        const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
-        this.setState({keyState: newKeyState});
+        if (this.props.editing) {
+            this.props.onClick(i);
+        }
     }
 
     renderKey(n, v) {
         return (
             <SaxKey
                 keyName={n}
-                keyPressed={this.state.keyState[v]}
+                keyPressed={this.props.bin[v]}
                 onClick={() => this.handleClick(v)}
             />
         );

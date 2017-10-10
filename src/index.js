@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import Browse from './containers/Browse';
-import NewData from './containers/New';
+import EditData from './containers/New';
 import Search from './containers/Search';
 
 class App extends React.Component {
@@ -15,7 +15,7 @@ class App extends React.Component {
                 ReactDOM.render(<Search />,document.getElementById('container'));
                 break;
             case "new":
-                ReactDOM.render(<NewData />,document.getElementById('container'));
+                ReactDOM.render(<EditData editType="add" />,document.getElementById('container'));
                 break;
             case "browse":
                 ReactDOM.render(<Browse />,document.getElementById('container'));
