@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import Browse from './containers/Browse';
-import EditData from './containers/New';
+import EditData from './containers/EditData';
 import Search from './containers/Search';
 
 class App extends React.Component {
@@ -24,7 +24,7 @@ class App extends React.Component {
                 console.log("nope, this isn't a thing");
                 break;
         }
-                
+
     }
 
     render() {

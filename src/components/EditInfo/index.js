@@ -5,14 +5,8 @@ import './index.css';
 export default class EditInfo extends React.Component {
 
     constructor(props) {
-        super(props);
-        this.state = {
-            pitches: '',
-            multi: false,
-            audio: '',
-            other: ''
-        };
-        this.handleChange = this.handleChange.bind(this);
+        super();
+        this.props = props;
     }
 
     handleChange(e) {
@@ -39,7 +33,7 @@ export default class EditInfo extends React.Component {
                     type={d.type}
                     value={d.value}
                     checked={d.checked}
-                    onChange={this.handleChange}
+                    onChange={d.onChange}
                 />
             </div>
 
@@ -49,13 +43,10 @@ export default class EditInfo extends React.Component {
     render() {
         return (
             <form className="pure-form pure-form-aligned" onSubmit={this.handleSubmit} >
-                {this.formField({name:"pitches", type:"text", value:this.state.pitches})}
-                {this.formField({name:"multi", type: "checkbox", checked: this.state.multi }) }
-                {this.formField({ name: "audio", type: "text", value: this.state.audio }) }
-                {this.formField({ name: "other", type: "text", value: this.state.other }) }
-                <div className="pure-controls">
-                    <input type="submit" className="pure-button pure-button-primary" value="Submit" />
-                </div>
+                {this.formField({name:"pitches", type:"text", value:this.props.pitches, onChange:this.props.onChange}) }
+                {this.formField({name:"multi", type: "checkbox", checked: this.props.multi,onChange:this.props.onChange }) }
+                {this.formField({ name: "audio", type: "text", value: this.props.audio, onChange: this.props.onChange }) }
+                {this.formField({ name: "other", type: "text", value: this.props.other, onChange: this.props.onChange }) }
             </form>
         );
     }
