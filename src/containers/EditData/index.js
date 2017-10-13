@@ -1,8 +1,7 @@
 import React from 'react';
-import $ from 'jquery';
 
 import FingeringDisplay from '../../components/FingeringDisplay';
-import EditInfo from '../../components/EditInfo';
+import Info from '../../components/Info';
 
 const API = "http://api.mikesperone.com/landman/v1/alto/";
 
@@ -115,12 +114,13 @@ export default class EditData extends React.Component {
                     bin={this.state.bin}
                     onClick={this.handleFingeringClick.bind(this)}
                 />
-                <EditInfo
+                <Info
                     pitches={this.state.pitches}
                     multi={this.state.multi}
                     audio={this.state.audio}
                     other={this.state.other.toString()}
                     onChange={this.handleChange.bind(this)}
+                    editType="edit"
                 />
                 <button
                     className="pure-button pure-button-primary"

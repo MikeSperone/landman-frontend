@@ -1,17 +1,15 @@
 import React from 'react';
 import $ from 'jquery';
 
-import FingeringDisplay from '../../components/FingeringDisplay';
-import Info from '../../components/Info';
+import Display from '../../components/Display';
 import Slider from 'react-slick';
 
 const listItems = function(data) {
     return (
         data.map((d) => {
             return (
-                <div key={d._id.toString()}>  
-                    <FingeringDisplay bin={d.bin} />
-                    <Info data={d} edit={true} />
+                <div key={d._id.toString()}>
+                    <Display data={d} />
                 </div>
             );
         })
