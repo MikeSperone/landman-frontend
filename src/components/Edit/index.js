@@ -1,20 +1,19 @@
 import React from 'react';
 
-import FingeringDisplay from '../../components/FingeringDisplay';
-import Info from '../../components/Info';
+import Display from "../Display";
 
 const API = "http://api.mikesperone.com/landman/v1/alto/";
 
-export default class EditData extends React.Component {
+export default class Edit extends React.Component {
 
     constructor(props) {
         super();
+        this.bin = props.bin || "00000000000000000000000";
+        this.data = props.data || {};
+        this.editType = props.editType;
         this.state = {
-            bin: "00000000000000000000000",
-            pitches: "",
-            multi: false,
-            audio: '',
-            other: {}
+            editType: this.editType,
+            data: this.data
         };
     }
 
@@ -107,26 +106,18 @@ export default class EditData extends React.Component {
     }
 
     render() {
+        const editing = (this.props.editType !== "view");
+        const btnClass = "pure-button pure-button-primary ";
+        //TODO: onClick and submit handlers for the "display" component
+
         return (
-            <div className="new">
-                <FingeringDisplay
-                    editing
-                    bin={this.state.bin}
-                    onClick={this.handleFingeringClick.bind(this)}
-                />
-                <Info
-                    pitches={this.state.pitches}
-                    multi={this.state.multi}
-                    audio={this.state.audio}
-                    other={this.state.other.toString()}
-                    onChange={this.handleChange.bind(this)}
-                    editType="edit"
-                />
+            <div className="edit">
+                <Display editType={this.state.editType} data={this.state.data} />
                 <button
-                    className="pure-button pure-button-primary"
+                    className={btnClass}
                     onClick={this.handleSubmit.bind(this)}
                 >
-                    Submit
+                    {(editing)? "Submit" : "Edit"}
                 </button> 
             </div>
         );

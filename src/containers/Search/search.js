@@ -1,9 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
 
-// import FingeringDisplay from '../../components/FingeringDisplay';
-// import Info from '../../components/Info';
-import Edit from '../../components/Edit';
+import FingeringDisplay from '../../components/FingeringDisplay';
+import Info from '../../components/Info';
 
 export default class Search extends React.Component {
 
@@ -54,7 +53,9 @@ export default class Search extends React.Component {
     render() {
         return (
             <div>
-                <Edit />
+                <form className="pure-form pure-form-aligned" onSubmit={this.handleSearch.bind(this)} >
+                    <FingeringDisplay editType={this.state.editType} bin={this.state.keyState} onClick={this.handleSearchClick.bind(this)}/>
+                </form>
                 <Info data={this.state.data} editType={this.state.editType} />
                 <div id="not-found"></div>
                 <button id="edit-btn" className="pure-button button-primary" onClick={this.handleEdit.bind(this)}>Edit</button>

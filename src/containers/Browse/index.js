@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 
-import Display from '../../components/Display';
+import Edit from '../../components/Edit';
 import Slider from 'react-slick';
 
 const listItems = function(data) {
@@ -9,7 +9,7 @@ const listItems = function(data) {
         data.map((d) => {
             return (
                 <div key={d._id.toString()}>
-                    <Display data={d} />
+                    <Edit data={d} editType="none"/>
                 </div>
             );
         })

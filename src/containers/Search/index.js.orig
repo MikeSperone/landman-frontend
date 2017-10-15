@@ -1,9 +1,10 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 
-// import FingeringDisplay from '../../components/FingeringDisplay';
-// import Info from '../../components/Info';
-import Edit from '../../components/Edit';
+import EditData from '../EditData';
+import FingeringDisplay from '../../components/FingeringDisplay';
+import Info from '../../components/Info';
 
 export default class Search extends React.Component {
 
@@ -11,18 +12,11 @@ export default class Search extends React.Component {
         super();
         this.state = {
             keyState: "00000000000000000000000",
-            data: null,
-            editType: "search"
+            data: null
         };
     }
 
-    handleEditClick() {
-        this.setState({editType: "edit"});
-        $('#edit-btn').addClass("hidden");
-        $('#submit-btn').removeClass("hidden");
-    }
-
-    handleSearchClick(i) {
+    handleClick(i) {
         const keyState = this.state.keyState;
         const newState = (keyState[i] == 0) ? "1" : "0";
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
@@ -30,23 +24,25 @@ export default class Search extends React.Component {
         console.log(this.state.keyState);
     }
 
-    handleSearch(e) {
+    handleSubmit(e) {
         console.log("searching...");
         const url = "http://api.mikesperone.com/landman/v1/alto/" + this.state.keyState;
+<<<<<<< Updated upstream
+        $.getJSON(url, (d) => this.setState({data:d}));
+=======
         var req = new XMLHttpRequest();
         req.open("GET", url, false);
         req.send();
         if (req.status === 200) {
             var b = JSON.parse(req.responseText).bin;
             console.log("found!", b);
-            $('#not-found').text("");
-            $('#edit-btn').removeClass("hidden");
+            ReactDOM.render(<EditData editType="view" bin={b} />,document.getElementById('container'));
+
         } else {
             console.log("not found :(");
-            $('#not-found').text("Not Found");
-            $('#edit-btn').addClass("hidden");
         }
         //  
+>>>>>>> Stashed changes
         //TODO: something when a result returns
         e.preventDefault();
     }
@@ -54,10 +50,10 @@ export default class Search extends React.Component {
     render() {
         return (
             <div>
-                <Edit />
-                <Info data={this.state.data} editType={this.state.editType} />
-                <div id="not-found"></div>
-                <button id="edit-btn" className="pure-button button-primary" onClick={this.handleEdit.bind(this)}>Edit</button>
+                <form className="pure-form pure-form-aligned" onSubmit={this.handleSubmit.bind(this)} >
+                    <FingeringDisplay editing bin={this.state.keyState} onClick={this.handleClick.bind(this)}/>
+                </form>
+                <Info data={this.state.data} editType="none" />
             </div>
         );
     }
