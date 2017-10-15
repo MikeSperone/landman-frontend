@@ -27,9 +27,6 @@ export default class Search extends React.Component {
     handleSubmit(e) {
         console.log("searching...");
         const url = "http://api.mikesperone.com/landman/v1/alto/" + this.state.keyState;
-<<<<<<< Updated upstream
-        $.getJSON(url, (d) => this.setState({data:d}));
-=======
         var req = new XMLHttpRequest();
         req.open("GET", url, false);
         req.send();
@@ -42,7 +39,6 @@ export default class Search extends React.Component {
             console.log("not found :(");
         }
         //  
->>>>>>> Stashed changes
         //TODO: something when a result returns
         e.preventDefault();
     }

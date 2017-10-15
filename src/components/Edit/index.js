@@ -2,15 +2,16 @@ import React from 'react';
 
 import Display from "../Display";
 
-const API = "http://api.mikesperone.com/landman/v1/alto/";
+import { API } from '../../constants';
+import Button from '../../atoms/Button'; 
 
 export default class Edit extends React.Component {
 
     constructor(props) {
         super();
-        this.bin = props.bin || "00000000000000000000000";
         this.data = props.data || {};
-        this.editType = props.editType;
+        this.data.bin = props.data.bin || "00000000000000000000000";
+        this.editType = props.editType || "view";
         this.state = {
             editType: this.editType,
             data: this.data
@@ -61,26 +62,30 @@ export default class Edit extends React.Component {
 
 
     handleSubmit(e) {
-        console.log("searching...");
-        if (this.props.editType === "add") {
-            this.handleNewData(e);
-        } else if (this.props.editType === "edit") {
-            this.handleEditData(e);
+        switch (this.state.editType) {
+            case "add":
+                this.handleNewData(e);
+                break;
+            case "edit":
+                this.handleEditData(e);
+                break;
+            case "view":
+                console.log("Editing...");
+                this.setState({editType: "edit"});
+                break;
+            case "default":
+                console.log("Unexpected edit state!!");
+                break;
         }
         //TODO: something when a result returns
         e.preventDefault();
     }
 
-    handleChange(e) {
+    handleEditDataChange(e) {
         const target = e.target;
         const val = (target.type === 'checkbox') ? target.checked : target.value;
         const name = target.name;
-        this.setState({[name]: val});
-    }
-
-    handleEditData(e) {
-
-        console.log("editing current data");
+        this.setState({data:{[name]: val}});
     }
 
     handleNewData(e) {
@@ -106,19 +111,20 @@ export default class Edit extends React.Component {
     }
 
     render() {
-        const editing = (this.props.editType !== "view");
-        const btnClass = "pure-button pure-button-primary ";
+        const editing = (this.state.editType !== "view");
         //TODO: onClick and submit handlers for the "display" component
 
         return (
             <div className="edit">
-                <Display editType={this.state.editType} data={this.state.data} />
-                <button
-                    className={btnClass}
-                    onClick={this.handleSubmit.bind(this)}
-                >
-                    {(editing)? "Submit" : "Edit"}
-                </button> 
+                <Display
+                    bin={this.state.data.bin}
+                    data={this.state.data}
+                    editType={this.state.editType}
+                    onFingerChange={this.handleNewData.bind(this)}
+                    onFingerClick={this.handleFingeringClick.bind(this)}
+                    onEditDataChange={this.handleEditDataChange.bind(this)}
+                />
+                <Button onClick={this.handleSubmit.bind(this)} text={(editing) ? "Submit" : "Edit"} />
             </div>
         );
     }

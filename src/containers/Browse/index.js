@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 
+import { API } from '../../constants';
 import Edit from '../../components/Edit';
 import Slider from 'react-slick';
 
@@ -9,7 +10,7 @@ const listItems = function(data) {
         data.map((d) => {
             return (
                 <div key={d._id.toString()}>
-                    <Edit data={d} editType="none"/>
+                    <Edit data={d} editType="view"/>
                 </div>
             );
         })
@@ -25,7 +26,7 @@ export default class Browse extends React.Component {
         };
     }
     componentWillMount() {
-        const url = "http://api.mikesperone.com/landman/v1/alto";
+        const url = API;
         $.getJSON(url, (d) => this.setState({data:d}));
     }
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import $ from 'jquery';
 
-// import FingeringDisplay from '../../components/FingeringDisplay';
-// import Info from '../../components/Info';
-import Edit from '../../components/Edit';
+import { API } from '../../constants';
+import Button from '../../atoms/Button';
+import Display from '../../components/Display';
 
 export default class Search extends React.Component {
 
@@ -32,7 +32,7 @@ export default class Search extends React.Component {
 
     handleSearch(e) {
         console.log("searching...");
-        const url = "http://api.mikesperone.com/landman/v1/alto/" + this.state.keyState;
+        const url = API + this.state.keyState;
         var req = new XMLHttpRequest();
         req.open("GET", url, false);
         req.send();
@@ -54,10 +54,9 @@ export default class Search extends React.Component {
     render() {
         return (
             <div>
-                <Edit />
-                <Info data={this.state.data} editType={this.state.editType} />
+                <Display />
                 <div id="not-found"></div>
-                <button id="edit-btn" className="pure-button button-primary" onClick={this.handleEdit.bind(this)}>Edit</button>
+                <Button id="edit-btn" onClick={this.handleEdit.bind(this)} text="Edit" />
             </div>
         );
     }

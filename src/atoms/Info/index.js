@@ -27,7 +27,8 @@ class Field extends React.Component {
                 </div>
             );
         } else {
-            let value = d.value || d.checked;
+            let checked = d.checked ? d.checked.toString() : "false";
+            let value = d.value || checked;
             return (
                 <div className=" ">
                     <div className="label">
@@ -45,7 +46,8 @@ export default class Info extends React.Component {
     constructor(props) {
         super();
         this.props = props;
-        this.editing = (this.props.editType !== "none");
+        this.data = this.props.data;
+        this.editing = (this.props.editType !== "view");
     }
 
     handleChange(e) {
@@ -72,10 +74,10 @@ export default class Info extends React.Component {
         }
         return (
             <form className="pure-form pure-form-aligned" onSubmit={this.handleSubmit} >
-                <Field name="pitches" type="text"     value={this.props.pitches} onChange={this.props.onChange} editing={this.editing} />
-                <Field name="multi"   type="checkbox" checked={this.props.multi} onChange={this.props.onChange} editing={this.editing} />
-                <Field name="audio"   type="text"     value={this.props.audio}   onChange={this.props.onChange} editing={this.editing} />
-                <Field name="other"   type="text"     value={this.props.other}   onChange={this.props.onChange} editing={this.editing} />
+                <Field name="pitches" type="text"     value={this.data.pitches} onChange={this.props.onChange} editing={this.editing} />
+                <Field name="multi"   type="checkbox" checked={this.data.multi} onChange={this.props.onChange} editing={this.editing} />
+                <Field name="audio"   type="text"     value={this.data.audio}   onChange={this.props.onChange} editing={this.editing} />
+                <Field name="other"   type="text"     value={this.data.other}   onChange={this.props.onChange} editing={this.editing} />
             </form>
         );
     }

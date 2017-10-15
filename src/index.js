@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+// Atoms/Components
+import Button from './atoms/Button';
+
+// Views
 import Browse from './containers/Browse';
 import NewData from './containers/NewData';
 import Search from './containers/Search';
@@ -33,13 +37,13 @@ class App extends React.Component {
                 <h1>Geoffery Landman Saxophone Fingerings</h1>
                 <div className="index-btns">
                     <div className="pure-u-1-3">
-                        <button className="pure-button pure-button-primary" onClick={() => this.handleClick("search")}>SEARCH</button>
+                        <Button onClick={this.handleClick.bind(this, "search")} text="SEARCH" />
                     </div>
                     <div className="pure-u-1-3">
-                        <button className="pure-button pure-button-primary" onClick={() => this.handleClick("new")}>NEW</button>
+                        <Button onClick={this.handleClick.bind(this, "new")} text="NEW" />
                     </div>
                     <div className="pure-u-1-3">
-                        <button className="pure-button pure-button-primary" onClick={() => this.handleClick("browse")}>BROWSE</button>
+                        <Button onClick={this.handleClick.bind(this, "browse")} text="BROWSE" />
                     </div>
                 </div>
             </div>
