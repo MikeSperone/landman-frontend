@@ -13,14 +13,17 @@ export default class Display extends React.Component {
     render() {
         return (
             <div> 
-                <form className="pure-form pure-form-aligned" onSubmit={this.handleSearch} >
-                    <FingeringDisplay editing={this.props.editType === "add"} editType={this.props.editType} bin={this.props.bin} onClick={this.handleSearchClick}/>
-                </form>
+                <FingeringDisplay
+                    editing={this.props.editType === "add"}
+                    editType={this.props.editType}
+                    bin={this.props.bin}
+                    onClick={this.props.onFingerClick.bind(this)}
+                />
                 <Info
                     data={this.props.data}
                     editing={this.props.editType !== "view"}
                     editType={this.props.editType}
-                    onChange={this.props.onEditDataChange}
+                    onChange={this.props.onEditDataChange.bind(this)}
                 />
             </div>
         );

@@ -9,8 +9,7 @@ export default class Edit extends React.Component {
 
     constructor(props) {
         super();
-        this.data = props.data || {};
-        this.data.bin = props.data.bin || "00000000000000000000000";
+        this.data = props.data || {bin: "00000000000000000000000"};
         this.state = {
             editType: props.editType || "view",
             editing: (props.editType !== "view"),
@@ -32,11 +31,19 @@ export default class Edit extends React.Component {
         let req = new XMLHttpRequest();
         let url = API;
         let params = this._verifyData();
+        if (params === false) {
+            return;
+        }
         req.open("POST", url, true);
         req.setRequestHeader("Content-type", "application/json");
         req.onreadystatechange = () => {
-            if (req.readyState == 4 && req.status == 200) {
-                alert("Success, new data added");
+            if (req.readyState == 4) {
+                if (req.status == 201) {
+                    alert("Success, new data added");
+                    window.location.reload();
+                } else {
+                    alert("Server error: " + req.status);
+                }
             }
         };
         console.log("Data added: ", params);
@@ -46,13 +53,26 @@ export default class Edit extends React.Component {
 
     _editData() {
         let req = new XMLHttpRequest();
-        let url = API;
+        let url = API + this.state.data.bin;
         let params = this._verifyData();
-        alert("This is where I should be editing the data");
+        req.open("PUT", url, true);
+        req.setRequestHeader("Content-type", "application/json");
+        req.onreadystatechange = () => {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    alert("Success, data edited");
+                } else {
+                    alert("Error - data not updated.  Server status: " + req.status);
+                }
+            }
+        };
+        console.log("data editied: ", params);
+        req.send(params);
     }
 
     _verifyData() {
         const d = this.state.data;
+        console.log("data: ", d);
         const invalid = "Error: Invalid Data - ";
         let finalData = {};
         if (d.bin.length !== 23) {
@@ -102,7 +122,9 @@ export default class Edit extends React.Component {
         const target = e.target;
         const val = (target.type === 'checkbox') ? target.checked : target.value;
         const name = target.name;
-        this.setState({data:{[name]: val}});
+        const data = this.state.data;
+        data[name] = val;
+        this.forceUpdate();
     }
 
     handleNewData(e) {
@@ -120,10 +142,12 @@ export default class Edit extends React.Component {
     }
 
     handleFingeringClick(i) {
-        const keyState = this.state.bin;
+        const keyState = this.state.data.bin;
         const newState = (keyState[i] == 0) ? "1" : "0";
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
-        this.setState({bin: newKeyState});
+        const data = this.state.data;
+        data.bin = newKeyState;
+        this.setState({data});
     }
 
     render() {

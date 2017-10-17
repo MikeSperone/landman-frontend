@@ -6,7 +6,7 @@ export default class NewEdit extends React.Component {
 
     render() {
         return (
-            <Edit />
+            <Edit editType="add"/>
         );
     }
 
