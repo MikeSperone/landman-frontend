@@ -10,16 +10,18 @@ export default class Display extends React.Component {
         this.handleSearchClick = props.onFingerClick;
     }
 
-//                    onEditDataChange={this.handleEditDataChange.bind(this)}
- //                   onNewClick={this.handleNewClick.bind(this)}
-
     render() {
         return (
             <div> 
                 <form className="pure-form pure-form-aligned" onSubmit={this.handleSearch} >
-                    <FingeringDisplay editType={this.props.editType} bin={this.props.bin} onClick={this.handleSearchClick}/>
+                    <FingeringDisplay editing={this.props.editType === "add"} editType={this.props.editType} bin={this.props.bin} onClick={this.handleSearchClick}/>
                 </form>
-                <Info data={this.props.data} editType={this.props.editType} />
+                <Info
+                    data={this.props.data}
+                    editing={this.props.editType !== "view"}
+                    editType={this.props.editType}
+                    onChange={this.props.onEditDataChange}
+                />
             </div>
         );
     }

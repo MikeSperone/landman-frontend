@@ -11,11 +11,13 @@ export default class Edit extends React.Component {
         super();
         this.data = props.data || {};
         this.data.bin = props.data.bin || "00000000000000000000000";
-        this.editType = props.editType || "view";
         this.state = {
-            editType: this.editType,
+            editType: props.editType || "view",
+            editing: (props.editType !== "view"),
             data: this.data
         };
+        this.state.buttonText = this.state.editing ? "submit" : "edit";
+        console.log("starting edit type: ", this.state.editType);
     }
 
     _checkIfExists(bin) {
@@ -29,28 +31,37 @@ export default class Edit extends React.Component {
     _addNewData() {
         let req = new XMLHttpRequest();
         let url = API;
-        let params = this._verifyData(this.state);
+        let params = this._verifyData();
         req.open("POST", url, true);
         req.setRequestHeader("Content-type", "application/json");
         req.onreadystatechange = () => {
             if (req.readyState == 4 && req.status == 200) {
-                console.log("Success, new data added");
+                alert("Success, new data added");
             }
         };
-        console.log(params);
+        console.log("Data added: ", params);
         req.send(params);
 
     }
 
-    _verifyData(d) {
+    _editData() {
+        let req = new XMLHttpRequest();
+        let url = API;
+        let params = this._verifyData();
+        alert("This is where I should be editing the data");
+    }
+
+    _verifyData() {
+        const d = this.state.data;
         const invalid = "Error: Invalid Data - ";
         let finalData = {};
         if (d.bin.length !== 23) {
-            alert(invalid, "incorrect data length");
+            alert(invalid + "incorrect data length");
             return false;
         }
         finalData["bin"] = d.bin;
         if (d.pitches !== "") {
+            console.log("d.pitches", d.pitches);
             finalData["pitches"] = d.pitches.split(",");
         }
         finalData["multi"] = d.multi;
@@ -71,14 +82,20 @@ export default class Edit extends React.Component {
                 break;
             case "view":
                 console.log("Editing...");
-                this.setState({editType: "edit"});
+                this.setState(function(s) {
+                    return {buttonText: "Submit", editing: true, editType: "edit"};
+                });
                 break;
-            case "default":
-                console.log("Unexpected edit state!!");
+            default:
+                alert("Unexpected edit state!!" + this.state.editType);
                 break;
         }
         //TODO: something when a result returns
         e.preventDefault();
+    }
+    
+    handleEditData() {
+        this._editData();
     }
 
     handleEditDataChange(e) {
@@ -98,7 +115,6 @@ export default class Edit extends React.Component {
         } else {
             console.log("creating new entry");
             this._addNewData();
-            //TODO: create this fingering
         }
 
     }
@@ -111,7 +127,6 @@ export default class Edit extends React.Component {
     }
 
     render() {
-        const editing = (this.state.editType !== "view");
         //TODO: onClick and submit handlers for the "display" component
 
         return (
@@ -119,12 +134,13 @@ export default class Edit extends React.Component {
                 <Display
                     bin={this.state.data.bin}
                     data={this.state.data}
+                    editing={this.state.editing}
                     editType={this.state.editType}
                     onFingerChange={this.handleNewData.bind(this)}
                     onFingerClick={this.handleFingeringClick.bind(this)}
                     onEditDataChange={this.handleEditDataChange.bind(this)}
                 />
-                <Button onClick={this.handleSubmit.bind(this)} text={(editing) ? "Submit" : "Edit"} />
+                <Button onClick={this.handleSubmit.bind(this)} text={this.state.buttonText} />
             </div>
         );
     }

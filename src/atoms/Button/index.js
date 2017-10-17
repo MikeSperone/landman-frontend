@@ -4,10 +4,10 @@ export default class Button extends React.Component {
     
     constructor(props) {
         super(props);
+        this.props = props;
         this.id = props.id || this.uuid();
         this.className = "pure-button pure-button-primary " + props.className;
         this.onClick =  props.onClick || this.handleClick;
-        this.text = props.text || "Click";
     }
     
     handleClick() {
@@ -29,7 +29,7 @@ export default class Button extends React.Component {
                 className={this.className}
                 onClick={this.onClick}
             >
-                {this.text}
+                {this.props.text || "Click"}
             </button>
         );
     }

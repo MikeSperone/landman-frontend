@@ -3,14 +3,13 @@ import './index.css';
 
 class Field extends React.Component {
     constructor(props) {
-        super();
+        super(props);
         this.props = props;
-        this.editing = this.props.editing;
     }
 
     render() {
         const d = this.props;
-        if (this.editing) {
+        if (this.props.editing) {
             return (
                 <div className="pure-control-group">
                     <label htmlFor={d.name}>
@@ -44,40 +43,18 @@ class Field extends React.Component {
 export default class Info extends React.Component {
 
     constructor(props) {
-        super();
+        super(props);
         this.props = props;
         this.data = this.props.data;
-        this.editing = (this.props.editType !== "view");
     }
-
-    handleChange(e) {
-        const target = e.target;
-        const val = (target.type === 'checkbox') ? target.checked : target.value;
-        const name = target.name;
-        this.setState({[name]: val});
-    }
-
-    handleSubmit(e) {
-        console.log("Submitted");
-        e.preventDefault();
-    }
-
 
     render() {
-        let openDiv, closingDiv;
-        if (this.editing) {
-            openDiv = <form className="pure-form pure-form-aligned" onSubmit={this.handleSubmit} >;
-            closingDiv = </form>;
-        } else {
-            openDiv = <div>;
-            closingDiv = </div>;
-        }
         return (
             <form className="pure-form pure-form-aligned" onSubmit={this.handleSubmit} >
-                <Field name="pitches" type="text"     value={this.data.pitches} onChange={this.props.onChange} editing={this.editing} />
-                <Field name="multi"   type="checkbox" checked={this.data.multi} onChange={this.props.onChange} editing={this.editing} />
-                <Field name="audio"   type="text"     value={this.data.audio}   onChange={this.props.onChange} editing={this.editing} />
-                <Field name="other"   type="text"     value={this.data.other}   onChange={this.props.onChange} editing={this.editing} />
+                <Field name="pitches" type="text"     value={this.props.data.pitches} onChange={this.props.onChange} editing={this.props.editing} />
+                <Field name="multi"   type="checkbox" checked={this.props.data.multi} onChange={this.props.onChange} editing={this.props.editing} />
+                <Field name="audio"   type="text"     value={this.props.data.audio}   onChange={this.props.onChange} editing={this.props.editing} />
+                <Field name="other"   type="text"     value={this.props.data.other}   onChange={this.props.onChange} editing={this.props.editing} />
             </form>
         );
     }

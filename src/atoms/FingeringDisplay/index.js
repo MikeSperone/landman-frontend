@@ -16,15 +16,11 @@ export default class FingeringDisplay extends React.Component {
     constructor(props) {
         super();
         this.props = props;
-        this.editing = (props.editType !== "none");
-        this.bin = props.bin || "00000000000000000000000000";
-        this.state = {
-            keyState: this.bin,
-        };
+        this.newBin = "00000000000000000000000000";
     }
 
     handleClick(i) {
-        if (this.editing) {
+        if (this.props.editing) {
             this.props.onClick(i);
         }
     }
@@ -33,7 +29,7 @@ export default class FingeringDisplay extends React.Component {
         return (
             <SaxKey
                 keyName={n}
-                keyPressed={this.bin[v]}
+                keyPressed={(this.props && this.props.bin && this.props.bin[v]) ? this.props.bin[v] : this.newBin[v]}
                 onClick={() => this.handleClick(v)}
             />
         );
