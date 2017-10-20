@@ -6,9 +6,9 @@ import './index.css';
 import Button from './atoms/Button';
 
 // Views
-import Browse from './containers/Browse';
-import NewData from './containers/NewData';
-import Search from './containers/Search';
+import Browse from './containers/Browse/Browse.js';
+import NewData from './containers/NewData/NewData.js';
+import Search from './containers/Search/Search.js';
 
 class App extends React.Component {
 

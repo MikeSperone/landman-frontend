@@ -9,7 +9,7 @@ export default class Edit extends React.Component {
 
     constructor(props) {
         super();
-        this.data = props.data || {bin: "00000000000000000000000"};
+        this.data = props.data;
         this.state = {
             editType: props.editType || "view",
             editing: (props.editType !== "view"),
@@ -61,6 +61,9 @@ export default class Edit extends React.Component {
             if (req.readyState == 4) {
                 if (req.status == 200) {
                     alert("Success, data edited");
+                    this.setState(function(s) {
+                        return {buttonText: "Edit", editing: false, editType: "view"};
+                    });
                 } else {
                     alert("Error - data not updated.  Server status: " + req.status);
                 }
@@ -80,8 +83,7 @@ export default class Edit extends React.Component {
             return false;
         }
         finalData["bin"] = d.bin;
-        if (d.pitches !== "") {
-            console.log("d.pitches", d.pitches);
+        if (d.pitches.length) {
             finalData["pitches"] = d.pitches.split(",");
         }
         finalData["multi"] = d.multi;
@@ -164,7 +166,7 @@ export default class Edit extends React.Component {
                     onFingerClick={this.handleFingeringClick.bind(this)}
                     onEditDataChange={this.handleEditDataChange.bind(this)}
                 />
-                <Button onClick={this.handleSubmit.bind(this)} text={this.state.buttonText} />
+                <Button className="editOrSubmit" onClick={this.handleSubmit.bind(this)} text={this.state.buttonText} />
             </div>
         );
     }

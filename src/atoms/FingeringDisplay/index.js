@@ -37,6 +37,7 @@ export default class FingeringDisplay extends React.Component {
 
     render() {
         return (
+            <div className="fingeringDisplay">
             <div className="fingeringItem">
                 <div className="leftColumn">
                     <div>
@@ -84,6 +85,7 @@ export default class FingeringDisplay extends React.Component {
                         {this.renderKey("lowBFlat", 20)}
                     </div>
                 </div>
+            </div>
             </div>
         );
     }

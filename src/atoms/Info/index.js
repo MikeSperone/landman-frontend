@@ -29,11 +29,11 @@ class Field extends React.Component {
             let checked = d.checked ? d.checked.toString() : "false";
             let value = d.value || checked;
             return (
-                <div className=" ">
+                <div className="dataItem">
                     <div className="label">
-                        {d.name.charAt(0).toUpperCase() + d.name.slice(1)}
+                        {d.name.charAt(0).toUpperCase() + d.name.slice(1) + ":"}
                     </div>
-                    <div id={d.name}>{value}</div>
+                    <div id={d.name} className="value">{value}</div>
                 </div>
             );
         }

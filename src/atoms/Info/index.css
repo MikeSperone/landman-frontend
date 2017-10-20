@@ -10,3 +10,22 @@
     color: white;
     background-color: red;
 }
+
+form {
+    float: left;
+}
+
+.dataItem {
+    display: block;
+    clear: both;
+}
+.label {
+    float: left;
+    margin: 1rem 0.5rem;
+    width: 60px;
+}
+
+.value {
+    float: left;
+    margin: 1rem 0.5rem;
+}
