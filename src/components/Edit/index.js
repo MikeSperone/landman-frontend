@@ -4,6 +4,7 @@ import Display from "../Display";
 
 import { API } from '../../constants';
 import Button from '../../atoms/Button'; 
+import './index.css';
 
 export default class Edit extends React.Component {
 
@@ -15,12 +16,13 @@ export default class Edit extends React.Component {
             editing: (props.editType !== "view"),
             data: this.data
         };
-        this.state.buttonText = this.state.editing ? "submit" : "edit";
+        this.state.buttonText = this.state.editing ? "Submit" : "Edit";
         console.log("starting edit type: ", this.state.editType);
     }
 
     _checkIfExists(bin) {
         const url = API + bin;
+        console.log(url);
         var req = new XMLHttpRequest();
         req.open("GET", url, false);
         req.send();
@@ -83,7 +85,7 @@ export default class Edit extends React.Component {
             return false;
         }
         finalData["bin"] = d.bin;
-        if (d.pitches.length) {
+        if (d.pitches && d.pitches.length) {
             finalData["pitches"] = d.pitches.split(",");
         }
         finalData["multi"] = d.multi;
@@ -116,6 +118,16 @@ export default class Edit extends React.Component {
         e.preventDefault();
     }
     
+    handleCancel() {
+        //TODO: cancel
+        alert("TODO: make this button cancel out of editing");
+    }
+
+    handleDelete() {
+        //ToDo: confirmation of delete
+        alert("TODO: make this button confirm deletion of entry");
+    }
+    
     handleEditData() {
         this._editData();
     }
@@ -132,7 +144,7 @@ export default class Edit extends React.Component {
     handleNewData(e) {
 
         console.log("adding new data");
-        const exists = this._checkIfExists(this.state.bin);
+        const exists = this._checkIfExists(this.state.data.bin);
         console.log("exists? ", exists);
         if (exists) {
             alert('this fingering already exists');
@@ -153,7 +165,6 @@ export default class Edit extends React.Component {
     }
 
     render() {
-        //TODO: onClick and submit handlers for the "display" component
 
         return (
             <div className="edit">
@@ -167,6 +178,8 @@ export default class Edit extends React.Component {
                     onEditDataChange={this.handleEditDataChange.bind(this)}
                 />
                 <Button className="editOrSubmit" onClick={this.handleSubmit.bind(this)} text={this.state.buttonText} />
+                <Button className={(this.state.editType === "edit") ? "cancel" : "cancel hidden"} onClick={this.handleCancel.bind(this)} text="Cancel" />
+                <Button className={(this.state.editType === "edit") ? "delete" : "delete hidden"} onClick={this.handleDelete.bind(this)} text="Delete" />
             </div>
         );
     }

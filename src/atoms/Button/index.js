@@ -6,7 +6,6 @@ export default class Button extends React.Component {
         super(props);
         this.props = props;
         this.id = props.id || this.uuid();
-        this.className = "pure-button pure-button-primary " + props.className;
         this.onClick =  props.onClick || this.handleClick;
     }
     
@@ -26,7 +25,7 @@ export default class Button extends React.Component {
         return (
             <button
                 id={this.id}
-                className={this.className}
+                className={"pure-button pure-button-primary " + this.props.className}
                 onClick={this.onClick}
             >
                 {this.props.text || "Click"}
