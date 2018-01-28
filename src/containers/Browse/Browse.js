@@ -26,7 +26,7 @@ export default class Browse extends React.Component {
         };
     }
     componentWillMount() {
-        const url = API;
+        const url = API.fingerings;
         $.getJSON(url, (d) => this.setState({data:d}));
     }
 
