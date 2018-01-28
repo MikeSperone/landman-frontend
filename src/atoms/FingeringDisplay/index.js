@@ -1,16 +1,14 @@
 import React from 'react';
 import './index.css';
 
-class SaxKey extends React.Component {
-    render() {
-        let openClosed = (this.props.keyPressed === "0") ? "open" : "closed";
-        return (
-            <button className={this.props.keyName + " " + openClosed}
-                onClick={() => this.props.onClick()}
-            ></button>
-        );
-    }
-}
+const SaxKey = (props) => {
+    const openClosed = (props.keyPressed === "0") ? "open" : "closed";
+    return (
+        <button className={props.keyName + " " + openClosed}
+            onClick={() => props.onClick()}
+        ></button>
+    );
+};
 
 export default class FingeringDisplay extends React.Component {
     constructor(props) {

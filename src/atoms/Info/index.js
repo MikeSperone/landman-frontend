@@ -51,10 +51,34 @@ export default class Info extends React.Component {
     render() {
         return (
             <form className="pure-form pure-form-aligned" onSubmit={this.handleSubmit} >
-                <Field name="pitches" type="text"     value={this.props.data.pitches} onChange={this.props.onChange} editing={this.props.editing} />
-                <Field name="multi"   type="checkbox" checked={this.props.data.multi} onChange={this.props.onChange} editing={this.props.editing} />
-                <Field name="audio"   type="text"     value={this.props.data.audio}   onChange={this.props.onChange} editing={this.props.editing} />
-                <Field name="other"   type="text"     value={this.props.data.other}   onChange={this.props.onChange} editing={this.props.editing} />
+                <Field
+                    name="pitches"
+                    type="text"
+                    value={this.props.data.pitches}
+                    onChange={this.props.onChange}
+                    editing={this.props.editing}
+                />
+                <Field
+                    name="multi"
+                    type="checkbox"
+                    checked={this.props.data.multi}
+                    onChange={this.props.onChange} 
+                    editing={this.props.editing}
+                />
+                <Field
+                    name="audio"
+                    type="text"
+                    value={this.props.data.audio}
+                    onChange={this.props.onChange} 
+                    editing={this.props.editing}
+                />
+                <Field
+                    name="other"
+                    type="text"
+                    value={this.props.data.other}
+                    onChange={this.props.onChange}
+                    editing={this.props.editing}
+                />
             </form>
         );
     }
