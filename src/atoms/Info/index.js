@@ -1,39 +1,43 @@
 import React from 'react';
 import './index.css';
 import Field from './field';
+import $ from 'jquery';
 import { API } from '../../constants';
 
-class SoundEntry extends React.Components {
+class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {data: null};
+        console.log("hi");
+        this.state = {data: {}};
+        this.sound = props.sound;
     }
 
     componentWillMount() {
         const url = API.soundData;
-        $.getJSON(url + props.sound, (d) => this.setState({data:d}));
+        $.getJSON(url + this.sound, (d) => this.setState({data:d}));
     }
 
     render() {
-        <div>
-            <div>{props.sound}</div>
-        </div>
+        //TODO: get this database API working
+        console.log("rendering: ", this.sound.data);
+        return <div>{this.sound}</div>;
     }
-};
+}
 
-const listSoundsData = (data) => {
-    if (data.sounds) {
-        return (
-            data.sounds.map((d) => {
-                console.log("d: ", d);
-                return <SoundEntry sound={d} key={d} />;
-            })
-        );
-    }
+function listSoundsData(sounds) {
+    return (
+        sounds.map((d) => {
+            return (
+                d ? (
+                    <SoundEntry sound={d} key={d} />
+                ) : null
+            );
+        })
+    );
 };
 
 const Info = (props) => (
-    <div> { listSoundsData(props.data) } </div>
+        <div> { props.data.sounds ? listSoundsData(props.data.sounds) : null } </div>
 );
 
 export default Info;
