@@ -4,8 +4,8 @@ import $ from 'jquery';
 import { API } from '../../constants';
 import SoundData from './soundData';
 
-const AudioPlayer = props => (
-    <h3>{props.name}</h3>
+const AudioPlayer = () => (
+    <h3>AudioPlayer</h3>
 );
 
 class SoundEntry extends React.Component {
@@ -35,10 +35,11 @@ class SoundEntry extends React.Component {
         return (
             <div onClick={this.handleClick.bind(this)}>
                 <AudioPlayer name={this.sound}/>
+                <div>{this.sound}</div>
                 <SoundData
                     selected={this.state.selected}
                     data={this.state.data}
-                />;
+                />
             </div>
         );
     }

@@ -15,7 +15,7 @@ export default class SoundData extends React.Component {
                 <Field
                     name="pitches"
                     type="text"
-                    value={this.props.data.pitch}
+                    value={this.props.data.pitch || 'n/a'}
                     onChange={this.props.onChange}
                     editing={this.props.editing}
                 />
@@ -29,7 +29,7 @@ export default class SoundData extends React.Component {
                 <Field
                     name="comments"
                     type="text"
-                    value={this.props.data.comments}
+                    value={this.props.data.comments || ['no comments']}
                     onChange={this.props.onChange} 
                     editing={this.props.editing}
                 />

@@ -55,6 +55,7 @@ export default class Search extends React.Component {
         return (
             <div>
                 <Display
+                    onEditDataChange={() => alert('this does nothing')}
                     onFingerClick={this.handleSearch.bind(this)}/>
                 <div id="not-found"></div>
                 <Button id="edit-btn" onClick={this.handleSearch.bind(this)} text="Edit" />

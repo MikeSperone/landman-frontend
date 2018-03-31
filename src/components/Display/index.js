@@ -8,6 +8,7 @@ export default class Display extends React.Component {
         this.props = props;
         this.handleSearch = props.onFingerChange;
         this.handleSearchClick = props.onFingerClick;
+        this.handleEditDataChange = props.onEditDataChange;
     }
 
     render() {
@@ -17,13 +18,13 @@ export default class Display extends React.Component {
                     editing={this.props.editType === "add"}
                     editType={this.props.editType}
                     bin={this.props.bin}
-                    onClick={this.props.onFingerClick.bind(this)}
+                    onClick={this.handleSearchClick.bind(this)}
                 />
                 <Info
                     data={this.props.data}
                     editing={this.props.editType !== "view"}
                     editType={this.props.editType}
-                    onChange={this.props.onEditDataChange.bind(this)}
+                    onChange={this.handleEditDataChange.bind(this)}
                 />
             </div>
         );
