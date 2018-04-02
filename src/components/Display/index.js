@@ -4,25 +4,24 @@ import Info from '../../atoms/Info';
 
 export default class Display extends React.Component {
     constructor(props) {
-        super();
-        this.props = props;
-        this.handleSearch = props.onFingerChange;
-        this.handleSearchClick = props.onFingerClick;
-        this.handleEditDataChange = props.onEditDataChange;
+        super(props);
+        this.handleSearch = this.props.onFingerChange;
+        this.handleSearchClick = this.props.onFingerClick;
+        this.handleEditDataChange = this.props.onEditDataChange;
     }
 
     render() {
         return (
             <div> 
                 <FingeringDisplay
-                    editing={this.props.editType === "add"}
+                    editing={this.props.editType === 'add' || this.props.editType === 'search'}
                     editType={this.props.editType}
                     bin={this.props.bin}
-                    onClick={this.handleSearchClick.bind(this)}
+                    onClick={this.handleSearchClick}
                 />
                 <Info
                     data={this.props.data}
-                    editing={this.props.editType !== "view"}
+                    editing={this.props.editType !== 'view'}
                     editType={this.props.editType}
                     onChange={this.handleEditDataChange.bind(this)}
                 />

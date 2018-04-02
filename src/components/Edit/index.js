@@ -124,7 +124,7 @@ export default class Edit extends React.Component {
     }
 
     handleDelete() {
-        //ToDo: confirmation of delete
+        //TODO: confirmation of delete
         alert("TODO: make this button confirm deletion of entry");
     }
     

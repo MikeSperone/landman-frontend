@@ -10,9 +10,9 @@ export default class Search extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            keyState: "00000000000000000000000",
-            data: null,
-            editType: "search"
+            data: '00000000000000000000000',
+            editType: 'search',
+            keyState: '00000000000000000000000',
         };
     }
 
@@ -26,37 +26,43 @@ export default class Search extends React.Component {
         const keyState = this.state.keyState;
         const newState = (keyState[i] == 0) ? "1" : "0";
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
-        this.setState({keyState: newKeyState});
-        console.log(this.state.keyState);
+        this.setState({keyState: newKeyState}, i => this.handleSearch(i));
     }
 
-    handleSearch(e) {
-        console.log("searching...");
-        const url = API + this.state.keyState;
+    handleSearch(i) {
+        const url = API.fingerings + this.state.keyState;
+        console.log('url: ', url);
+        $('#searching').removeClass('hidden');
         var req = new XMLHttpRequest();
         req.open("GET", url, false);
         req.send();
         if (req.status === 200) {
+            console.log('response: ', req.responseText);
             var b = JSON.parse(req.responseText).bin;
-            console.log("found!", b);
-            $('#not-found').text("");
-            $('#edit-btn').removeClass("hidden");
+            $('#not-found').text('');
+            $('#edit-btn').removeClass('hidden');
+            this.setState({data:this.state.keyState});
         } else {
-            console.log("not found :(");
-            $('#not-found').text("Not Found");
-            $('#edit-btn').addClass("hidden");
+            $('#not-found').text('Not Found');
+            $('#edit-btn').addClass('hidden');
         }
         //  
+        $('#searching').addClass('hidden');
         //TODO: something when a result returns
-        e.preventDefault();
+        console.log('i: ', i);
+        // e.preventDefault();
     }
 
     render() {
         return (
             <div>
                 <Display
+                    bin={this.state.keyState}
+                    data={this.state.data}
+                    editType={'search'}
                     onEditDataChange={() => alert('this does nothing')}
-                    onFingerClick={this.handleSearch.bind(this)}/>
+                    onFingerClick={this.handleSearchClick.bind(this)}
+                />
                 <div id="not-found"></div>
                 <Button id="edit-btn" onClick={this.handleSearch.bind(this)} text="Edit" />
             </div>
