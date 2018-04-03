@@ -36,13 +36,10 @@ class App extends React.Component {
             <div className="menu">
                 <h1>Geoffery Landman Saxophone Fingerings</h1>
                 <div className="index-btns">
-                    <div className="pure-u-1-3">
-                        <Button onClick={this.handleClick.bind(this, "search")} text="SEARCH" />
-                    </div>
-                    <div className="pure-u-1-3">
+                    <div className="pure-u-1-2">
                         <Button onClick={this.handleClick.bind(this, "new")} text="NEW" />
                     </div>
-                    <div className="pure-u-1-3">
+                    <div className="pure-u-1-2">
                         <Button onClick={this.handleClick.bind(this, "browse")} text="BROWSE" />
                     </div>
                 </div>

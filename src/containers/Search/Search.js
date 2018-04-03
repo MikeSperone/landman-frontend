@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { API } from '../../constants';
 import Button from '../../atoms/Button';
 import Display from '../../components/Display';
+import Edit from '../../components/Edit';
 
 export default class Search extends React.Component {
 
@@ -56,6 +57,10 @@ export default class Search extends React.Component {
     render() {
         return (
             <div>
+                <Edit
+                    data={{bin: "00000000000000000000000"}}
+                    editType='search'
+                />
                 <Display
                     bin={this.state.keyState}
                     data={this.state.data}

@@ -3,7 +3,8 @@ import React from 'react';
 import Display from "../Display";
 
 import { API } from '../../constants';
-import Button from '../../atoms/Button'; 
+import Button from '../../atoms/Button';
+import $ from 'jquery';
 import './index.css';
 
 export default class Edit extends React.Component {
@@ -20,22 +21,29 @@ export default class Edit extends React.Component {
         console.log("starting edit type: ", this.state.editType);
     }
 
-    _checkIfExists(bin) {
-        const url = API + bin;
-        console.log(url);
-        var req = new XMLHttpRequest();
-        req.open("GET", url, false);
-        req.send();
-        return (req.status === 200);
+    _searchOrAdd(bin) {
+        const url = API.fingerings + bin;
+        console.log("url: ", url);
+        $.getJSON(
+            url,
+            d => this.setState({data:d, buttonText: 'Edit'},
+                () => {
+                    $('#not-found').text('');
+                }
+            )
+        ).fail(e => {
+            console.log("no match");
+            this.setState({buttonText: 'Submit'});
+            $('#not-found').text('Not Found');
+            //TODO: clear sound data
+            //TODO: activate submit/edit
+        });
     }
 
-    _addNewData() {
+    _addNewData(params) {
         let req = new XMLHttpRequest();
         let url = API;
-        let params = this._verifyData();
-        if (params === false) {
-            return;
-        }
+
         req.open("POST", url, true);
         req.setRequestHeader("Content-type", "application/json");
         req.onreadystatechange = () => {
@@ -117,7 +125,7 @@ export default class Edit extends React.Component {
         //TODO: something when a result returns
         e.preventDefault();
     }
-    
+
     handleCancel() {
         //TODO: cancel
         alert("TODO: make this button cancel out of editing");
@@ -127,7 +135,7 @@ export default class Edit extends React.Component {
         //TODO: confirmation of delete
         alert("TODO: make this button confirm deletion of entry");
     }
-    
+
     handleEditData() {
         this._editData();
     }
@@ -144,14 +152,9 @@ export default class Edit extends React.Component {
     handleNewData(e) {
 
         console.log("adding new data");
-        const exists = this._checkIfExists(this.state.data.bin);
-        console.log("exists? ", exists);
-        if (exists) {
-            alert('this fingering already exists');
-        } else {
-            console.log("creating new entry");
-            this._addNewData();
-        }
+        const params = this._verifyData();
+        if (params === false) return;
+        this._addNewData(params);
 
     }
 
@@ -161,7 +164,7 @@ export default class Edit extends React.Component {
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
         const data = this.state.data;
         data.bin = newKeyState;
-        this.setState({data});
+        this.setState({data},() => this._searchOrAdd(this.state.data.bin));
     }
 
     render() {
