@@ -1,5 +1,4 @@
 import React from 'react';
-import $ from 'jquery';
 
 import { API } from '../../constants';
 import Edit from '../../components/Edit';
@@ -21,13 +20,26 @@ export default class Browse extends React.Component {
 
     constructor() {
         super();
-        this.state = {
-            data: []
-        };
+        this.state = {data: []};
     }
     componentWillMount() {
         const url = API.fingerings;
-        $.getJSON(url, (d) => this.setState({data:d}));
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+
+        request.onload = () => {
+            if (request.status >= 200 && request.status < 400) {
+                // Success!
+                var data = JSON.parse(request.responseText);
+                this.setState({data});
+            } else {
+                alert("Error: " + request.status);
+            }
+        };
+        request.onerror = () => {
+            alert("Connection error");
+        };
+        request.send();
     }
 
     render() {

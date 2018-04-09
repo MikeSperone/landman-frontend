@@ -7,19 +7,14 @@ import Button from './atoms/Button';
 
 // Views
 import Browse from './containers/Browse/Browse.js';
-import NewData from './containers/NewData/NewData.js';
-import Search from './containers/Search/Search.js';
+import SearchAdd from './containers/SearchAdd/SearchAdd.js';
 
 class App extends React.Component {
 
     handleClick(name) {
-        console.log(name + " clicked");
         switch (name) {
             case "search":
-                ReactDOM.render(<Search />,document.getElementById('container'));
-                break;
-            case "new":
-                ReactDOM.render(<NewData editType="add" />,document.getElementById('container'));
+                ReactDOM.render(<SearchAdd />,document.getElementById('container'));
                 break;
             case "browse":
                 ReactDOM.render(<Browse />,document.getElementById('container'));
@@ -37,7 +32,7 @@ class App extends React.Component {
                 <h1>Geoffery Landman Saxophone Fingerings</h1>
                 <div className="index-btns">
                     <div className="pure-u-1-2">
-                        <Button onClick={this.handleClick.bind(this, "new")} text="NEW" />
+                        <Button onClick={this.handleClick.bind(this, "search")} text="SEARCH" />
                     </div>
                     <div className="pure-u-1-2">
                         <Button onClick={this.handleClick.bind(this, "browse")} text="BROWSE" />
