@@ -1,5 +1,6 @@
 .fingeringDisplay {
-    width: 50%;
+    width: 250px;
+    float: left;
 }
 
 .fingeringItem {
@@ -182,4 +183,3 @@ hr {
     width: 60px;
     margin: 0;
 }
-

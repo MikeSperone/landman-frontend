@@ -4,7 +4,6 @@ import Field from './field';
 export default class SoundData extends React.Component {
     constructor(props) {
         super(props);
-        this.props = { ...props };
         this.data = this.props.data;
     }
 

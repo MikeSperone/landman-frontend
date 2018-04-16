@@ -33,10 +33,11 @@ export default class Edit extends React.Component {
             )
         ).fail(e => {
             console.log("no match");
-            this.setState({buttonText: 'Submit'});
-            $('#not-found').text('Not Found');
-            //TODO: clear sound data
-            //TODO: activate submit/edit
+            this.setState({data:{}, buttonText: 'Add', editType: 'add'}, () => {
+                $('#not-found').text('Not Found');
+                //TODO: clear sound data
+                //TODO: activate submit/edit
+            });
         });
     }
 
@@ -107,13 +108,15 @@ export default class Edit extends React.Component {
     handleSubmit(e) {
         switch (this.state.editType) {
             case "add":
+                console.log("Adding...");
                 this.handleNewData(e);
                 break;
             case "edit":
+                console.log("Editing...");
                 this.handleEditData(e);
                 break;
             case "view":
-                console.log("Editing...");
+                console.log("Viewing...");
                 this.setState(function(s) {
                     return {buttonText: "Submit", editing: true, editType: "edit"};
                 });
@@ -167,10 +170,21 @@ export default class Edit extends React.Component {
         this.setState({data},() => this._searchOrAdd(this.state.data.bin));
     }
 
+    handleBrowseClick(n) {
+        // I think I will have to change the db id's to be sequential numbers
+        // and instead, here use the id to get the next db value.
+        const currentDecimalBin = parseInt(this.state.data.bin, 2);
+        const newDecimalBin = currentDecimalBin + n;
+        const newBin = newDecimalBin.toString(2);
+        const newBinString = Array(23 - newBin.length).join("0") + newBin;
+        //TODO: get newBinString
+    }
+
     render() {
 
         return (
             <div className="edit">
+                <Button className="left" onClick={this.handleBrowseClick.bind(this, -1)} text="<" />
                 <Display
                     bin={this.state.data.bin}
                     data={this.state.data}
@@ -180,9 +194,12 @@ export default class Edit extends React.Component {
                     onFingerClick={this.handleFingeringClick.bind(this)}
                     onEditDataChange={this.handleEditDataChange.bind(this)}
                 />
-                <Button className="editOrSubmit" onClick={this.handleSubmit.bind(this)} text={this.state.buttonText} />
-                <Button className={(this.state.editType === "edit") ? "cancel" : "cancel hidden"} onClick={this.handleCancel.bind(this)} text="Cancel" />
-                <Button className={(this.state.editType === "edit") ? "delete" : "delete hidden"} onClick={this.handleDelete.bind(this)} text="Delete" />
+                <div>
+                    <Button className="editOrSubmit" onClick={this.handleSubmit.bind(this)} text={this.state.buttonText} />
+                    <Button className={(this.state.editType === "edit") ? "cancel" : "cancel hidden"} onClick={this.handleCancel.bind(this)} text="Cancel" />
+                    <Button className={(this.state.editType === "edit") ? "delete" : "delete hidden"} onClick={this.handleDelete.bind(this)} text="Delete" />
+                </div>
+                <Button className="right" onClick={this.handleBrowseClick.bind(this, 1)} text=">" />
             </div>
         );
     }

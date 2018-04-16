@@ -11,6 +11,25 @@
     background-color: red;
 }
 
+audio {
+    vertical-align: middle;
+}
+
+.audio-player {
+    padding: 1rem;
+}
+
+.audio-name{
+    background-color: SteelBlue;
+    padding: .5rem 1rem;
+}
+.audio-selected {
+    background-color: LightSteelBlue;
+}
+.audio-unselected {
+    background-color: LightGrey;
+}
+
 form {
     float: left;
 }
@@ -28,4 +47,9 @@ form {
 .value {
     float: left;
     margin: 1rem 0.5rem;
+}
+
+.info {
+    width: calc(100% - 250px);
+    float: right;
 }

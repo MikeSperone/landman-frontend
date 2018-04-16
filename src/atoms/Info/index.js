@@ -3,10 +3,7 @@ import './index.css';
 import $ from 'jquery';
 import { API } from '../../constants';
 import SoundData from './soundData';
-
-const AudioPlayer = () => (
-    <h3>AudioPlayer</h3>
-);
+import AudioPlayer from './audioPlayer';
 
 class SoundEntry extends React.Component {
     constructor(props) {
@@ -25,17 +22,18 @@ class SoundEntry extends React.Component {
     }
 
     handleClick() {
-        console.log("clicked");
         this.setState((prevState) => ({selected: !prevState.selected}));
     }
 
     render() {
         console.log("rendering: ", this.state.data);
-        console.log("selected State: ", this.state.selected);
         return (
             <div onClick={this.handleClick.bind(this)}>
-                <AudioPlayer name={this.sound}/>
-                <div>{this.sound}</div>
+                <AudioPlayer
+                    audio={this.state.data.soundID}
+                    name={this.sound}
+                    selected={this.state.selected}
+                />
                 <SoundData
                     selected={this.state.selected}
                     data={this.state.data}
@@ -58,7 +56,7 @@ function listSoundsData(sounds) {
 };
 
 const Info = (props) => (
-        <div> { props.data.sounds ? listSoundsData(props.data.sounds) : null } </div>
+        <div className="info"> { props.data.sounds ? listSoundsData(props.data.sounds) : null } </div>
 );
 
 export default Info;
