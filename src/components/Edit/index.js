@@ -12,12 +12,13 @@ export default class Edit extends React.Component {
     constructor(props) {
         super();
         this.data = props.data;
+        const initIsEditing = props.editType !== "view";
         this.state = {
+            buttonText: initIsEditing ? "Submit" : "Edit",
             editType: props.editType || "view",
-            editing: (props.editType !== "view"),
+            editing: initIsEditing,
             data: this.data
         };
-        this.state.buttonText = this.state.editing ? "Submit" : "Edit";
         console.log("starting edit type: ", this.state.editType);
     }
 
@@ -33,23 +34,27 @@ export default class Edit extends React.Component {
             )
         ).fail(e => {
             console.log("no match");
-            this.setState({data:{}, buttonText: 'Add', editType: 'add'}, () => {
+            this.setState(prevState => {
                 $('#not-found').text('Not Found');
-                //TODO: clear sound data
-                //TODO: activate submit/edit
+                // TODO: display all edit fields with editType 'add'
+                return {
+                    buttonText: 'Add',
+                    data: { bin: prevState.data.bin },
+                    editType: 'add'
+                };
             });
         });
     }
 
     _addNewData(params) {
         let req = new XMLHttpRequest();
-        let url = API;
+        let url = API.fingerings;
 
         req.open("POST", url, true);
         req.setRequestHeader("Content-type", "application/json");
         req.onreadystatechange = () => {
-            if (req.readyState == 4) {
-                if (req.status == 201) {
+            if (req.readyState === 4) {
+                if (req.status === 201) {
                     alert("Success, new data added");
                     window.location.reload();
                 } else {
@@ -69,8 +74,8 @@ export default class Edit extends React.Component {
         req.open("PUT", url, true);
         req.setRequestHeader("Content-type", "application/json");
         req.onreadystatechange = () => {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
+            if (req.readyState === 4) {
+                if (req.status === 200) {
                     alert("Success, data edited");
                     this.setState(function(s) {
                         return {buttonText: "Edit", editing: false, editType: "view"};
@@ -167,7 +172,8 @@ export default class Edit extends React.Component {
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
         const data = this.state.data;
         data.bin = newKeyState;
-        this.setState({data},() => this._searchOrAdd(this.state.data.bin));
+        console.log("data: ", data);
+        this.setState({ data }, () => this._searchOrAdd(this.state.data.bin));
     }
 
     handleBrowseClick(n) {
