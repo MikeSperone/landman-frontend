@@ -2,46 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-// Atoms/Components
-import Button from './atoms/Button';
+import Edit from './components/Edit';
 
-// Views
-import Browse from './containers/Browse/Browse.js';
-import SearchAdd from './containers/SearchAdd/SearchAdd.js';
-
-class App extends React.Component {
-
-    handleClick(name) {
-        switch (name) {
-            case "search":
-                ReactDOM.render(<SearchAdd />,document.getElementById('container'));
-                break;
-            case "browse":
-                ReactDOM.render(<Browse />,document.getElementById('container'));
-                break;
-            default:
-                console.log("nope, this isn't a thing");
-                break;
-        }
-
-    }
+class SearchAdd extends React.Component {
 
     render() {
         return (
-            <div className="menu">
-                <h1>Geoffery Landman Saxophone Fingerings</h1>
-                <div className="index-btns">
-                    <div className="pure-u-1-2">
-                        <Button onClick={this.handleClick.bind(this, "search")} text="SEARCH" />
-                    </div>
-                    <div className="pure-u-1-2">
-                        <Button onClick={this.handleClick.bind(this, "browse")} text="BROWSE" />
-                    </div>
-                </div>
+            <div>
+                <Edit
+                    data={{bin: "00000000000000000000000"}}
+                    editType="search"
+                />
+                <div id="not-found"></div>
             </div>
         );
     }
+
 }
+
+const App = () => <SearchAdd />;
 
 ReactDOM.render(
     <App />,
