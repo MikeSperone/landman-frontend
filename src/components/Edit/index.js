@@ -67,7 +67,7 @@ export default class Edit extends React.Component {
 
     }
 
-    _editData() {
+    _submitData() {
         let req = new XMLHttpRequest();
         let url = API + this.state.data.bin;
         let params = this._verifyData();
@@ -109,17 +109,8 @@ export default class Edit extends React.Component {
         return JSON.stringify(finalData);
     }
 
-
-    handleSubmit(e) {
+    _placeholder() {
         switch (this.state.editType) {
-            case "add":
-                console.log("Adding...");
-                this.handleNewData(e);
-                break;
-            case "edit":
-                console.log("Editing...");
-                this.handleEditData(e);
-                break;
             case "view":
                 console.log("Viewing...");
                 this.setState(function(s) {
@@ -127,16 +118,19 @@ export default class Edit extends React.Component {
                 });
                 break;
             default:
-                alert("Unexpected edit state!!" + this.state.editType);
+                alert("Unexpected edit state!! \"" + this.state.editType + "\"");
                 break;
         }
         //TODO: something when a result returns
+    }
+
+    handleAdd(e) {
+        this.setState(() => ({ editType: 'add' }), this.handleNewData);
         e.preventDefault();
     }
 
     handleCancel() {
-        //TODO: cancel
-        alert("TODO: make this button cancel out of editing");
+        this.setState(() => ({ editType: 'search' }));
     }
 
     handleDelete() {
@@ -144,10 +138,11 @@ export default class Edit extends React.Component {
         alert("TODO: make this button confirm deletion of entry");
     }
 
-    handleEditData() {
-        this._editData();
+    handleEdit(e) {
+        this.setState(() => ({ editType: 'edit' }));
+        e.preventDefault();
     }
-
+        
     handleEditDataChange(e) {
         const target = e.target;
         const val = (target.type === 'checkbox') ? target.checked : target.value;
@@ -164,6 +159,11 @@ export default class Edit extends React.Component {
         if (params === false) return;
         this._addNewData(params);
 
+    }
+
+    handleSubmit() {
+        alert("submitting data");
+        this._submitData();
     }
 
     handleFingeringClick(i) {
@@ -190,7 +190,8 @@ export default class Edit extends React.Component {
                     onEditDataChange={this.handleEditDataChange.bind(this)}
                 />
                 <div>
-                    <Button className="editOrSubmit" onClick={this.handleSubmit.bind(this)} text={this.state.buttonText} />
+                    <Button className={(this.state.editType === "edit") ? "edit hidden" : "edit"} onClick={this.handleEdit.bind(this)} text="Edit" />
+                    <Button className={(this.state.editType === "edit") ? "submit" : "submit hidden"} onClick={this.handleSubmit.bind(this)} text="Submit" />
                     <Button className={(this.state.editType === "edit") ? "cancel" : "cancel hidden"} onClick={this.handleCancel.bind(this)} text="Cancel" />
                     <Button className={(this.state.editType === "edit") ? "delete" : "delete hidden"} onClick={this.handleDelete.bind(this)} text="Delete" />
                 </div>
