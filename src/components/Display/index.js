@@ -21,7 +21,7 @@ export default class Display extends React.Component {
                 />
                 <Info
                     data={this.props.data}
-                    editing={this.props.isEditing}
+                    isEditing={this.props.isEditing}
                     editType={this.props.editType}
                     onChange={this.handleEditDataChange.bind(this)}
                 />

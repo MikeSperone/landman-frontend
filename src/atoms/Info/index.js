@@ -37,18 +37,19 @@ class SoundEntry extends React.Component {
                 <SoundData
                     selected={this.state.selected}
                     data={this.state.data}
+                    isEditing={this.props.isEditing}
                 />
             </div>
         );
     }
 }
 
-function listSoundsData(sounds) {
+function listSoundsData(props) {
     return (
-        sounds.map((d) => {
+        props.data.sounds.map((d) => {
             return (
                 d ? (
-                    <SoundEntry sound={d} key={d} />
+                    <SoundEntry sound={d} key={d} isEditing={props.isEditing}/>
                 ) : null
             );
         })
@@ -56,7 +57,7 @@ function listSoundsData(sounds) {
 };
 
 const Info = (props) => (
-        <div className="info"> { props.data.sounds ? listSoundsData(props.data.sounds) : null } </div>
+        <div className="info"> { props.data.sounds ? listSoundsData(props) : null } </div>
 );
 
 export default Info;
