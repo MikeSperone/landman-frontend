@@ -12,11 +12,10 @@ export default class Edit extends React.Component {
     constructor(props) {
         super();
         this.data = props.data;
-        const initIsEditing = props.editType !== "view";
         this.state = {
-            buttonText: initIsEditing ? "Submit" : "Edit",
+            buttonText: "Edit",
             editType: props.editType || "view",
-            editing: initIsEditing,
+            isEditing: false,
             data: this.data
         };
         console.log("starting edit type: ", this.state.editType);
@@ -78,7 +77,7 @@ export default class Edit extends React.Component {
                 if (req.status === 200) {
                     alert("Success, data edited");
                     this.setState(function(s) {
-                        return {buttonText: "Edit", editing: false, editType: "view"};
+                        return {buttonText: "Edit", isEditing: false, editType: "view"};
                     });
                 } else {
                     alert("Error - data not updated.  Server status: " + req.status);
@@ -114,7 +113,7 @@ export default class Edit extends React.Component {
             case "view":
                 console.log("Viewing...");
                 this.setState(function(s) {
-                    return {buttonText: "Submit", editing: true, editType: "edit"};
+                    return {buttonText: "Submit", isEditing: true, editType: "edit"};
                 });
                 break;
             default:
@@ -125,12 +124,12 @@ export default class Edit extends React.Component {
     }
 
     handleAdd(e) {
-        this.setState(() => ({ editType: 'add' }), this.handleNewData);
+        this.setState(() => ({ isEditing: true, buttonText: "Add", editType: 'add' }), this.handleNewData);
         e.preventDefault();
     }
 
     handleCancel() {
-        this.setState(() => ({ editType: 'search' }));
+        this.setState(() => ({ buttonText: "Edit", isEditing: false, editType: 'search' }));
     }
 
     handleDelete() {
@@ -139,7 +138,7 @@ export default class Edit extends React.Component {
     }
 
     handleEdit(e) {
-        this.setState(() => ({ editType: 'edit' }));
+        this.setState(() => ({ buttonText: "Edit", isEditing: true, editType: 'edit' }));
         e.preventDefault();
     }
         
@@ -183,20 +182,19 @@ export default class Edit extends React.Component {
                 <Display
                     bin={this.state.data.bin}
                     data={this.state.data}
-                    editing={this.state.editing}
+                    isEditing={this.state.isEditing}
                     editType={this.state.editType}
                     onFingerChange={this.handleNewData.bind(this)}
                     onFingerClick={this.handleFingeringClick.bind(this)}
                     onEditDataChange={this.handleEditDataChange.bind(this)}
                 />
                 <div>
-                    <Button className={(this.state.editType === "edit") ? "edit hidden" : "edit"} onClick={this.handleEdit.bind(this)} text="Edit" />
-                    <Button className={(this.state.editType === "edit") ? "submit" : "submit hidden"} onClick={this.handleSubmit.bind(this)} text="Submit" />
-                    <Button className={(this.state.editType === "edit") ? "cancel" : "cancel hidden"} onClick={this.handleCancel.bind(this)} text="Cancel" />
-                    <Button className={(this.state.editType === "edit") ? "delete" : "delete hidden"} onClick={this.handleDelete.bind(this)} text="Delete" />
+                    <Button className={(this.state.isEditing) ? "edit hidden" : "edit"} onClick={this.handleEdit.bind(this)} text={this.state.buttonText} />
+                    <Button className={(this.state.isEditing) ? "submit" : "submit hidden"} onClick={this.handleSubmit.bind(this)} text="Submit" />
+                    <Button className={(this.state.isEditing) ? "cancel" : "cancel hidden"} onClick={this.handleCancel.bind(this)} text="Cancel" />
+                    <Button className={(this.state.isEditing) ? "delete" : "delete hidden"} onClick={this.handleDelete.bind(this)} text="Delete" />
                 </div>
             </div>
         );
     }
 }
-
