@@ -1,5 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
 import Field from './field';
+
+const Form = styled.form.attrs({
+    className: "pure-form pure-form-aligned"
+})`
+    float: left;
+`;
 
 export default class SoundData extends React.Component {
     constructor(props) {
@@ -10,7 +17,7 @@ export default class SoundData extends React.Component {
     render() {
         return (
             (this.props.selected) ? (
-            <form className="pure-form pure-form-aligned" onSubmit={this.handleSubmit} >
+            <Form onSubmit={this.handleSubmit} >
                 <Field
                     name="pitches"
                     type="text"
@@ -39,7 +46,7 @@ export default class SoundData extends React.Component {
                     onChange={this.props.onChange}
                     editing={this.props.isEditing}
                 />
-            </form>
+            </Form>
             ) : null
         );
     }

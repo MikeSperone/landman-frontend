@@ -1,7 +1,25 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const FormWrapper = styled.div.attrs({
+    className: "pure-control-group"
+})`
+    padding: 1rem;
+    display: block;
+    clear: both;
+`;
+const Label = styled.div`
+    float: left;
+    margin: 1rem 0.5rem;
+    width: 60px;
+`;
+const Value = styled.div`
+    float: left;
+    margin: 1rem 0.5rem;
+`;
 
 const Form = d => (
-    <div className="pure-control-group">
+    <FormWrapper>
         <label htmlFor={d.name}>
             {d.name.charAt(0).toUpperCase() + d.name.slice(1)}
         </label>
@@ -13,16 +31,16 @@ const Form = d => (
             checked={d.checked}
             onChange={d.onChange}
         />
-    </div>
+    </FormWrapper>
 );
 
 const Disp = props => (
-    <div className="dataItem">
-        <div className="label">
+    <FormWrapper>
+        <Label>
             {props.name.charAt(0).toUpperCase() + props.name.slice(1) + ":"}
-        </div>
-        <div id={props.name} className="value">{props.value}</div>
-    </div>
+        </Label>
+        <Value id={props.name}>{props.value}</Value>
+    </FormWrapper>
 );
 
 const Field = props => {

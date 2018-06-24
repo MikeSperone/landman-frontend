@@ -1,4 +1,18 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Audio = styled.audio`
+    vertical-align: middle;
+`;
+
+const AudioPlayerWrapper = styled.div`
+    padding: 1rem;
+`;
+
+const AudioName = styled.span`
+    background-color: SteelBlue;
+    padding: 0.5rem 1rem;
+`;
 
 class AudioPlayer extends React.Component {
     constructor(props) {
@@ -8,15 +22,15 @@ class AudioPlayer extends React.Component {
     }
 
     render() {
-        const classNames = 'audio-player audio-' + (this.props.selected ? 'selected' : 'unselected');
+        const bgColor = this.props.selected ? 'LightSteelBlue' : 'LightGrey';
         return (
-            <div className={classNames}>
-                <span className="audio-name">{this.props.name}</span>
-                <audio controls="controls">
+            <AudioPlayerWrapper style={{backgroundColor: bgColor}}>
+                <AudioName>{this.props.name}</AudioName>
+                <Audio controls="controls">
                     <source src={this.audioSrc} />
                     Your browser does not support the <code>audio</code> element.
-                </audio>
-            </div>
+                </Audio>
+            </AudioPlayerWrapper>
         );
     }
 }
