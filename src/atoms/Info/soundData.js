@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Field from './field';
+import Field, { CommentField } from './field';
 
 const Form = styled.form.attrs({
     className: "pure-form pure-form-aligned"
@@ -32,7 +32,7 @@ export default class SoundData extends React.Component {
                     onChange={this.props.onChange} 
                     editing={this.props.isEditing}
                 />
-                <Field
+                <CommentField
                     name="comments"
                     type="text"
                     value={this.props.data.comments || ['no comments']}

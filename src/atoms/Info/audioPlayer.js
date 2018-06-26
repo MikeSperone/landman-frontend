@@ -3,13 +3,16 @@ import styled from 'styled-components';
 
 const Audio = styled.audio`
     vertical-align: middle;
+    width: calc(100% - 1rem);
+    margin: 0.5rem;
 `;
 
 const AudioPlayerWrapper = styled.div`
-    padding: 1rem;
+    padding: 0.5rem;
 `;
 
 const AudioName = styled.span`
+    display: inline-block;
     background-color: SteelBlue;
     padding: 0.5rem 1rem;
 `;
