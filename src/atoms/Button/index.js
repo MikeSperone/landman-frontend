@@ -1,4 +1,9 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const ButtonWrapper = styled.button`
+    margin: 0.5rem;
+`;
 
 export default class Button extends React.Component {
     
@@ -23,13 +28,13 @@ export default class Button extends React.Component {
     render() {
         
         return (
-            <button
+            <ButtonWrapper
                 id={this.id}
                 className={"pure-button pure-button-primary " + this.props.className}
                 onClick={this.onClick}
             >
                 {this.props.text || "Click"}
-            </button>
+            </ButtonWrapper>
         );
     }
 }

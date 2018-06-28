@@ -5,7 +5,13 @@ import Display from "../Display";
 import { API } from '../../constants';
 import Button from '../../atoms/Button';
 import $ from 'jquery';
+import styled from 'styled-components';
 import './index.css';
+
+const ButtonSection = styled.div`
+    float: right;
+    margin: 2rem;
+`;
 
 export default class Edit extends React.Component {
 
@@ -167,7 +173,7 @@ export default class Edit extends React.Component {
 
     handleFingeringClick(i) {
         const keyState = this.state.data.bin;
-        const newState = (keyState[i] == 0) ? "1" : "0";
+        const newState = (String(keyState[i]) === "0") ? "1" : "0";
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
         const data = this.state.data;
         data.bin = newKeyState;
@@ -188,12 +194,12 @@ export default class Edit extends React.Component {
                     onFingerClick={this.handleFingeringClick.bind(this)}
                     onEditDataChange={this.handleEditDataChange.bind(this)}
                 />
-                <div>
+                <ButtonSection>
                     <Button className={(this.state.isEditing) ? "edit hidden" : "edit"} onClick={this.handleEdit.bind(this)} text={this.state.buttonText} />
                     <Button className={(this.state.isEditing) ? "submit" : "submit hidden"} onClick={this.handleSubmit.bind(this)} text="Submit" />
                     <Button className={(this.state.isEditing) ? "cancel" : "cancel hidden"} onClick={this.handleCancel.bind(this)} text="Cancel" />
                     <Button className={(this.state.isEditing) ? "delete" : "delete hidden"} onClick={this.handleDelete.bind(this)} text="Delete" />
-                </div>
+                </ButtonSection>
             </div>
         );
     }
