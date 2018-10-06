@@ -8,6 +8,11 @@ const FormWrapper = styled.div.attrs({
     display: block;
     clear: both;
 `;
+const Comment = ({className, children}) => <div className={className}>{children}</div>;
+const CommentBox = styled(Comment)`
+    background-color: ${props => (props.name % 2) ? 'white' : '#ccc'};
+    border-bottom: solid 1px grey;
+`;
 const Label = styled.div`
     display: ${props =>
         props.name ? 'block' : 'none'
@@ -71,13 +76,12 @@ const CommentField = props => {
     console.log("props.value: ", props.value);
     return (
         <FormWrapper>
-            <Label name>Comments</Label>
+            <h3>Comments</h3>
             {props.value.map((v, ind) => (
-                <Disp
+                <CommentBox
                     key={ind}
-                    value={v}
                     name={ind}
-                />
+                >{v}</CommentBox>
             ))}
         </FormWrapper>
     );

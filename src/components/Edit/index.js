@@ -32,10 +32,9 @@ export default class Edit extends React.Component {
         console.log("url: ", url);
         $.getJSON(
             url,
-            d => this.setState({data:d, buttonText: 'Edit'},
-                () => {
-                    $('#not-found').text('');
-                }
+            d => this.setState(
+                {data:d, buttonText: 'Edit'},
+                () => $('#not-found').text('')
             )
         ).fail(e => {
             console.log("no match");

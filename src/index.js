@@ -4,7 +4,7 @@ import './index.css';
 
 import Edit from './components/Edit';
 
-class SearchAdd extends React.Component {
+class App extends React.Component {
 
     render() {
         return (
@@ -19,8 +19,6 @@ class SearchAdd extends React.Component {
     }
 
 }
-
-const App = () => <SearchAdd />;
 
 ReactDOM.render(
     <App />,
