@@ -11,7 +11,7 @@ export default class Button extends React.Component {
         super(props);
         this.props = props;
         this.id = props.id || this.uuid();
-        this.onClick =  props.onClick || this.handleClick;
+        this.onClick =  props.onClick || this.handleClick.bind(this);
     }
     
     handleClick() {

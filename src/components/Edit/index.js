@@ -1,8 +1,9 @@
 import React from 'react';
 
 import Display from "../Display";
+import DeleteConfirmation from "./DeleteConfirmation";
 
-import { API } from '../../constants';
+import APIcalls from './APIcalls';
 import Button from '../../atoms/Button';
 import $ from 'jquery';
 import styled from 'styled-components';
@@ -20,77 +21,12 @@ export default class Edit extends React.Component {
         this.data = props.data;
         this.state = {
             buttonText: "Edit",
+            data: this.data,
             editType: props.editType || "view",
             isEditing: false,
-            data: this.data
+            showDeleteConfirmation: false
         };
         console.log("starting edit type: ", this.state.editType);
-    }
-
-    _searchOrAdd(bin) {
-        const url = API.fingerings + bin;
-        console.log("url: ", url);
-        $.getJSON(
-            url,
-            d => this.setState(
-                {data:d, buttonText: 'Edit'},
-                () => $('#not-found').text('')
-            )
-        ).fail(e => {
-            console.log("no match");
-            this.setState(prevState => {
-                $('#not-found').text('Not Found');
-                // TODO: display all edit fields with editType 'add'
-                return {
-                    buttonText: 'Add',
-                    data: { bin: prevState.data.bin },
-                    editType: 'add'
-                };
-            });
-        });
-    }
-
-    _addNewData(params) {
-        let req = new XMLHttpRequest();
-        let url = API.fingerings;
-
-        req.open("POST", url, true);
-        req.setRequestHeader("Content-type", "application/json");
-        req.onreadystatechange = () => {
-            if (req.readyState === 4) {
-                if (req.status === 201) {
-                    alert("Success, new data added");
-                    window.location.reload();
-                } else {
-                    alert("Server error: " + req.status);
-                }
-            }
-        };
-        console.log("Data added: ", params);
-        req.send(params);
-
-    }
-
-    _submitData() {
-        let req = new XMLHttpRequest();
-        let url = API + this.state.data.bin;
-        let params = this._verifyData();
-        req.open("PUT", url, true);
-        req.setRequestHeader("Content-type", "application/json");
-        req.onreadystatechange = () => {
-            if (req.readyState === 4) {
-                if (req.status === 200) {
-                    alert("Success, data edited");
-                    this.setState(function(s) {
-                        return {buttonText: "Edit", isEditing: false, editType: "view"};
-                    });
-                } else {
-                    alert("Error - data not updated.  Server status: " + req.status);
-                }
-            }
-        };
-        console.log("data editied: ", params);
-        req.send(params);
     }
 
     _verifyData() {
@@ -138,8 +74,11 @@ export default class Edit extends React.Component {
     }
 
     handleDelete() {
-        //TODO: confirmation of delete
-        alert("TODO: make this button confirm deletion of entry");
+        alert('TODO: make this delete work');
+    }
+
+    confirmDelete() {
+        this.setState(() => ({showDeleteConfirmation: true}));
     }
 
     handleEdit(e) {
@@ -149,25 +88,21 @@ export default class Edit extends React.Component {
         
     handleEditDataChange(e) {
         const target = e.target;
-        const val = (target.type === 'checkbox') ? target.checked : target.value;
         const name = target.name;
         const data = this.state.data;
-        data[name] = val;
+        data[name] = (target.type === 'checkbox') ? target.checked : target.value;
         this.forceUpdate();
     }
 
     handleNewData(e) {
-
-        console.log("adding new data");
-        const params = this._verifyData();
+        const params = APIcalls.verifyData(this.state.data);
         if (params === false) return;
-        this._addNewData(params);
-
+        APIcalls.addNewData(params);
     }
 
     handleSubmit() {
         alert("submitting data");
-        this._submitData();
+        APIcalls.submitData();
     }
 
     handleFingeringClick(i) {
@@ -177,13 +112,32 @@ export default class Edit extends React.Component {
         const data = this.state.data;
         data.bin = newKeyState;
         console.log("data: ", data);
-        this.setState({ data }, () => this._searchOrAdd(this.state.data.bin));
+        const successCallback = d => this.setState(
+            {data:d, buttonText: 'Edit'},
+            () => $('#not-found').text('')
+        );
+        const failCallback = this.setState(prevState => {
+            $('#not-found').text('Not Found');
+            alert("TODO: remove old results");
+            // TODO: display all edit fields with editType 'add'
+            return {
+                buttonText: 'Add',
+                data: { bin: prevState.data.bin },
+                editType: 'add'
+            };
+        });
+        this.setState({ data }, () => APIcalls.searchOrAdd(this.state.data.bin, successCallback, failCallback));
     }
 
     render() {
 
         return (
             <div className="edit">
+                <DeleteConfirmation
+                    className={this.state.showDeleteConfirmation ? "" : "hidden"}
+                    onCancel={() => this.setState(() => ({showDeleteConfirmation: false}))}
+                    onConfirm={this.handleDelete.bind(this)}
+                />
                 <Display
                     bin={this.state.data.bin}
                     data={this.state.data}
@@ -197,7 +151,7 @@ export default class Edit extends React.Component {
                     <Button className={(this.state.isEditing) ? "edit hidden" : "edit"} onClick={this.handleEdit.bind(this)} text={this.state.buttonText} />
                     <Button className={(this.state.isEditing) ? "submit" : "submit hidden"} onClick={this.handleSubmit.bind(this)} text="Submit" />
                     <Button className={(this.state.isEditing) ? "cancel" : "cancel hidden"} onClick={this.handleCancel.bind(this)} text="Cancel" />
-                    <Button className={(this.state.isEditing) ? "delete" : "delete hidden"} onClick={this.handleDelete.bind(this)} text="Delete" />
+                    <Button className={(this.state.isEditing) ? "delete" : "delete hidden"} onClick={this.confirmDelete.bind(this)} text="Delete" />
                 </ButtonSection>
             </div>
         );
