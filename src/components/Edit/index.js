@@ -24,6 +24,7 @@ export default class Edit extends React.Component {
             data: this.data,
             editType: props.editType || "view",
             isEditing: false,
+            spinner: false,
             showDeleteConfirmation: false
         };
         console.log("starting edit type: ", this.state.editType);
@@ -61,7 +62,6 @@ export default class Edit extends React.Component {
                 alert("Unexpected edit state!! \"" + this.state.editType + "\"");
                 break;
         }
-        //TODO: something when a result returns
     }
 
     handleAdd(e) {
@@ -74,7 +74,12 @@ export default class Edit extends React.Component {
     }
 
     handleDelete() {
-        alert('TODO: make this delete work');
+        this.setState(
+            () => ({showDeleteConfirmation: false}),
+            () => {
+                APIcalls.deleteEntry();
+            }
+        );
     }
 
     confirmDelete() {
@@ -85,7 +90,7 @@ export default class Edit extends React.Component {
         this.setState(() => ({ buttonText: "Edit", isEditing: true, editType: 'edit' }));
         e.preventDefault();
     }
-        
+
     handleEditDataChange(e) {
         const target = e.target;
         const name = target.name;
@@ -105,6 +110,11 @@ export default class Edit extends React.Component {
         APIcalls.submitData();
     }
 
+    spinner(isOn) {
+        alert('add spinner');
+        this.setState(state => ({ spinner: isOn }));
+    }
+
     handleFingeringClick(i) {
         const keyState = this.state.data.bin;
         const newState = (String(keyState[i]) === "0") ? "1" : "0";
@@ -112,19 +122,23 @@ export default class Edit extends React.Component {
         const data = this.state.data;
         data.bin = newKeyState;
         console.log("data: ", data);
+        this.spinner(true);
         const successCallback = d => this.setState(
             {data:d, buttonText: 'Edit'},
-            () => $('#not-found').text('')
+            () => {
+                this.spinner(false);
+                $('#not-found').text('');
+            }
         );
-        const failCallback = this.setState(prevState => {
+        const failCallback = () => this.setState(prevState => ({
+            buttonText: 'Add',
+            data: { bin: prevState.data.bin },
+            editType: 'add'
+        }), () => {
+            // TODO: display all edit fields with editType 'add'
+            this.spinner(false);
             $('#not-found').text('Not Found');
             alert("TODO: remove old results");
-            // TODO: display all edit fields with editType 'add'
-            return {
-                buttonText: 'Add',
-                data: { bin: prevState.data.bin },
-                editType: 'add'
-            };
         });
         this.setState({ data }, () => APIcalls.searchOrAdd(this.state.data.bin, successCallback, failCallback));
     }
@@ -148,10 +162,26 @@ export default class Edit extends React.Component {
                     onEditDataChange={this.handleEditDataChange.bind(this)}
                 />
                 <ButtonSection>
-                    <Button className={(this.state.isEditing) ? "edit hidden" : "edit"} onClick={this.handleEdit.bind(this)} text={this.state.buttonText} />
-                    <Button className={(this.state.isEditing) ? "submit" : "submit hidden"} onClick={this.handleSubmit.bind(this)} text="Submit" />
-                    <Button className={(this.state.isEditing) ? "cancel" : "cancel hidden"} onClick={this.handleCancel.bind(this)} text="Cancel" />
-                    <Button className={(this.state.isEditing) ? "delete" : "delete hidden"} onClick={this.confirmDelete.bind(this)} text="Delete" />
+                    <Button
+                        className={(this.state.isEditing) ? "edit hidden" : "edit"}
+                        onClick={this.handleEdit.bind(this)}
+                        text={this.state.buttonText}
+                    />
+                    <Button
+                        className={(this.state.isEditing) ? "submit" : "submit hidden"}
+                        onClick={this.handleSubmit.bind(this)}
+                        text="Submit"
+                    />
+                    <Button
+                        className={(this.state.isEditing) ? "cancel" : "cancel hidden"}
+                        onClick={this.handleCancel.bind(this)}
+                        text="Cancel"
+                    />
+                    <Button
+                        className={(this.state.isEditing) ? "delete" : "delete hidden"}
+                        onClick={this.confirmDelete.bind(this)}
+                        text="Delete"
+                    />
                 </ButtonSection>
             </div>
         );
