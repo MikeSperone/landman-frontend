@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const AddNewAudio = () => <div><p>Add a way to upload audio here.</p></div>;
+
 const Audio = styled.audio`
     vertical-align: middle;
     width: calc(100% - 1rem);
@@ -27,12 +29,18 @@ class AudioPlayer extends React.Component {
     render() {
         const bgColor = this.props.selected ? 'LightSteelBlue' : 'LightGrey';
         return (
-            <AudioPlayerWrapper style={{backgroundColor: bgColor}}>
+            <AudioPlayerWrapper onClick={this.props.handleClick} style={{backgroundColor: bgColor}}>
                 <AudioName>{this.props.name}</AudioName>
-                <Audio controls="controls">
-                    <source src={this.audioSrc} />
-                    Your browser does not support the <code>audio</code> element.
-                </Audio>
+                {
+                    this.props.isNew ? (
+                        <AddNewAudio />
+                    ) : (
+                        <Audio controls="controls">
+                            <source src={this.audioSrc} />
+                            Your browser does not support the <code>audio</code> element.
+                        </Audio>
+                    )
+                }
             </AudioPlayerWrapper>
         );
     }

@@ -12,6 +12,7 @@ const InfoWrapper = styled.div`
 function listSoundsData(props) {
     return (
         props.data.sounds.map(d => {
+            console.log(d);
             return (
                 d ? (
                     <SoundEntry sound={d} key={d} isEditing={props.isEditing}/>
@@ -24,6 +25,7 @@ function listSoundsData(props) {
 const Info = (props) => (
         <InfoWrapper>
             { props.data.sounds ? listSoundsData(props) : null }
+            <SoundEntry new key={'new'} isEditing={true}/>
         </InfoWrapper>
 );
 

@@ -116,10 +116,8 @@ export default class Edit extends React.Component {
             {data:d, buttonText: 'Edit'},
             () => $('#not-found').text('')
         );
-        const failCallback = this.setState(prevState => {
+        const failCallback = () => this.setState(prevState => {
             $('#not-found').text('Not Found');
-            alert("TODO: remove old results");
-            // TODO: display all edit fields with editType 'add'
             return {
                 buttonText: 'Add',
                 data: { bin: prevState.data.bin },

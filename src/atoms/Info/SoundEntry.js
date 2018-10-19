@@ -15,7 +15,7 @@ class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
         this.state = {data: {}, selected: false};
-        this.sound = props.sound;
+        this.sound = props.sound || (props.new && "Add New Sound...");
     }
 
     componentWillMount() {
@@ -34,10 +34,13 @@ class SoundEntry extends React.Component {
     render() {
         console.log("rendering: ", this.state.data);
         return (
-            <SoundEntryWrapper onClick={this.handleClick.bind(this)}>
+            <SoundEntryWrapper>
                 <AudioPlayer
+                    handleClick={this.handleClick.bind(this)}
                     audio={this.state.data.soundID}
                     name={this.sound}
+                    isEditing={this.props.isEditing}
+                    isNew={this.props.new}
                     selected={this.state.selected}
                 />
                 <SoundData
