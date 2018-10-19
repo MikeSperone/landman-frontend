@@ -1,4 +1,5 @@
 import React from 'react';
+import Loader from 'react-loader-spinner';
 
 import Display from "../Display";
 import DeleteConfirmation from "./DeleteConfirmation";
@@ -12,6 +13,12 @@ import './index.css';
 const ButtonSection = styled.div`
     float: right;
     margin: 2rem;
+`;
+
+const Spinner = styled.div`
+    position: absolute;
+    left: calc(50vw - 150px);
+    z-index: 9999;
 `;
 
 export default class Edit extends React.Component {
@@ -111,7 +118,6 @@ export default class Edit extends React.Component {
     }
 
     spinner(isOn) {
-        alert('add spinner');
         this.setState(state => ({ spinner: isOn }));
     }
 
@@ -150,6 +156,14 @@ export default class Edit extends React.Component {
                     onCancel={() => this.setState(() => ({showDeleteConfirmation: false}))}
                     onConfirm={this.handleDelete.bind(this)}
                 />
+                <Spinner className={this.state.spinner ? "spinner" : "spinner hidden"}>
+                    <Loader 
+                        type="Bars"
+                        color="#00BFFF"
+                        height="300"	
+                        width="300"
+                    />
+                </Spinner>
                 <Display
                     bin={this.state.data.bin}
                     data={this.state.data}

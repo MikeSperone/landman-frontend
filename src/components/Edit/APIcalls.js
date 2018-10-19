@@ -2,7 +2,7 @@ import { API } from '../../constants';
 import $ from 'jquery';
 
 const APIcalls = {
-    readyStateChange: (successCallback, failureCallback) => {
+    readyStateChange: (req, successCallback, failureCallback) => {
         if (req.readyState === 4) {
             if (req.status === 200) {
                 successCallback();
@@ -32,11 +32,12 @@ const APIcalls = {
         req.open("POST", url, true);
         req.setRequestHeader("Content-type", "application/json");
         req.onreadystatechange = this.readyStateChange(
+            req,
             () => {
                 alert("Success, new data added");
                 window.location.reload();
             },
-            () => alert("Server error: " + req.status);
+            () => alert("Server error: " + req.status)
         );
         console.log("Data added: ", params);
         req.send(params);
