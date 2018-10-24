@@ -14,7 +14,7 @@ const SoundEntryWrapper = styled.div`
 class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {data: {}, selected: false};
+        this.state = {data: {}, selected: false, loaded: 0};
         this.sound = props.sound || (props.new && "Add New Sound...");
     }
 
@@ -42,6 +42,7 @@ class SoundEntry extends React.Component {
                     isEditing={this.props.isEditing}
                     isNew={this.props.new}
                     selected={this.state.selected}
+                    handleNewEntry={this.props.handleNewEntry}
                 />
                 <SoundData
                     data={this.state.data}

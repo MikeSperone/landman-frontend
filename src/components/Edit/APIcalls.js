@@ -25,7 +25,11 @@ const APIcalls = {
         });
     },
 
-    addNewData: params => {
+    addNewData: data => {
+        const params = this._verifyData(data);
+        if (params === false) return;
+
+        APIcalls.addNewData(params);
         let req = new XMLHttpRequest();
         let url = API.fingerings;
     

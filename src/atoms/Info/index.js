@@ -22,10 +22,15 @@ function listSoundsData(props) {
     );
 };
 
-const Info = (props) => (
+const Info = props => (
         <InfoWrapper>
             { props.data.sounds ? listSoundsData(props) : null }
-            <SoundEntry new key={'new'} isEditing={true}/>
+            <SoundEntry
+                new
+                handleNewEntry={props.handleNewEntry}
+                isEditing={true}
+                key={'new'}
+            />
         </InfoWrapper>
 );
 

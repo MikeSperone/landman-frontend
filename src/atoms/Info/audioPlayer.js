@@ -1,7 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const AddNewAudio = () => <div><p>Add a way to upload audio here.</p></div>;
+const AddNewAudio = props => (
+    <div className={"upload" + (props.selected ? "" : " hidden")} >
+        <input type="file" name="" id="" onChange={props.handleSelectedFile} />
+        <button onClick={props.handleUpload}>Upload</button>
+        <div> {Math.round(props.loaded,2) } %</div>
+    </div>
+);
 
 const Audio = styled.audio`
     vertical-align: middle;
@@ -17,6 +23,7 @@ const AudioName = styled.span`
     display: inline-block;
     background-color: SteelBlue;
     padding: 0.5rem 1rem;
+    cursor: pointer;
 `;
 
 class AudioPlayer extends React.Component {
@@ -28,12 +35,18 @@ class AudioPlayer extends React.Component {
 
     render() {
         const bgColor = this.props.selected ? 'LightSteelBlue' : 'LightGrey';
+        const { handleNewEntry, name, handleClick, isNew, ...props } = this.props;
         return (
-            <AudioPlayerWrapper onClick={this.props.handleClick} style={{backgroundColor: bgColor}}>
-                <AudioName>{this.props.name}</AudioName>
+            <AudioPlayerWrapper onClick={handleClick} style={{backgroundColor: bgColor}}>
+                <AudioName>{name}</AudioName>
                 {
-                    this.props.isNew ? (
-                        <AddNewAudio />
+                    isNew ? (
+                        <AddNewAudio
+                            handleSelectedFile={handleNewEntry.selectedFile}
+                            handleUpload={handleNewEntry.upload}
+                            loaded={handleNewEntry.loaded}
+                            { ...props }
+                        />
                     ) : (
                         <Audio controls="controls">
                             <source src={this.audioSrc} />

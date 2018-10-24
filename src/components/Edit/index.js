@@ -37,26 +37,6 @@ export default class Edit extends React.Component {
         console.log("starting edit type: ", this.state.editType);
     }
 
-    _verifyData() {
-        const d = this.state.data;
-        console.log("data: ", d);
-        const invalid = "Error: Invalid Data - ";
-        let finalData = {};
-        if (d.bin.length !== 23) {
-            alert(invalid + "incorrect data length");
-            return false;
-        }
-        finalData["bin"] = d.bin;
-        if (d.pitches && d.pitches.length) {
-            finalData["pitches"] = d.pitches.split(",");
-        }
-        finalData["multi"] = d.multi;
-        if (JSON.stringify(d.other) !== JSON.stringify({})) {
-            finalData["other"] = d.other;
-        }
-        return JSON.stringify(finalData);
-    }
-
     _placeholder() {
         switch (this.state.editType) {
             case "view":
@@ -72,7 +52,7 @@ export default class Edit extends React.Component {
     }
 
     handleAdd(e) {
-        this.setState(() => ({ isEditing: true, buttonText: "Add", editType: 'add' }), this.handleNewData);
+        this.setState(() => ({ isEditing: true, buttonText: "Add", editType: 'add' }), APIcalls.addNewData(this.state.data));
         e.preventDefault();
     }
 
@@ -83,9 +63,7 @@ export default class Edit extends React.Component {
     handleDelete() {
         this.setState(
             () => ({showDeleteConfirmation: false}),
-            () => {
-                APIcalls.deleteEntry();
-            }
+            () => APIcalls.deleteEntry()
         );
     }
 
@@ -106,14 +84,26 @@ export default class Edit extends React.Component {
         this.forceUpdate();
     }
 
-    handleNewData(e) {
-        const params = APIcalls.verifyData(this.state.data);
-        if (params === false) return;
-        APIcalls.addNewData(params);
+    newEntry() {
+        return {
+            updateProgress: ProgressEvent => this.loaded = (ProgressEvent.loaded / ProgressEvent.total*100),
+            handleUpload: () => {
+                const data = new FormData()
+                data.append('file', this.selectedFile, this.selectedFile.name)
+
+                APIcalls.upload(data, this.updateProgress)
+                    .then(res => {
+                        console.log(res.statusText);
+                    });
+
+            },
+            handleSelectedFile: event => this.selectedFile = event.target.files[0],
+            selectedFile: null,
+            loaded: 0
+        };
     }
 
     handleSubmit() {
-        alert("submitting data");
         APIcalls.submitData();
     }
 
@@ -127,7 +117,6 @@ export default class Edit extends React.Component {
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
         const data = this.state.data;
         data.bin = newKeyState;
-        console.log("data: ", data);
         this.spinner(true);
         const successCallback = d => this.setState(
             {data:d, buttonText: 'Edit'},
@@ -169,7 +158,8 @@ export default class Edit extends React.Component {
                     data={this.state.data}
                     isEditing={this.state.isEditing}
                     editType={this.state.editType}
-                    onFingerChange={this.handleNewData.bind(this)}
+                    onNewEntry={this.newEntry.bind(this)}
+                    onFingerChange={APIcalls.addNewData.bind(this)}
                     onFingerClick={this.handleFingeringClick.bind(this)}
                     onEditDataChange={this.handleEditDataChange.bind(this)}
                 />
