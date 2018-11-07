@@ -12,12 +12,15 @@ const APIcalls = {
         }
     },
 
-    searchOrAdd: (bin, successCallback, failCallback=()=>{}) => {
+    search: (bin, successCallback, failCallback=()=>{}) => {
         const url = API.fingerings + bin;
         console.log("url: ", url);
         $.getJSON(
             url,
-            d => successCallback(d)
+            d => {
+                console.log('result: ', d);
+                successCallback(d);
+            }
         ).fail(e => {
             console.log("no match");
             console.log("e: ", e);
@@ -92,10 +95,18 @@ const APIcalls = {
             return false;
         }
         finalData["bin"] = data.bin;
-        if (data.pitches && data.pitches.length) {
-            finalData["pitches"] = data.pitches.split(",");
+        if (data.sounds) {
+            finalData["sounds"] = [];
+            data.sounds.forEach(sound => {
+                const newSound = {};
+                if (sound.pitches && sound.pitches.length) {
+                    newSound["pitch"] = sound.pitch.split(",");
+                }
+                newSound["multi"] = sound.multi;
+                newSound["comments"] = sound.comments;
+                finalData["sounds"].push(newSound);
+            });
         }
-        finalData["multi"] = data.multi;
         if (JSON.stringify(data.other) !== JSON.stringify({})) {
             finalData["other"] = data.other;
         }

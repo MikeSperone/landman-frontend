@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SoundEntry from './SoundEntry';
 
@@ -11,27 +12,36 @@ const InfoWrapper = styled.div`
 `;
 function listSoundsData(props) {
     return (
-        props.data.sounds.map(d => {
-            console.log(d);
+        props.soundData.map(d => {
+            console.log('soundData: ', d);
             return (
                 d ? (
-                    <SoundEntry sound={d} key={d} isEditing={props.isEditing}/>
+                    <SoundEntry soundData={d} key={d} isEditing={props.isEditing}/>
                 ) : null
             );
         })
     );
 };
 
-const Info = props => (
+const Info = props => {
+    
+    console.log('Info props: ', props);
+    return (
         <InfoWrapper>
-            { props.data.sounds ? listSoundsData(props) : null }
+            { props.soundData.length ? listSoundsData(props) : null }
             <SoundEntry
                 new
                 handleNewEntry={props.handleNewEntry}
-                isEditing={true}
+                isEditing={props.isEditing}
                 key={'new'}
             />
         </InfoWrapper>
-);
+    );
+}
 
+Info.propTypes = {
+    soundData: PropTypes.array,
+    isEditing: PropTypes.bool,
+    handleNewEntry: PropTypes.func
+};
 export default Info;

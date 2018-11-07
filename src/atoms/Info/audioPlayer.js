@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const AddNewAudio = props => (
@@ -8,6 +9,13 @@ const AddNewAudio = props => (
         <div> {Math.round(props.loaded,2) } %</div>
     </div>
 );
+
+AddNewAudio.propTypes = {
+    selected: PropTypes.bool,
+    handleSelectedFile: PropTypes.func,
+    handleUpload: PropTypes.func,
+    loaded: PropTypes.bool
+};
 
 const Audio = styled.audio`
     vertical-align: middle;
@@ -58,5 +66,13 @@ class AudioPlayer extends React.Component {
         );
     }
 }
+
+AudioPlayer.propTypes = {
+    audio: PropTypes.string,
+    handleClick: PropTypes.func,
+    handleNewEntry: PropTypes.func,
+    name: PropTypes.string,
+    isNew: PropTypes.bool,
+};
 
 export default AudioPlayer;

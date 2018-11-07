@@ -1,12 +1,12 @@
 import React from 'react';
-import Loader from 'react-loader-spinner';
 
-import Display from "../Display";
+import Loader from 'react-loader-spinner';
 import DeleteConfirmation from "./DeleteConfirmation";
+import FingeringDisplay from '../../atoms/FingeringDisplay';
+import Info from '../../atoms/Info';
 
 import APIcalls from './APIcalls';
 import Button from '../../atoms/Button';
-import $ from 'jquery';
 import styled from 'styled-components';
 import './index.css';
 
@@ -21,22 +21,21 @@ const Spinner = styled.div`
     z-index: 9999;
 `;
 
-export default class Edit extends React.Component {
+class Edit extends React.Component {
 
     constructor(props) {
-        super();
-        this.data = props.data;
+        super(props);
         this.state = {
-            buttonText: "Edit",
-            data: this.data,
-            editType: props.editType || "view",
+            bin: "00000000000000000000000",
+            soundData: [],
             isEditing: false,
+            buttonText: 'Edit',
             spinner: false,
             showDeleteConfirmation: false
         };
         console.log("starting edit type: ", this.state.editType);
     }
-
+    
     _placeholder() {
         switch (this.state.editType) {
             case "view":
@@ -52,8 +51,8 @@ export default class Edit extends React.Component {
     }
 
     handleAdd(e) {
-        this.setState(() => ({ isEditing: true, buttonText: "Add", editType: 'add' }), APIcalls.addNewData(this.state.data));
         e.preventDefault();
+        this.setState(() => ({ isEditing: true, buttonText: "Add", editType: 'add' }), APIcalls.addNewData(this.state.data));
     }
 
     handleCancel() {
@@ -79,7 +78,7 @@ export default class Edit extends React.Component {
     handleEditDataChange(e) {
         const target = e.target;
         const name = target.name;
-        const data = this.state.data;
+        const data = { bin: this.state.bin, soundData: this.state.soundData };
         data[name] = (target.type === 'checkbox') ? target.checked : target.value;
         this.forceUpdate();
     }
@@ -107,33 +106,27 @@ export default class Edit extends React.Component {
         APIcalls.submitData();
     }
 
-    spinner(isOn) {
-        this.setState(state => ({ spinner: isOn }));
-    }
-
     handleFingeringClick(i) {
-        const keyState = this.state.data.bin;
+        console.log('handleFingeringClick');
+        this.setState(() => ({spinner: true}));
+        const keyState = this.state.bin;
         const newState = (String(keyState[i]) === "0") ? "1" : "0";
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
-        const data = this.state.data;
-        data.bin = newKeyState;
-        this.spinner(true);
-        const successCallback = d => this.setState(
-            {data:d, buttonText: 'Edit'},
-            () => {
-                this.spinner(false);
-                $('#not-found').text('');
-            }
-        );
+        const successCallback = d => this.setState(() => ({
+            bin: d.bin,
+            soundData: d.sounds,
+            buttonText: 'Edit',
+            spinner: false,
+            notFound: false
+        }));
         const failCallback = () => this.setState(prevState => ({
             buttonText: 'Add',
-            data: { bin: prevState.data.bin },
-            editType: 'add'
-        }), () => {
-            this.spinner(false);
-            $('#not-found').text('Not Found');
-        });
-        this.setState({ data }, () => APIcalls.searchOrAdd(this.state.data.bin, successCallback, failCallback));
+            bin: prevState.bin,
+            editType: 'add',
+            spinner: false,
+            notFound: true
+        }));
+        this.setState(() => ({ bin: newKeyState}), () => APIcalls.search(this.state.bin, successCallback, failCallback));
     }
 
     render() {
@@ -153,16 +146,21 @@ export default class Edit extends React.Component {
                         width="300"
                     />
                 </Spinner>
-                <Display
-                    bin={this.state.data.bin}
-                    data={this.state.data}
-                    isEditing={this.state.isEditing}
-                    editType={this.state.editType}
-                    onNewEntry={this.newEntry.bind(this)}
-                    onFingerChange={APIcalls.addNewData.bind(this)}
-                    onFingerClick={this.handleFingeringClick.bind(this)}
-                    onEditDataChange={this.handleEditDataChange.bind(this)}
-                />
+                <div> 
+                    <FingeringDisplay
+                        editing={this.state.editType === 'add' || this.state.editType === 'search'}
+                        editType={this.state.editType}
+                        bin={this.state.bin}
+                        handleClick={this.handleFingeringClick.bind(this)}
+                    />
+                    <Info
+                        soundData={this.state.soundData || []}
+                        handleNewEntry={this.newEntry.bind(this)}
+                        isEditing={this.state.isEditing}
+                        editType={this.state.editType}
+                        onChange={this.handleEditDataChange.bind(this)}
+                    />
+                </div>
                 <ButtonSection>
                     <Button
                         className={(this.state.isEditing) ? "edit hidden" : "edit"}
@@ -189,3 +187,5 @@ export default class Edit extends React.Component {
         );
     }
 }
+
+export default Edit;

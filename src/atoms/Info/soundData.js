@@ -8,46 +8,43 @@ const Form = styled.form.attrs({
     float: left;
 `;
 
-export default class SoundData extends React.Component {
-    constructor(props) {
-        super(props);
-        this.data = this.props.data;
-    }
+const SoundData = props => {
 
-    render() {
-        return (
-            (this.props.selected) ? (
+    const { data } = props;
+    return (
+        (props.selected) ? (
             <Form onSubmit={this.handleSubmit} >
                 <Field
                     name="pitches"
                     type="text"
-                    value={this.props.data.pitch || 'n/a'}
-                    onChange={this.props.onChange}
-                    editing={this.props.isEditing}
+                    value={data.pitch || 'n/a'}
+                    onChange={props.onChange}
+                    editing={props.isEditing}
                 />
                 <Field
                     name="multi"
                     type="checkbox"
-                    checked={this.props.data.multi}
-                    onChange={this.props.onChange} 
-                    editing={this.props.isEditing}
+                    checked={data.multi}
+                    onChange={props.onChange} 
+                    editing={props.isEditing}
                 />
                 <CommentField
                     name="comments"
                     type="text"
-                    value={this.props.data.comments || ['no comments']}
-                    onChange={this.props.onChange} 
-                    editing={this.props.isEditing}
+                    value={data.comments || ['no comments']}
+                    onChange={props.onChange} 
+                editing={props.isEditing}
                 />
                 <Field
                     name="other"
                     type="text"
-                    value={this.props.data.other}
-                    onChange={this.props.onChange}
-                    editing={this.props.isEditing}
+                    value={props.data.other}
+                    onChange={props.onChange}
+                    editing={props.isEditing}
                 />
             </Form>
-            ) : null
-        );
-    }
-}
+        ) : null
+    );
+};
+
+export default SoundData;

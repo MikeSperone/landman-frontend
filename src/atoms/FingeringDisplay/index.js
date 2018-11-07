@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './index.css';
 
 const SaxKey = (props) => {
@@ -12,14 +13,13 @@ const SaxKey = (props) => {
 
 export default class FingeringDisplay extends React.Component {
     constructor(props) {
-        super();
-        this.props = props;
+        super(props);
         this.newBin = "00000000000000000000000000";
     }
 
     handleClick(i) {
         if (this.props.editing) {
-            this.props.onClick(i);
+            this.props.handleClick(i);
         }
     }
 
@@ -27,8 +27,8 @@ export default class FingeringDisplay extends React.Component {
         return (
             <SaxKey
                 keyName={n}
-                keyPressed={(this.props && this.props.bin && this.props.bin[v]) ? this.props.bin[v] : this.newBin[v]}
-                onClick={() => this.handleClick(v)}
+                keyPressed={(this.props.bin && this.props.bin[v]) ? this.props.bin[v] : this.newBin[v]}
+                onClick={() => this.props.handleClick(v)}
             />
         );
     }
@@ -89,3 +89,7 @@ export default class FingeringDisplay extends React.Component {
     }
 }
 
+FingeringDisplay.propTypes = {
+    bin: PropTypes.string,
+    handleClick: PropTypes.func
+};
