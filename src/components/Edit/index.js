@@ -21,6 +21,10 @@ const Spinner = styled.div`
     z-index: 9999;
 `;
 
+const NotFound = styled.div`
+    display: ${props => props.found ? 'none' : 'block'};
+`;
+
 class Edit extends React.Component {
 
     constructor(props) {
@@ -30,6 +34,7 @@ class Edit extends React.Component {
             soundData: [],
             isEditing: false,
             buttonText: 'Edit',
+            found: true,
             spinner: false,
             showDeleteConfirmation: false
         };
@@ -112,20 +117,31 @@ class Edit extends React.Component {
         const keyState = this.state.bin;
         const newState = (String(keyState[i]) === "0") ? "1" : "0";
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
-        const successCallback = d => this.setState(() => ({
-            bin: d.bin,
-            soundData: d.sounds,
+        
+        const _successState = resp => this.setState(() => ({
+            bin: resp.bin,
+            soundData: resp.soundData,
             buttonText: 'Edit',
             spinner: false,
-            notFound: false
+            found: true 
         }));
-        const failCallback = () => this.setState(prevState => ({
+        const _failureState = () => this.setState(prevState => ({
             buttonText: 'Add',
             bin: prevState.bin,
+            soundData: [],
             editType: 'add',
             spinner: false,
-            notFound: true
+            found: false 
         }));
+        const successCallback = d => {
+            console.log('success! ', d.response);
+            if (d.response) {
+                console.log('d.response.soundData: ', d.response.soundData);
+                _successState(d.response);
+            }
+            else _failureState();
+        };
+        const failCallback = _failureState;
         this.setState(() => ({ bin: newKeyState}), () => APIcalls.search(this.state.bin, successCallback, failCallback));
     }
 
@@ -154,7 +170,7 @@ class Edit extends React.Component {
                         handleClick={this.handleFingeringClick.bind(this)}
                     />
                     <Info
-                        soundData={this.state.soundData || []}
+                        soundData={this.state.soundData}
                         handleNewEntry={this.newEntry.bind(this)}
                         isEditing={this.state.isEditing}
                         editType={this.state.editType}
@@ -183,6 +199,7 @@ class Edit extends React.Component {
                         text="Delete"
                     />
                 </ButtonSection>
+                <NotFound found={this.state.found} children={"Not Found"} />
             </div>
         );
     }

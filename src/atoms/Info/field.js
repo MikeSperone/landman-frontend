@@ -63,10 +63,10 @@ const Disp = props => {
 const Field = props => {
     if (props.editing) {
         return <Form { ...props }/>;
-    } else if (props.value) {
+    } else if (props.value || props.checked) {
         let checked = props.checked ? props.checked.toString() : "false";
         let value = props.value || checked;
-        return <Disp checked={checked} value={value} { ...props } />;
+        return <Disp value={value} { ...props } />;
     } else {
         return null;
     }

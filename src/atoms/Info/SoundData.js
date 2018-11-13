@@ -24,7 +24,7 @@ const SoundData = props => {
                 <Field
                     name="multi"
                     type="checkbox"
-                    checked={data.multi}
+                    checked={Boolean(data.multi)}
                     onChange={props.onChange} 
                     editing={props.isEditing}
                 />

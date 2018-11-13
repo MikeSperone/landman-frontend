@@ -1,6 +1,7 @@
-import { API } from '../../constants';
 import $ from 'jquery';
 
+//const API_URL = "https://api.mikesperone.com/landman/v1/alto/";
+const API_URL = "http://159.203.187.114/landman/v1/alto/";
 const APIcalls = {
     readyStateChange: (req, successCallback, failureCallback) => {
         if (req.readyState === 4) {
@@ -13,16 +14,11 @@ const APIcalls = {
     },
 
     search: (bin, successCallback, failCallback=()=>{}) => {
-        const url = API.fingerings + bin;
-        console.log("url: ", url);
         $.getJSON(
-            url,
-            d => {
-                console.log('result: ', d);
-                successCallback(d);
-            }
+            API_URL + bin,
+            d => successCallback(d)
         ).fail(e => {
-            console.log("no match");
+            console.log("server error");
             console.log("e: ", e);
             failCallback();
         });
@@ -34,7 +30,7 @@ const APIcalls = {
 
         APIcalls.addNewData(params);
         let req = new XMLHttpRequest();
-        let url = API.fingerings;
+        let url = API_URL;
     
         req.open("POST", url, true);
         req.setRequestHeader("Content-type", "application/json");
@@ -53,7 +49,7 @@ const APIcalls = {
 
     submitData: (data, successCallback) => {
         let req = new XMLHttpRequest();
-        let url = API + data.bin;
+        let url = API_URL + data.bin;
         let params = this._verifyData(data);
         req.open("PUT", url, true);
         req.setRequestHeader("Content-type", "application/json");
@@ -75,7 +71,7 @@ const APIcalls = {
     deleteEntry: data => {
         alert('TODO: make this delete work');
         let req = new XMLHttpRequest();
-        let url = API + data.bin;
+        let url = API_URL + data.bin;
         let params = this._verifyData(data);
         req.open("DELETE", url, true);
         req.setRequestHeader("Content-type", "application/json");

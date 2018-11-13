@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import './index.css';
-import SoundData from './soundData';
-import AudioPlayer from './audioPlayer';
+import SoundData from './SoundData';
+import AudioPlayer from './AudioPlayer';
 
 const SoundEntryWrapper = styled.div`
     border-bottom: 1px solid black;
@@ -14,7 +14,6 @@ class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
         this.state = {selected: false, loaded: 0};
-        this.audio = (this.props.soundData && this.props.soundData.soundID) || 'audio-placeholder';
         this.sound = this.props.sound || (this.props.new && "Add New Sound...");
     }
 
@@ -28,8 +27,7 @@ class SoundEntry extends React.Component {
             <SoundEntryWrapper>
                 <AudioPlayer
                     handleClick={this.handleClick.bind(this)}
-                    audio={this.audio || ''}
-                    name={(this.props.soundData && this.props.soundData.soundID) || ''}
+                    name={(this.props.soundData && this.props.soundData.name) || ''}
                     isEditing={this.props.isEditing}
                     isNew={this.props.new}
                     selected={this.state.selected}

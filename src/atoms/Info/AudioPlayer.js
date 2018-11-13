@@ -37,7 +37,6 @@ const AudioName = styled.span`
 class AudioPlayer extends React.Component {
     constructor(props) {
         super(props);
-        this.audio = props.audio;
         this.audioSrc = "http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg";
     }
 
@@ -68,7 +67,6 @@ class AudioPlayer extends React.Component {
 }
 
 AudioPlayer.propTypes = {
-    audio: PropTypes.string,
     handleClick: PropTypes.func,
     handleNewEntry: PropTypes.func,
     name: PropTypes.string,
