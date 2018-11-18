@@ -5,6 +5,7 @@ import './index.css';
 import SoundData from './SoundData';
 import AudioPlayer from './AudioPlayer';
 
+
 const SoundEntryWrapper = styled.div`
     border-bottom: 1px solid black;
     clear: both;
@@ -13,12 +14,26 @@ const SoundEntryWrapper = styled.div`
 class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {selected: false, loaded: 0};
+        this.state = {
+            buttonText: 'Edit',
+            isEditing: false,
+            selected: false,
+            loaded: 0
+        };
         this.sound = this.props.sound || (this.props.new && "Add New Sound...");
     }
 
     handleClick() {
         this.setState(prevState => ({selected: !prevState.selected}));
+    }
+    
+    handleCancel() {
+        this.setState(() => ({ buttonText: "Edit", isEditing: false }));
+    }
+
+    handleEdit(e) {
+        this.setState(() => ({ buttonText: "Edit", isEditing: true }));
+        e.preventDefault();
     }
 
     render() {
@@ -28,16 +43,21 @@ class SoundEntry extends React.Component {
                 <AudioPlayer
                     handleClick={this.handleClick.bind(this)}
                     name={(this.props.soundData && this.props.soundData.name) || ''}
-                    isEditing={this.props.isEditing}
+                    isEditing={this.state.isEditing}
                     isNew={this.props.new}
                     selected={this.state.selected}
                     handleNewEntry={this.props.handleNewEntry}
                 />
-                <SoundData
-                    data={this.props.soundData || {}}
-                    isEditing={this.props.isEditing}
-                    selected={this.state.selected}
-                />
+                {this.state.selected ? (
+                    <div>
+                        <SoundData
+                            data={this.props.soundData || {}}
+                            isEditing={this.state.isEditing}
+                            handleEdit={this.handleEdit.bind(this)}
+                            handleCancel={this.handleCancel.bind(this)}
+                        />
+                    </div>
+                ) : null}
             </SoundEntryWrapper>
         );
     }
@@ -47,6 +67,7 @@ SoundEntry.propTypes = {
     isEditing: PropTypes.bool,
     new: PropTypes.bool,
     handleNewEntry: PropTypes.func,
+    handleConfirmDelete: PropTypes.func,
     soundData: PropTypes.object
 };
 

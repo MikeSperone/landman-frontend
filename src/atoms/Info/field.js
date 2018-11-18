@@ -19,28 +19,40 @@ const Label = styled.div`
     };
     float: left;
     margin: 1rem 0.5rem;
-    width: 60px;
+    width: 75px;
 `;
 const Value = styled.div`
     float: left;
     margin: 1rem 0.5rem;
 `;
 
-const Form = d => (
-    <FormWrapper>
-        <label htmlFor={d.name}>
-            {d.name.charAt(0).toUpperCase() + d.name.slice(1)}
-        </label>
-        <input
-            id={d.name}
-            name={d.name}
-            type={d.type}
-            value={d.value}
-            checked={d.checked}
-            onChange={d.onChange}
-        />
-    </FormWrapper>
-);
+class Form extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    handleChange(e) {
+        this.props.handleEdit(this.props.name, e.target.value, e.target.checked);
+    }
+
+    render () {
+        return (
+            <FormWrapper>
+                <label htmlFor={this.props.name}>
+                    {this.props.name.charAt(0).toUpperCase() + this.props.name.slice(1)}
+                </label>
+                <input
+                    id={this.props.name}
+                    name={this.props.name}
+                    type={this.props.type}
+                    value={this.props.value}
+                    checked={this.props.checked}
+                    onChange={this.handleChange.bind(this)}
+                />
+            </FormWrapper>
+        );
+    }
+}
 
 function setLabel(name) {
     return (typeof name === "string")
@@ -74,7 +86,10 @@ const Field = props => {
 
 const CommentField = props => {
     console.log("props.value: ", props.value);
-    return (
+    return (null);
+};
+
+/*
         <FormWrapper>
             <h3>Comments</h3>
             {props.value.map((v, ind) => (
@@ -86,6 +101,7 @@ const CommentField = props => {
         </FormWrapper>
     );
 };
+*/
 
 export default Field;
 export { CommentField };

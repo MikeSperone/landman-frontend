@@ -5,15 +5,9 @@ import DeleteConfirmation from "./DeleteConfirmation";
 import FingeringDisplay from '../../atoms/FingeringDisplay';
 import Info from '../../atoms/Info';
 
-import APIcalls from './APIcalls';
-import Button from '../../atoms/Button';
+import APIcalls from '../../APIcalls';
 import styled from 'styled-components';
 import './index.css';
-
-const ButtonSection = styled.div`
-    float: right;
-    margin: 2rem;
-`;
 
 const Spinner = styled.div`
     position: absolute;
@@ -32,7 +26,6 @@ class Edit extends React.Component {
         this.state = {
             bin: "00000000000000000000000",
             soundData: [],
-            isEditing: false,
             buttonText: 'Edit',
             found: true,
             spinner: false,
@@ -46,7 +39,7 @@ class Edit extends React.Component {
             case "view":
                 console.log("Viewing...");
                 this.setState(function(s) {
-                    return {buttonText: "Submit", isEditing: true, editType: "edit"};
+                    return {buttonText: "Submit", editType: "edit"};
                 });
                 break;
             default:
@@ -60,10 +53,6 @@ class Edit extends React.Component {
         this.setState(() => ({ isEditing: true, buttonText: "Add", editType: 'add' }), APIcalls.addNewData(this.state.data));
     }
 
-    handleCancel() {
-        this.setState(() => ({ buttonText: "Edit", isEditing: false, editType: 'search' }));
-    }
-
     handleDelete() {
         this.setState(
             () => ({showDeleteConfirmation: false}),
@@ -75,10 +64,6 @@ class Edit extends React.Component {
         this.setState(() => ({showDeleteConfirmation: true}));
     }
 
-    handleEdit(e) {
-        this.setState(() => ({ buttonText: "Edit", isEditing: true, editType: 'edit' }));
-        e.preventDefault();
-    }
 
     handleEditDataChange(e) {
         const target = e.target;
@@ -107,10 +92,6 @@ class Edit extends React.Component {
         };
     }
 
-    handleSubmit() {
-        APIcalls.submitData();
-    }
-
     handleFingeringClick(i) {
         console.log('handleFingeringClick');
         this.setState(() => ({spinner: true}));
@@ -126,10 +107,8 @@ class Edit extends React.Component {
             found: true 
         }));
         const _failureState = () => this.setState(prevState => ({
-            buttonText: 'Add',
             bin: prevState.bin,
             soundData: [],
-            editType: 'add',
             spinner: false,
             found: false 
         }));
@@ -164,41 +143,17 @@ class Edit extends React.Component {
                 </Spinner>
                 <div> 
                     <FingeringDisplay
-                        editing={this.state.editType === 'add' || this.state.editType === 'search'}
-                        editType={this.state.editType}
                         bin={this.state.bin}
                         handleClick={this.handleFingeringClick.bind(this)}
                     />
                     <Info
                         soundData={this.state.soundData}
                         handleNewEntry={this.newEntry.bind(this)}
-                        isEditing={this.state.isEditing}
                         editType={this.state.editType}
                         onChange={this.handleEditDataChange.bind(this)}
+                        handleConfirmDelete={this.confirmDelete.bind(this)}
                     />
                 </div>
-                <ButtonSection>
-                    <Button
-                        className={(this.state.isEditing) ? "edit hidden" : "edit"}
-                        onClick={this.handleEdit.bind(this)}
-                        text={this.state.buttonText}
-                    />
-                    <Button
-                        className={(this.state.isEditing) ? "submit" : "submit hidden"}
-                        onClick={this.handleSubmit.bind(this)}
-                        text="Submit"
-                    />
-                    <Button
-                        className={(this.state.isEditing) ? "cancel" : "cancel hidden"}
-                        onClick={this.handleCancel.bind(this)}
-                        text="Cancel"
-                    />
-                    <Button
-                        className={(this.state.isEditing) ? "delete" : "delete hidden"}
-                        onClick={this.confirmDelete.bind(this)}
-                        text="Delete"
-                    />
-                </ButtonSection>
                 <NotFound found={this.state.found} children={"Not Found"} />
             </div>
         );

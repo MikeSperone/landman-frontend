@@ -17,12 +17,6 @@ export default class FingeringDisplay extends React.Component {
         this.newBin = "00000000000000000000000000";
     }
 
-    handleClick(i) {
-        if (this.props.editing) {
-            this.props.handleClick(i);
-        }
-    }
-
     renderKey(n, v) {
         return (
             <SaxKey

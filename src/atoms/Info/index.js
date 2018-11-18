@@ -16,7 +16,7 @@ function listSoundsData(props) {
             console.log('soundData: ', d);
             return (
                 d ? (
-                    <SoundEntry soundData={d} key={d} isEditing={props.isEditing}/>
+                    <SoundEntry soundData={d} key={d} handleConfirmDelete={props.handleConfirmDelete}/>
                 ) : null
             );
         })
@@ -32,7 +32,6 @@ const Info = props => {
             <SoundEntry
                 new
                 handleNewEntry={props.handleNewEntry}
-                isEditing={props.isEditing}
                 key={'new'}
             />
         </InfoWrapper>
@@ -41,7 +40,7 @@ const Info = props => {
 
 Info.propTypes = {
     soundData: PropTypes.array,
-    isEditing: PropTypes.bool,
-    handleNewEntry: PropTypes.func
+    handleNewEntry: PropTypes.func,
+    handleConfirmDelte: PropTypes.func,
 };
 export default Info;
