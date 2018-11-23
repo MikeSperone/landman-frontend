@@ -23,7 +23,7 @@ class SoundEntry extends React.Component {
         this.sound = this.props.sound || (this.props.new && "Add New Sound...");
     }
 
-    handleClick() {
+    handleClick(e) {
         e.preventDefault();
         this.setState(prevState => ({selected: !prevState.selected}));
     }
