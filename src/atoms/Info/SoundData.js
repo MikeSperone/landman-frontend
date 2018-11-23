@@ -1,8 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import Field, { CommentField } from './field';
 import Button from '../Button';
 import APIcalls from '../../APIcalls';
+
+const AddNewAudio = props => (
+    <div className={ "upload" }>
+        <input type="file" accept="audio/*" name="" id="" onChange={e => props.handleSelectedFile(e.target.files[0]) } />
+        <div> {props.loaded ? Math.round(props.loaded,2) : 100 } %</div>
+    </div>
+);
+
+AddNewAudio.propTypes = {
+    handleSelectedFile: PropTypes.func.isRequired,
+    loaded: PropTypes.bool
+};
 
 const ButtonSection = styled.div`
     float: right;
@@ -27,11 +40,31 @@ class SoundData extends React.Component {
         this.setState(prevState => { prevState[name] = value || checked; });
     }
     
+    handleSelectedFile(file) {
+        this.setState(() => ({audio: file}));
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        if (this.props.isNew) {
+            APIcalls.createData(this.state);
+        } else {
+            APIcalls.updateData(this.state);
+        }
+    }
+
     render() {
         const { data } = this.props;
         return (
             <div id="soundDataSection">
-                <Form onSubmit={e => { e.preventDefault(); APIcalls.updateData(this.state); }} >
+                <Form onSubmit={this.handleSubmit.bind(this)}>
+                    {this.props.isNew && this.props.isEditing ? (
+                        <AddNewAudio
+                            handleSelectedFile={this.handleSelectedFile.bind(this)}
+                            { ...this.props }
+                        />
+                    ) : null
+                    }
                     <Field
                         name="pitch"
                         type="text"
@@ -64,26 +97,26 @@ class SoundData extends React.Component {
                         type="submit"
                         value="Submit"
                     />
-                        <ButtonSection>
-                            <Button
-                                className={(this.props.isEditing) ? "edit hidden" : "edit"}
-                                onClick={this.props.handleEdit}
-                                text={"Edit"}
-                            />
-                            <Button
-                                className={(this.props.isEditing) ? "cancel" : "cancel hidden"}
-                                onClick={this.props.handleCancel}
-                                text="Cancel"
-                            />
-                            <Button
-                                className={(this.props.isEditing) ? "delete" : "delete hidden"}
-                                onClick={this.props.handleConfirmDelete}
-                                text="Delete"
-                            />
-                        </ButtonSection>
-                    </Form>
-                </div>
-            );
+                    <ButtonSection>
+                        <Button
+                            className={(this.props.isEditing) ? "edit hidden" : "edit"}
+                            onClick={this.props.handleEdit}
+                            text={"Edit"}
+                        />
+                        <Button
+                            className={(this.props.isEditing) ? "cancel" : "cancel hidden"}
+                            onClick={this.props.handleCancel}
+                            text="Cancel"
+                        />
+                        <Button
+                            className={(this.props.isEditing) ? "delete" : "delete hidden"}
+                            onClick={this.props.handleConfirmDelete}
+                            text="Delete"
+                        />
+                    </ButtonSection>
+                </Form>
+            </div>
+        );
     }
     
 }

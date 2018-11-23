@@ -48,11 +48,6 @@ class Edit extends React.Component {
         }
     }
 
-    handleAdd(e) {
-        e.preventDefault();
-        this.setState(() => ({ isEditing: true, buttonText: "Add", editType: 'add' }), APIcalls.addNewData(this.state.data));
-    }
-
     handleDelete() {
         this.setState(
             () => ({showDeleteConfirmation: false}),
@@ -65,7 +60,7 @@ class Edit extends React.Component {
     }
 
 
-    handleEditDataChange(e) {
+    handleDataChange(e) {
         const target = e.target;
         const name = target.name;
         const data = { bin: this.state.bin, soundData: this.state.soundData };
@@ -86,8 +81,6 @@ class Edit extends React.Component {
                     });
 
             },
-            handleSelectedFile: event => this.selectedFile = event.target.files[0],
-            selectedFile: null,
             loaded: 0
         };
     }
@@ -148,9 +141,10 @@ class Edit extends React.Component {
                     />
                     <Info
                         soundData={this.state.soundData}
+                        bin={this.state.bin}
                         handleNewEntry={this.newEntry.bind(this)}
                         editType={this.state.editType}
-                        onChange={this.handleEditDataChange.bind(this)}
+                        onChange={this.handleDataChange.bind(this)}
                         handleConfirmDelete={this.confirmDelete.bind(this)}
                     />
                 </div>

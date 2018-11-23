@@ -24,16 +24,18 @@ class SoundEntry extends React.Component {
     }
 
     handleClick() {
+        e.preventDefault();
         this.setState(prevState => ({selected: !prevState.selected}));
     }
     
-    handleCancel() {
+    handleCancel(e) {
+        e.preventDefault();
         this.setState(() => ({ buttonText: "Edit", isEditing: false }));
     }
 
     handleEdit(e) {
-        this.setState(() => ({ buttonText: "Edit", isEditing: true }));
         e.preventDefault();
+        this.setState(() => ({ buttonText: "Edit", isEditing: true }));
     }
 
     render() {
@@ -42,7 +44,7 @@ class SoundEntry extends React.Component {
             <SoundEntryWrapper>
                 <AudioPlayer
                     handleClick={this.handleClick.bind(this)}
-                    name={(this.props.soundData && this.props.soundData.name) || ''}
+                    name={(this.props.soundData && this.props.soundData.soundID) || ''}
                     isEditing={this.state.isEditing}
                     isNew={this.props.new}
                     selected={this.state.selected}
@@ -51,8 +53,9 @@ class SoundEntry extends React.Component {
                 {this.state.selected ? (
                     <div>
                         <SoundData
-                            data={this.props.soundData || {}}
+                            data={this.props.soundData || {bin: this.props.bin}}
                             isEditing={this.state.isEditing}
+                            isNew={this.props.new}
                             handleEdit={this.handleEdit.bind(this)}
                             handleCancel={this.handleCancel.bind(this)}
                         />

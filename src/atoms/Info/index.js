@@ -31,6 +31,7 @@ const Info = props => {
             { props.soundData.length ? listSoundsData(props) : null }
             <SoundEntry
                 new
+                bin={props.bin}
                 handleNewEntry={props.handleNewEntry}
                 key={'new'}
             />

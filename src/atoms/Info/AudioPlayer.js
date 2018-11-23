@@ -2,21 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const AddNewAudio = props => (
-    <div className={"upload" + (props.selected ? "" : " hidden")} >
-        <input type="file" name="" id="" onChange={props.handleSelectedFile} />
-        <button onClick={props.handleUpload}>Upload</button>
-        <div> {Math.round(props.loaded,2) } %</div>
-    </div>
-);
-
-AddNewAudio.propTypes = {
-    selected: PropTypes.bool,
-    handleSelectedFile: PropTypes.func,
-    handleUpload: PropTypes.func,
-    loaded: PropTypes.bool
-};
-
 const Audio = styled.audio`
     vertical-align: middle;
     width: calc(100% - 1rem);
@@ -42,18 +27,13 @@ class AudioPlayer extends React.Component {
 
     render() {
         const bgColor = this.props.selected ? 'LightSteelBlue' : 'LightGrey';
-        const { handleNewEntry, name, handleClick, isNew, ...props } = this.props;
+        const { name, handleClick, isNew } = this.props;
         return (
             <AudioPlayerWrapper onClick={handleClick} style={{backgroundColor: bgColor}}>
                 <AudioName>{name}</AudioName>
                 {
                     isNew ? (
-                        <AddNewAudio
-                            handleSelectedFile={handleNewEntry.selectedFile}
-                            handleUpload={handleNewEntry.upload}
-                            loaded={handleNewEntry.loaded}
-                            { ...props }
-                        />
+                        <Audio></Audio>
                     ) : (
                         <Audio controls="controls">
                             <source src={this.audioSrc} />
@@ -69,7 +49,10 @@ class AudioPlayer extends React.Component {
 AudioPlayer.propTypes = {
     handleClick: PropTypes.func,
     handleNewEntry: PropTypes.func,
-    name: PropTypes.string,
+    name: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]),
     isNew: PropTypes.bool,
 };
 

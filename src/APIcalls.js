@@ -25,16 +25,22 @@ const APIcalls = {
         });
     },
 
-    addNewData: data => {
-        const params = this._verifyData(data);
+    createData: function(data) {
+        const params = this._verifyCreateData(data);
         if (params === false) return;
+        var formData = new FormData();
+        formData.append('audio', data.audio, data.audio.name);
+        console.log('params: ', params);
+        Object.entries(params).forEach(([k, v]) => {
+            console.log('appending ' + k, ": " + v)
+            formData.append(k, v);
+        });
 
-        APIcalls.addNewData(params);
         let req = new XMLHttpRequest();
-        let url = API_URL;
-    
+        let url = API_URL + "upload/" + params.bin;
+
         req.open("POST", url, true);
-        req.setRequestHeader("Content-type", "application/json");
+        req.setRequestHeader("Content-type", "multipart/form-data");
         req.onreadystatechange = this.readyStateChange(
             req,
             () => {
@@ -43,16 +49,18 @@ const APIcalls = {
             },
             () => alert("Server error: " + req.status)
         );
-        console.log("Data added: ", params);
-        req.send(params);
-    
+        for(var kv of formData.entries()) {
+            console.log(kv);
+        }
+        req.send(formData);
+
     },
 
     updateData: function(data, successCallback) {
         console.log("data", data);
         let req = new XMLHttpRequest();
         let url = API_URL + data.bin + '/' + data.soundID;
-        let params = this._verifySoundData(data);
+        let params = this._verifyUpdateData(data);
         req.open("PUT", url, true);
         req.setRequestHeader("Content-type", "application/json");
         req.onreadystatechange = this.readyStateChange(
@@ -85,7 +93,7 @@ const APIcalls = {
         req.send(params);
     },
 
-    _verifySoundData: function(data) {
+    _verifyCreateData: function(data) {
         console.log("data: ", data);
         let finalData = {};
         if (this._validateBin(data.bin)) {
@@ -93,17 +101,22 @@ const APIcalls = {
         } else {
             return;
         }
-        if (data.name) {
-            finalData['name'] = data.name;
-        } else {
-            return alert("Error: missing required value 'name'");
-        }
         finalData['multi'] = Boolean(data.multi);
         if (data.pitch) {
             finalData['pitch'] = data.pitch;
         }
         if (data.description) {
             finalData['description'] = data.description;
+        }
+        return finalData;
+    },
+
+    _verifyUpdateData: function(data) {
+        var finalData = this._verifyCreateData(data);
+        if (data.name) {
+            finalData['name'] = data.name;
+        } else {
+            return alert("Error: missing required value 'name'");
         }
         return finalData;
     },
