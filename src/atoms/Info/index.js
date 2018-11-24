@@ -16,7 +16,7 @@ function listSoundsData(props) {
             console.log('soundData: ', d);
             return (
                 d ? (
-                    <SoundEntry soundData={d} key={d} handleConfirmDelete={props.handleConfirmDelete}/>
+                    <SoundEntry soundData={d} key={d.soundID} handleConfirmDelete={props.handleConfirmDelete}/>
                 ) : null
             );
         })
