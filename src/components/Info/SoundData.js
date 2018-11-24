@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import Field, { CommentField } from './field';
+import Field from './Field';
 import Button from '../Button';
 import APIcalls from '../../APIcalls';
 
@@ -85,12 +85,6 @@ class SoundData extends React.Component {
                         value={this.state.description || 'n/a'}
                         editing={this.props.isEditing}
                         handleEdit={this.handleEdit.bind(this)}
-                    />
-                    <CommentField
-                        name="comments"
-                        type="text"
-                        value={data.comments || ['no comments']}
-                        editing={this.props.isEditing}
                     />
                     <input
                         className={(this.props.isEditing) ? "submit" : "submit hidden"}

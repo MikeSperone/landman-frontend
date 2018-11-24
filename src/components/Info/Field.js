@@ -8,11 +8,7 @@ const FormWrapper = styled.div.attrs({
     display: block;
     clear: both;
 `;
-const Comment = ({className, children}) => <div className={className}>{children}</div>;
-const CommentBox = styled(Comment)`
-    background-color: ${props => (props.name % 2) ? 'white' : '#ccc'};
-    border-bottom: solid 1px grey;
-`;
+
 const Label = styled.div`
     display: ${props =>
         props.name ? 'block' : 'none'

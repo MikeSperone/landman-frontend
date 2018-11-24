@@ -2,8 +2,8 @@ import React from 'react';
 
 import Loader from 'react-loader-spinner';
 import DeleteConfirmation from "./DeleteConfirmation";
-import FingeringDisplay from '../../atoms/FingeringDisplay';
-import Info from '../../atoms/Info';
+import FingeringDisplay from '../FingeringDisplay';
+import Info from '../Info';
 
 import APIcalls from '../../APIcalls';
 import styled from 'styled-components';

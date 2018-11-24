@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../../atoms/Button';
+import Button from '../Button';
 
 const ConfirmationWrapper = styled.div`
     height: 200px;
