@@ -42,11 +42,12 @@ class SoundEntry extends React.Component {
         return (
             <SoundEntryWrapper>
                 <AudioPlayer
-                    handleClick={this.handleClick.bind(this)}
                     name={(this.props.soundData && this.props.soundData.soundID) || 'Add new sound...'}
+                    src={this.props.soundData && this.props.soundData.name}
                     isEditing={this.state.isEditing}
                     isNew={this.props.new}
                     selected={this.state.selected}
+                    handleClick={this.handleClick.bind(this)}
                     handleNewEntry={this.props.handleNewEntry}
                 />
                 {this.state.selected ? (

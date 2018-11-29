@@ -156,3 +156,4 @@ const APIcalls = {
 };
 
 export default APIcalls;
+export { API_URL };
