@@ -4,7 +4,7 @@ import './index.css';
 
 import Edit from './components/Edit';
 
-const App = () => <Edit editType="search" /> ;
+const App = () => <Edit editType="search" />;
 
 ReactDOM.render(
     <App />,

@@ -94,7 +94,7 @@ class SoundData extends React.Component {
                         <Button
                             className={(this.props.isEditing) ? "edit hidden" : "edit"}
                             onClick={this.props.handleEdit}
-                            text={"Edit"}
+                            text={this.props.isNew ? "Add" : "Edit"}
                         />
                         <Button
                             className={(this.props.isEditing) ? "cancel" : "cancel hidden"}

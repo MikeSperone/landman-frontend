@@ -17,6 +17,9 @@ const Spinner = styled.div`
 
 const NotFound = styled.div`
     display: ${props => props.found ? 'none' : 'block'};
+    height: 10rem;
+    width: 30rem;
+    background-color: dodgerblue;
 `;
 
 class Edit extends React.Component {
@@ -34,20 +37,6 @@ class Edit extends React.Component {
         console.log("starting edit type: ", this.state.editType);
     }
     
-    _placeholder() {
-        switch (this.state.editType) {
-            case "view":
-                console.log("Viewing...");
-                this.setState(function(s) {
-                    return {buttonText: "Submit", editType: "edit"};
-                });
-                break;
-            default:
-                alert("Unexpected edit state!! \"" + this.state.editType + "\"");
-                break;
-        }
-    }
-
     handleDelete() {
         this.setState(
             () => ({showDeleteConfirmation: false}),
@@ -107,10 +96,7 @@ class Edit extends React.Component {
         }));
         const successCallback = d => {
             console.log('success! ', d.response);
-            if (d.response) {
-                console.log('d.response.soundData: ', d.response.soundData);
-                _successState(d.response);
-            }
+            if (d.response) _successState(d.response);
             else _failureState();
         };
         const failCallback = _failureState;
