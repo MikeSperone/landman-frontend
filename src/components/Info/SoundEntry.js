@@ -20,7 +20,6 @@ class SoundEntry extends React.Component {
             selected: false,
             loaded: 0
         };
-        this.sound = this.props.sound || (this.props.new && "Add New Sound...");
     }
 
     handleClick(e) {
@@ -44,7 +43,7 @@ class SoundEntry extends React.Component {
             <SoundEntryWrapper>
                 <AudioPlayer
                     handleClick={this.handleClick.bind(this)}
-                    name={(this.props.soundData && this.props.soundData.soundID) || ''}
+                    name={(this.props.soundData && this.props.soundData.soundID) || 'Add new sound...'}
                     isEditing={this.state.isEditing}
                     isNew={this.props.new}
                     selected={this.state.selected}

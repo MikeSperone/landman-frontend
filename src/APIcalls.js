@@ -31,6 +31,7 @@ const APIcalls = {
         var formData = new FormData();
         formData.append('audio', data.audio, data.audio.name);
         console.log('params: ', params);
+        const dataKeys = ["audio", "bin", "pitch", "multi", "description"];
         Object.entries(params).forEach(([k, v]) => {
             console.log('appending ' + k, ": " + v)
             formData.append(k, v);
@@ -40,8 +41,7 @@ const APIcalls = {
         let url = API_URL + "upload/" + params.bin;
 
         req.open("POST", url, true);
-        req.setRequestHeader("Content-type", "multipart/form-data");
-        req.onreadystatechange = this.readyStateChange(
+        req.onreadystatechange = () => this.readyStateChange(
             req,
             () => {
                 alert("Success, new data added");
@@ -102,12 +102,8 @@ const APIcalls = {
             return;
         }
         finalData['multi'] = Boolean(data.multi);
-        if (data.pitch) {
-            finalData['pitch'] = data.pitch;
-        }
-        if (data.description) {
-            finalData['description'] = data.description;
-        }
+        finalData['pitch'] = data.pitch || '';
+        finalData['description'] = data.description || '';
         return finalData;
     },
 
