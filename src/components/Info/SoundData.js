@@ -69,7 +69,7 @@ class SoundData extends React.Component {
                     <Field
                         name="pitch"
                         type="text"
-                        value={this.state.pitch || 'n/a'}
+                        value={decodeURIComponent(this.state.pitch) || ''}
                         editing={this.props.isEditing}
                         handleEdit={this.handleEdit.bind(this)}
                     />
@@ -83,7 +83,7 @@ class SoundData extends React.Component {
                     <Field
                         name="description"
                         type="text"
-                        value={this.state.description || 'n/a'}
+                        value={decodeURIComponent(this.state.description) || ''}
                         editing={this.props.isEditing}
                         handleEdit={this.handleEdit.bind(this)}
                     />
