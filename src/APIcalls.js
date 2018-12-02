@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 //const API_URL = "https://api.mikesperone.com/landman/v1/alto/";
 const API_URL = "http://159.203.187.114/landman/v1/alto/";
 function xhr(type, url, data) {
