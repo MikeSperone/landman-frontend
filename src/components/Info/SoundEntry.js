@@ -23,7 +23,6 @@ class SoundEntry extends React.Component {
     }
 
     handleClick(e) {
-        e.preventDefault();
         this.setState(prevState => ({selected: !prevState.selected}));
     }
 

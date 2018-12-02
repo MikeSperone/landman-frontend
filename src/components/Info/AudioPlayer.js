@@ -37,7 +37,7 @@ class AudioPlayer extends React.Component {
                         <Audio></Audio>
                     ) : (
                         <Audio controls="controls">
-                            <source src={this.audioSrc} />
+                            <source src={this.audioSrc} type="audio/aif" />
                             Your browser does not support the <code>audio</code> element.
                         </Audio>
                     )
