@@ -30,7 +30,7 @@ class AudioPlayer extends React.Component {
         const matchDot = this.props.src.match(/(?:\.([^.]+))?$/);
         if (!matchDot) return 'mpeg3';
 
-        const extenension = matchDot[1];
+        const extension = matchDot[1];
         switch (extension) {
             case 'aif':
             case 'aifc':
