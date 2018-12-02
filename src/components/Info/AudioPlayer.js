@@ -23,7 +23,7 @@ const AudioName = styled.span`
 class AudioPlayer extends React.Component {
     constructor(props) {
         super(props);
-        this.audioSrc = API_URL + '/audio/' + this.props.src;
+        this.audioSrc = API_URL + 'audio/' + this.props.src;
     }
 
     render() {
