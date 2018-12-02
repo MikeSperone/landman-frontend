@@ -94,13 +94,17 @@ class Edit extends React.Component {
             spinner: false,
             found: false 
         }));
-        const successCallback = d => {
-            console.log('success! ', d.response);
-            if (d.response) _successState(d.response);
-            else _failureState();
-        };
-        const failCallback = _failureState;
-        this.setState(() => ({ bin: newKeyState}), () => APIcalls.search(this.state.bin, successCallback, failCallback));
+        this.setState(
+            () => ({ bin: newKeyState}),
+            () => APIcalls.search(this.state.bin)
+                .then(d => {
+                    console.log('type of d', typeof d);
+                    console.log('success! ', d.response);
+                    if (d.response) _successState(d.response);
+                    else _failureState();
+                })
+                // .catch(_failureState);
+        );
     }
 
     render() {

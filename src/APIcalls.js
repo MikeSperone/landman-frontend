@@ -2,6 +2,29 @@ import $ from 'jquery';
 
 //const API_URL = "https://api.mikesperone.com/landman/v1/alto/";
 const API_URL = "http://159.203.187.114/landman/v1/alto/";
+function xhr(type, url, data) {
+    console.log('xhr ' + type);
+    return new Promise((resolve, reject) => {
+        let req = new XMLHttpRequest();
+        req.open(type, url, true);
+        if (type === "PUT") {
+            req.setRequestHeader("Content-type", "application/json");
+        }
+        req.onreadystatechange = () => {
+            if (req.readyState === 4) {
+                if (req.status === 200) {
+                    console.log('200');
+                    return resolve(JSON.parse(req.responseText));
+                } else {
+                    console.log('not 200', req.status);
+                    return reject(req.status);
+                }
+            }
+        };
+        req.send(data);
+    });
+}
+
 const APIcalls = {
     errIntro: "Error: Invalid Data - ",
     readyStateChange: (req, successCallback, failureCallback) => {
@@ -14,72 +37,38 @@ const APIcalls = {
         }
     },
 
-    search: (bin, successCallback, failCallback=()=>{}) => {
-        $.getJSON(
-            API_URL + bin,
-            d => successCallback(d)
-        ).fail(e => {
-            console.log("server error");
-            console.log("e: ", e);
-            failCallback();
-        });
-    },
+    search: bin => xhr("GET", API_URL + bin),
 
     createData: function(data) {
         const params = this._verifyCreateData(data);
         if (params === false) return;
+
         var formData = new FormData();
         formData.append('audio', data.audio, data.audio.name);
-        console.log('params: ', params);
-        const dataKeys = ["audio", "bin", "pitch", "multi", "description"];
         Object.entries(params).forEach(([k, v]) => {
             console.log('appending ' + k, ": " + v)
             formData.append(k, v);
         });
 
-        let req = new XMLHttpRequest();
-        let url = API_URL + "upload/" + params.bin;
-
-        req.open("POST", url, true);
-        req.onreadystatechange = () => this.readyStateChange(
-            req,
-            () => {
-                alert("Success, new data added");
-                window.location.reload();
-            },
-            () => alert("Server error: " + req.status)
-        );
         for(var kv of formData.entries()) {
             console.log(kv);
         }
-        req.send(formData);
+
+        xhr("POST", API_URL + "upload/" + params.bin, formData)
+            .then(() => {
+                alert("Success, new data added");
+                window.location.reload();
+            })
+            .catch(status => alert("Server error: " + status));
 
     },
 
-    updateData: function(data, successCallback) {
-        console.log("data", data);
-        let req = new XMLHttpRequest();
-        let url = API_URL + data.bin + '/' + data.soundID;
-        let params = this._verifyUpdateData(data);
-        req.open("PUT", url, true);
-        req.setRequestHeader("Content-type", "application/json");
-        req.onreadystatechange = this.readyStateChange(
-            req,
-            () => {
-                alert("Success, data edited");
-                successCallback();
-                this.setState(() => (
-                    {buttonText: "Edit", isEditing: false, editType: "view"}
-                ));
-            }, () => {
-                    alert("Error - data not updated.  Server status: " + req.status);
-            }
-        );
-        console.log("data editied: ", params);
-        req.send(JSON.stringify(params));
+    updateData: function(data) {
+        let params = JSON.stringify(this._verifyUpdateData(data));
+        return xhr("PUT", API_URL + data.bin + '/' + data.soundID, params);
     },
 
-    deleteEntry: data => {
+    deleteEntry: function(data) {
         alert('TODO: make this delete work');
         let req = new XMLHttpRequest();
         let url = API_URL + data.bin;

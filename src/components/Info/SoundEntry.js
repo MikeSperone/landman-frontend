@@ -26,10 +26,18 @@ class SoundEntry extends React.Component {
         e.preventDefault();
         this.setState(prevState => ({selected: !prevState.selected}));
     }
-    
+
+    _stopEditing() {
+        this.setState(() => ({ buttonText: "Edit", isEditing: false }));
+    }
+
     handleCancel(e) {
         e.preventDefault();
-        this.setState(() => ({ buttonText: "Edit", isEditing: false }));
+        this._stopEditing();
+    }
+
+    handleUpdate() {
+        this._stopEditing();
     }
 
     handleEdit(e) {
@@ -57,6 +65,7 @@ class SoundEntry extends React.Component {
                             isEditing={this.state.isEditing}
                             isNew={this.props.new}
                             handleEdit={this.handleEdit.bind(this)}
+                            handleUpdate={this.handleUpdate.bind(this)}
                             handleCancel={this.handleCancel.bind(this)}
                         />
                     </div>

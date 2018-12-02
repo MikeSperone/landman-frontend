@@ -35,11 +35,11 @@ class SoundData extends React.Component {
         const { data } = this.props;
         this.state = data;
     }
-    
+
     handleEdit(name, value, checked) {
         this.setState(prevState => { prevState[name] = value || checked; });
     }
-    
+
     handleSelectedFile(file) {
         this.setState(() => ({audio: file}));
     }
@@ -49,7 +49,9 @@ class SoundData extends React.Component {
         if (this.props.isNew) {
             APIcalls.createData(this.state);
         } else {
-            APIcalls.updateData(this.state);
+            APIcalls.updateData(this.state).then(d => {
+                d.response && d.response.updated && this.props.handleUpdate();
+            });
         }
     }
 
@@ -111,6 +113,6 @@ class SoundData extends React.Component {
             </div>
         );
     }
-    
+
 }
-export default SoundData;                            
+export default SoundData;
