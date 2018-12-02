@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { API_URL } from '../../APIcalls';
 
 const Audio = styled.audio`
     vertical-align: middle;
@@ -24,6 +23,36 @@ class AudioPlayer extends React.Component {
     constructor(props) {
         super(props);
         this.audioSrc = 'audio/' + this.props.src;
+        this.mimeType = this.getMimeTypeFromFilename();
+    }
+
+    getMimeTypeFromFilename() {
+        const extension = this.props.src.match(/(?:\.([^.]+))?$/);
+        switch (extension) {
+            case 'aif':
+            case 'aifc':
+            case 'aiff':
+                return 'x-aiff';
+            case 'au':
+            case 'snd':
+                return "basic";
+            case 'mpa':
+            case 'mpg':
+            case 'mp2':
+                return 'mpeg';
+            case 'mp3':
+                return 'mpeg3';
+            case 'mp4':
+                return 'mp4';
+            case 'ogg':
+            case 'vorbis':
+                return 'ogg';
+            case 'wav':
+                return 'wav';
+            default:
+                return 'mpeg3';
+        }
+
     }
 
     render() {
@@ -37,7 +66,7 @@ class AudioPlayer extends React.Component {
                         <Audio></Audio>
                     ) : (
                         <Audio controls="controls">
-                            <source src={this.audioSrc} type="audio/aif" />
+                            <source src={this.audioSrc} type={"audio/" + this.mimeType} />
                             Your browser does not support the <code>audio</code> element.
                         </Audio>
                     )
