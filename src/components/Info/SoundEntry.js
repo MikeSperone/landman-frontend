@@ -50,7 +50,7 @@ class SoundEntry extends React.Component {
             <SoundEntryWrapper>
                 <AudioPlayer
                     name={(this.props.soundData && this.props.soundData.soundID) || 'Add new sound...'}
-                    src={this.props.soundData && this.props.soundData.name || ''}
+                    src={(this.props.soundData && this.props.soundData.name) || ''}
                     isEditing={this.state.isEditing}
                     isNew={this.props.new}
                     selected={this.state.selected}
