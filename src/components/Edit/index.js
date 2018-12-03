@@ -34,7 +34,6 @@ class Edit extends React.Component {
             spinner: false,
             showDeleteConfirmation: false
         };
-        console.log("starting edit type: ", this.state.editType);
     }
     
     handleDelete() {
@@ -44,10 +43,9 @@ class Edit extends React.Component {
         );
     }
 
-    confirmDelete() {
-        this.setState(() => ({showDeleteConfirmation: true}));
+    toggleDelete(v) {
+        this.setState(() => ({showDeleteConfirmation: v}));
     }
-
 
     handleDataChange(e) {
         const target = e.target;
@@ -113,7 +111,7 @@ class Edit extends React.Component {
             <div className="edit">
                 <DeleteConfirmation
                     className={this.state.showDeleteConfirmation ? "" : "hidden"}
-                    onCancel={() => this.setState(() => ({showDeleteConfirmation: false}))}
+                    onCancel={this.toggleDelete.bind(this, false)}
                     onConfirm={this.handleDelete.bind(this)}
                 />
                 <Spinner className={this.state.spinner ? "spinner" : "spinner hidden"}>
@@ -135,7 +133,7 @@ class Edit extends React.Component {
                         handleNewEntry={this.newEntry.bind(this)}
                         editType={this.state.editType}
                         onChange={this.handleDataChange.bind(this)}
-                        handleConfirmDelete={this.confirmDelete.bind(this)}
+                        handleConfirmDelete={this.toggleDelete.bind(this, true)}
                     />
                 </div>
                 <NotFound found={this.state.found} children={"Not Found"} />

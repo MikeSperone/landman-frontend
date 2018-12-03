@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './index.css';
 
-const SaxKey = (props) => {
+const SaxKey = props => {
     const openClosed = (props.keyPressed === "0") ? "open" : "closed";
     return (
-        <button className={props.keyName + " " + openClosed}
+        <button
+            className={props.keyName + " " + openClosed}
             onClick={() => props.onClick()}
         ></button>
     );

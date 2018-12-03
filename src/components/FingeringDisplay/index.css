@@ -2,27 +2,18 @@
     width: 250px;
     float: left;
 }
-
 .fingeringItem {
     min-width: 136px;
     float: left;
     margin: 0 25%;
 }
-
 .fingeringItem button {
     font-size: 1rem;
     font-weight: bold;
     border: 1px solid black;
 }
-
-.open {
-    background-color: white;
-}
-
-.closed {
-    background-color: black;
-}
-
+.open { background-color: white; }
+.closed { background-color: black; }
 .leftColumn {
     width: 30px;
     float:left;
@@ -35,7 +26,6 @@
     width: 40px;
     float: left;
 }
-
 .octave {
     top: 20px;
     left: 5px;
@@ -43,12 +33,10 @@
     width: 30px;
     border-radius: 10% 85% 25% 10%;
 }
-
 .side {
     position: absolute;
     top: 100px;
 }
-
 .highE, .sideC, .sideBFlat {
     display: block;
     height: 32px;
@@ -56,12 +44,10 @@
     margin: 5px;
     border-radius: 5px;
 }
-
 .otherSideKeys {
     position: absolute;
     top: 220px;
 }
-
 .highFSharp {
     display: block;
     border-radius: 5px;
@@ -69,21 +55,18 @@
     width: 20px;
     margin: 5px;
 }
-
 .sideFSharp {
     display: block;
     border-radius: 5px;
     height: 28px;
     width: 18px;
 }
-
 .frontF {
     width: 40px;
     height: 30px;
     margin: 5px;
     border-radius: 80px 15px 80px 15px;
 }
-
 .l1, .l2, .l3, .r1, .r2, .r3 {
     display: block;
     height: 40px;
@@ -91,7 +74,6 @@
     border-radius: 50%;
     margin: 5px;
 }
-
 .eFlat {
     height: 20px;
     width: 40px;
@@ -99,7 +81,6 @@
     border-radius: 50% 50% 5px 5px;
     margin: 5px;
 }
-
 .lowC {
     height: 20px;
     width: 40px;
@@ -107,7 +88,6 @@
     border-radius: 5px 5px 50% 50%;
     margin: 5px;
 }
-
 .bis {
     position: absolute;
     top: 30px;
@@ -117,39 +97,32 @@
     border-radius: 50%;
     margin: 5px;
 }
-
 .high {
     position: absolute;
     top: 25px;
 }
-
 .high button {
     height: 35px;
     width: 35px;
     border-radius: 10px 100px 10px 100px;
 }
-
 .highF {
     position: absolute;
     top: 30px;
 }
-
 .highDSharp {
     /* position: absolute; */
     /* top: 0px; */
 }
-
 .highD {
     position: absolute;
     top: 10px;
     left: 36px;
 }
-
 .sideKeys {
     position: absolute;
     top: 160px;
 }
-
 .gSharp {
     display: block;
     height: 20px;
@@ -178,7 +151,6 @@
     margin: 3px;
     margin-left: 5px;
 }
-
 hr {
     width: 60px;
     margin: 0;
