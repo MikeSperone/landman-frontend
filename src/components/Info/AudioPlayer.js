@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const Audio = styled.audio`
     vertical-align: middle;
-    width: calc(100% - 1rem);
+    width: calc(100% - 4rem);
     margin: 0.5rem;
 `;
 
@@ -22,7 +22,7 @@ const AudioName = styled.span`
 class AudioPlayer extends React.Component {
     constructor(props) {
         super(props);
-        this.audioSrc = 'audio/' + this.props.src;
+        this.audioSrc = '/audio/' + this.props.src;
         this.mimeType = this.getMimeTypeFromFilename();
     }
 
@@ -39,21 +39,18 @@ class AudioPlayer extends React.Component {
             case 'au':
             case 'snd':
                 return "basic";
-            case 'mpa':
-            case 'mpg':
-            case 'mp2':
-                return 'mpeg';
-            case 'mp3':
-                return 'mpeg3';
             case 'mp4':
                 return 'mp4';
             case 'ogg':
-            case 'vorbis':
                 return 'ogg';
             case 'wav':
                 return 'wav';
+            case 'mpa':
+            case 'mpg':
+            case 'mp2':
+            case 'mp3':
             default:
-                return 'mpeg3';
+                return 'mpeg';
         }
 
     }
@@ -62,8 +59,8 @@ class AudioPlayer extends React.Component {
         const bgColor = this.props.selected ? 'LightSteelBlue' : 'LightGrey';
         const { name, handleClick, isNew } = this.props;
         return (
-            <AudioPlayerWrapper onClick={handleClick} style={{backgroundColor: bgColor}}>
-                <AudioName>{name}</AudioName>
+            <AudioPlayerWrapper style={{backgroundColor: bgColor}}>
+                <AudioName onClick={handleClick} >{name}</AudioName>
                 {
                     isNew ? (
                         <Audio></Audio>
@@ -80,12 +77,13 @@ class AudioPlayer extends React.Component {
 }
 
 AudioPlayer.propTypes = {
+    src: PropTypes.string.isRequired,
     handleClick: PropTypes.func,
     handleNewEntry: PropTypes.func,
     name: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
-    ]),
+    ]).isRequired,
     isNew: PropTypes.bool,
 };
 
