@@ -1,5 +1,5 @@
 //const API_URL = "https://api.mikesperone.com/landman/v1/alto/";
-const API_URL = "http://159.203.187.114/landman/v1/alto/";
+const API_URL = "http://localhost:3000/v1/alto/";
 function xhr(type, url, data) {
     console.log('xhr ' + type);
     return new Promise((resolve, reject) => {
@@ -13,8 +13,10 @@ function xhr(type, url, data) {
                 if (req.status === 200) {
                     console.log('200');
                     return resolve(JSON.parse(req.responseText));
+                } else if (req.status === 401) {
+                    alert('you must be logged in to complete this action');
                 } else {
-                    console.log('not 200', req.status);
+                    console.log('unhandled response status', req.status);
                     return reject(req.status);
                 }
             }

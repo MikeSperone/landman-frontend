@@ -10,10 +10,18 @@ const SoundEntryWrapper = styled.div`
     border-bottom: 1px solid black;
     clear: both;
 `;
+// TODO: connect this to jwt log in system somehow
+const user = {
+    isLoggedIn: true,
+    hasPermissions: true 
+};
 
 class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
+        this.soundID = this.props.soundData && this.props.soundData.soundID; 
+        this.hasSoundData = Boolean(this.soundID);
+        this.name = this.soundID || 'Add new sound...';
         this.state = {
             buttonText: 'Edit',
             isEditing: false,
@@ -22,8 +30,25 @@ class SoundEntry extends React.Component {
         };
     }
 
+    checkIfUserLoggedIn(fn) {
+        if (user.isLoggedIn) {
+            if (user.hasPermissions) {
+                return fn();
+            }
+            alert('You do not have access to complete this action');
+        } else {
+            alert('You must be logged in to complete this action');
+        }
+    }
+
     handleClick(e) {
-        this.setState(prevState => ({selected: !prevState.selected}));
+        if (this.hasSoundData) {
+            return this.setState(prevState => ({selected: !prevState.selected}));
+        }
+
+        this.checkIfUserLoggedIn(() => {
+            this.setState(prevState => ({selected: !prevState.selected}));
+        });
     }
 
     _stopEditing() {
@@ -41,7 +66,9 @@ class SoundEntry extends React.Component {
 
     handleEdit(e) {
         e.preventDefault();
-        this.setState(() => ({ buttonText: "Edit", isEditing: true }));
+        this.checkIfUserLoggedIn(() => {
+            this.setState(() => ({ buttonText: "Edit", isEditing: true }));
+        });
     }
 
     render() {
@@ -49,7 +76,7 @@ class SoundEntry extends React.Component {
         return (
             <SoundEntryWrapper>
                 <AudioPlayer
-                    name={(this.props.soundData && this.props.soundData.soundID) || 'Add new sound...'}
+                    name={this.name}
                     src={(this.props.soundData && this.props.soundData.name) || ''}
                     isEditing={this.state.isEditing}
                     isNew={this.props.new}
