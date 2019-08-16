@@ -1,4 +1,4 @@
-//const API_URL = "https://api.mikesperone.com/landman/v1/alto/";
+// const API_URL = "http://api.mikesperone.com/landman/v1/alto/";
 const API_URL = "http://localhost:3000/v1/alto/";
 function xhr(type, url, data) {
     console.log('xhr ' + type);
@@ -7,6 +7,11 @@ function xhr(type, url, data) {
         req.open(type, url, true);
         if (type === "PUT") {
             req.setRequestHeader("Content-type", "application/json");
+        }
+        if (type !== "GET") {
+            // authorization needed
+            const token = '1';
+            req.setRequestHeader("Authorization", "Bearer " + token);
         }
         req.onreadystatechange = () => {
             if (req.readyState === 4) {
