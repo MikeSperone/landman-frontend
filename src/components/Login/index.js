@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from '../Button';
+import APIcalls from '../../APIcalls';
 
 class Login extends Component {
 
@@ -15,8 +16,8 @@ class Login extends Component {
     validateEmail(email) {
         return (
             email.length > 5 &&
-            email.matches('@') &&
-            email.matches('.')
+            email.match('@') &&
+            email.match('.')
         );
     }
 
@@ -25,10 +26,10 @@ class Login extends Component {
     }
 
     validateForm() {
-        const errors = [];
-        if (!this.validateEmail(this.state.email)) errors.push('Invalid email address');
-        if (!this.validatePassword(this.state.password)) errors.push('Invalid password');
-        return errors;
+        return (
+            this.validateEmail(this.state.email) &&
+            this.validatePassword(this.state.password)
+        );
     }
 
     handleChange = event => {
@@ -39,6 +40,18 @@ class Login extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
+        APIcalls.login(this.state.email, this.state.password)
+            .then(d => {
+                if (d.user) {
+                    this.setState({ password: '' });
+                    this.props.handleUser(d);
+                } else {
+                    alert('login error?');
+                    console.log('login error? ', d);
+                }
+            }).catch(e => {
+                alert(e);
+            });
     }
 
     render() {
@@ -47,7 +60,9 @@ class Login extends Component {
                 <form className="pure-form" onSubmit={this.handleSubmit}>
                     <fieldset>
                         <input
+                            style={{margin: '0.5rem'}}
                             autoFocus
+                            id="email"
                             type="email"
                             name="email"
                             placeholder="human@example.com"
@@ -55,6 +70,7 @@ class Login extends Component {
                             onChange={this.handleChange}
                         />
                         <input
+                            id="password"
                             type="password"
                             name="password"
                             value={this.state.password}
@@ -63,7 +79,7 @@ class Login extends Component {
                         <Button
                             type="submit"
                             text="Login" 
-                            disabled={!this.validateForm()}
+                            className={this.validateForm() ? '' : 'pure-button-disabled'}
                         />
                     </fieldset>
                 </form>

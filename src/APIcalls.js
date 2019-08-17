@@ -1,25 +1,50 @@
-// const API_URL = "http://api.mikesperone.com/landman/v1/alto/";
-const API_URL = "http://localhost:3000/v1/alto/";
-function xhr(type, url, data) {
+// const API_URL = "http://api.mikesperone.com/landman";
+const BASE_URL = "http://localhost:3000";
+const API_URL = BASE_URL + "/v1/alto/";
+const LOGIN_URL = BASE_URL + "/users/login";
+
+var token = 'woof';
+var permissionsLevel = '8';
+function tokens() {
+
+    var _token;
+
+    function set(t) {
+        _token = t;
+    }
+
+    function get() {
+        return _token;
+    }
+    return {
+        set,
+        get
+    };
+}
+
+function xhr(type, url, data, options={}) {
     console.log('xhr ' + type);
     return new Promise((resolve, reject) => {
         let req = new XMLHttpRequest();
         req.open(type, url, true);
-        if (type === "PUT") {
+        if (!(data instanceof FormData)) {
+            req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        } else if (type === "PUT") {
             req.setRequestHeader("Content-type", "application/json");
         }
-        if (type !== "GET") {
+        if (type !== "GET" && !url.match('users/login')) {
             // authorization needed
-            const token = '1';
+            if (token === 'woof') return (reject({status: 401}));
             req.setRequestHeader("Authorization", "Bearer " + token);
         }
         req.onreadystatechange = () => {
             if (req.readyState === 4) {
                 if (req.status === 200) {
-                    console.log('200');
                     return resolve(JSON.parse(req.responseText));
                 } else if (req.status === 401) {
                     alert('you must be logged in to complete this action');
+                } else if (req.status === 400) {
+                    return reject(JSON.parse(req.responseText));
                 } else {
                     console.log('unhandled response status', req.status);
                     return reject(req.status);
@@ -42,9 +67,27 @@ const APIcalls = {
         }
     },
 
+    login: (email, password) => {
+        return new Promise(resolve => {
+            xhr("POST", LOGIN_URL, 'email='+email+'&password='+ password)
+                .then(d => {
+                    if (typeof d !== "undefined") {
+                        if (d.token) token = d.token;
+                        permissionsLevel = (d.user && d.user.permissionsLevel) ?
+                            d.user.permissionsLevel :
+                            8;
+                    }
+                    resolve(d);
+                });
+        });
+    },
+
     search: bin => xhr("GET", API_URL + bin),
 
     createData: function(data) {
+        if (permissionsLevel >= 4) {
+            return new Promise((resolve, reject) => reject({ error: "Incorrect permissions" }));
+        }
         const params = this._verifyCreateData(data);
         if (params === false) return;
 
@@ -69,11 +112,18 @@ const APIcalls = {
     },
 
     updateData: function(data) {
+        // TODO: handle checking if this is the users' submitted data
+        // if (ownContent && user.permissionsLevel === 5)
+        if (permissionsLevel >= 3) {
+            console.error('incorrect permissions');
+            return new Promise((_, reject) => reject({ error: 'incorrect permissions' }));
+        }
         let params = JSON.stringify(this._verifyUpdateData(data));
         return xhr("PUT", API_URL + data.bin + '/' + data.soundID, params);
     },
 
     deleteEntry: function(data) {
+        // TODO: make this delete work
         alert('TODO: make this delete work');
         let req = new XMLHttpRequest();
         let url = API_URL + data.bin;

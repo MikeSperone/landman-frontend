@@ -1,32 +1,77 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Login from '../Login';
 import styled from 'styled-components';
 
 const HorizontalMenu = styled.div.attrs({
-    className: ''
+    className: 'pure-menu pure-menu-horizontal'
 })`
-    
+    display: flex;
+`;
+const MenuList = styled.div.attrs({
+    className: 'pure-menu-list'
+})`
+    flex: auto;
+`;
+
+const LoginMenuWrapper = styled.li.attrs({
+    className: "pure-menu-item pure-menu-has-children pure-menu-allow-hover"
+})`
+    float: right;
+    && > ul {
+        left: auto;
+        right: 0;
+    }
 `;
 
 const MenuItem = props => (
-    <li className='pure-menu-item'>
+    <li className={'pure-menu-item ' + (props.selected ? 'pure-menu-selected' : '')}>
         <a href='#' className='pure-menu-link'>{props.name}</a>
     </li>
 );
-const Menu = () => (
-    <ul className='pure-menu-list'>
-       <MenuItem name='About' />
-       <MenuItem name='Saxophone' />
-       <li className='pure-menu-item'><Login /></li>
-    </ul>
-);
-const Title = () => <div className='pure-menu-heading'>Geoffery Landman Saxophone Database</div>;
 
-const NavBar = () => (
-    <div className="pure-menu pure-menu-horizontal">
-        <Title />
-        <Menu />
-    </div>
-);
+class NavBar extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isLoggedIn: false, 
+            user: '',
+        };
+        this.handleUser = this.handleUser.bind(this);
+    }
+
+    handleUser(u) {
+        if (u && u.user !== "undefined") {
+            this.setState({ user: u.user, isLoggedIn: true });
+        } else {
+            console.error(u);
+        }
+    }
+
+    render() {
+        return (
+            <HorizontalMenu>
+                <div className='pure-menu-heading'>Geoffery Landman Saxophone Database</div>
+                <MenuList>
+                    <MenuItem name='About' />
+                    <MenuItem name='Saxophone' selected />
+                    { this.state.isLoggedIn ? (
+                        <MenuItem name={'Greetings ' + this.state.user.firstName} />
+                    ) : (
+                        <LoginMenuWrapper>
+                            <a href='#' id='menuLink1' className='pure-menu-link'>Login</a>
+                            <ul className="pure-menu-children">
+                                <li className='pure-menu-item'>
+                                    <Login handleUser={this.handleUser} />
+                                </li>
+                            </ul>
+                        </LoginMenuWrapper>
+                    )}
+                </MenuList>
+            </HorizontalMenu>
+        );
+    }
+}
 
 export default NavBar;
