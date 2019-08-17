@@ -9,6 +9,12 @@ import APIcalls from '../../APIcalls';
 import styled from 'styled-components';
 import './index.css';
 
+const EditWrapper = styled.div.attrs({
+    className: 'edit'
+})`
+    position: relative;
+`;
+
 const Spinner = styled.div`
     position: absolute;
     left: calc(50vw - 150px);
@@ -108,7 +114,7 @@ class Edit extends React.Component {
     render() {
 
         return (
-            <div className="edit">
+            <EditWrapper>
                 <DeleteConfirmation
                     className={this.state.showDeleteConfirmation ? "" : "hidden"}
                     onCancel={this.toggleDelete.bind(this, false)}
@@ -137,7 +143,7 @@ class Edit extends React.Component {
                     />
                 </div>
                 <NotFound found={this.state.found} children={"Not Found"} />
-            </div>
+            </EditWrapper>
         );
     }
 }
