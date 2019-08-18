@@ -23,9 +23,6 @@ const Value = styled.div`
 `;
 
 class Form extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     handleChange(e) {
         this.props.handleEdit(this.props.name, e.target.value, e.target.checked);

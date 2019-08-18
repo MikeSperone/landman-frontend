@@ -89,13 +89,13 @@ export default class User {
         // so by not passing in the author, you are
         // saying content Authorization is not needed
 
-        if (!isLoggedIn) return false;
+        if (!this.isLoggedIn) return false;
 
         if (!this.permissions.includes(action)) return false;
 
-        if (contentAuthor !== this.email && [Action.UPDATE, Action.DELETE].includes(action)) {
+        if (contentAuthor !== this.email && [Actions.UPDATE, Actions.DELETE].includes(action)) {
             // this indicates user must be a moderator
-            return this.permissions.includes(Action.MODERATE_DATA);
+            return this.permissions.includes(Actions.MODERATE_DATA);
         }
 
         return true;

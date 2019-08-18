@@ -65,8 +65,8 @@ class Edit extends React.Component {
         return {
             updateProgress: ProgressEvent => this.loaded = (ProgressEvent.loaded / ProgressEvent.total*100),
             handleUpload: () => {
-                const data = new FormData()
-                data.append('file', this.selectedFile, this.selectedFile.name)
+                const data = new FormData();
+                data.append('file', this.selectedFile, this.selectedFile.name);
 
                 APIcalls.upload(data, this.updateProgress)
                     .then(res => {

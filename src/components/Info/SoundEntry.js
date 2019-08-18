@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import './index.css';
 import SoundData from './SoundData';
 import AudioPlayer from './AudioPlayer';
+import { Actions } from '../../user';
 import { userHasAccess } from '../../APIcalls.js';
 
 
@@ -16,6 +17,7 @@ class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
         this.soundID = this.props.soundData && this.props.soundData.soundID; 
+        this.author = this.props.soundData && this.props.soundData.author;
         this.hasSoundData = Boolean(this.soundID);
         this.name = this.soundID || 'Add new sound...';
         this.state = {
@@ -33,7 +35,7 @@ class SoundEntry extends React.Component {
 
         // if there is no soundData, this leads to an "Add new data",
         // which is restricted to logged in users with access
-        userHasAccess('create') &&
+        userHasAccess(Actions.CREATE) &&
             this.setState(prevState => ({selected: !prevState.selected}));
     }
 
@@ -52,7 +54,7 @@ class SoundEntry extends React.Component {
 
     handleEdit(e) {
         e.preventDefault();
-        userHasAccess('update') &&
+        userHasAccess(Actions.UPDATE, this.author) &&
             this.setState(() => ({ buttonText: "Edit", isEditing: true }));
     }
 
@@ -62,7 +64,7 @@ class SoundEntry extends React.Component {
             <SoundEntryWrapper>
                 <AudioPlayer
                     name={this.name}
-                    src={(this.props.soundData && this.props.soundData.name) || ''}
+                    src={this.props.soundData && this.props.soundData.name || ''}
                     isEditing={this.state.isEditing}
                     isNew={this.props.new}
                     selected={this.state.selected}

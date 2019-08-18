@@ -92,7 +92,7 @@ const APIcalls = {
                             return resolve(d);
                         }
                     }
-                    alert(errorMsg('user not logged in'));
+                    alert(this.errorMsg('user not logged in'));
                     resolve({});
                 });
         });
@@ -140,7 +140,7 @@ const APIcalls = {
     },
 
     deleteEntry: function(data) {
-        if (!user.isAuthorizedFor(Actions.DELETE), data.email) {
+        if (!user.isAuthorizedFor(Actions.DELETE, data.email)) {
             this.errorMsg('You do not have access to complete this action.');
             return new Promise((_, reject) => reject({ error: 'incorrect permissions' }));
         }

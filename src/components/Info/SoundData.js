@@ -34,6 +34,9 @@ class SoundData extends React.Component {
         super(props);
         const { data } = this.props;
         this.state = data;
+        this.handleEdit = this.handleEdit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSelectedFile = this.handleSelectedFile.bind(this);
     }
 
     handleEdit(name, value, checked) {
@@ -58,10 +61,10 @@ class SoundData extends React.Component {
     render() {
         return (
             <div id="soundDataSection">
-                <Form onSubmit={this.handleSubmit.bind(this)}>
+                <Form onSubmit={this.handleSubmit}>
                     {this.props.isNew && this.props.isEditing ? (
                         <AddNewAudio
-                            handleSelectedFile={this.handleSelectedFile.bind(this)}
+                            handleSelectedFile={this.handleSelectedFile}
                             { ...this.props }
                         />
                     ) : null
@@ -69,23 +72,30 @@ class SoundData extends React.Component {
                     <Field
                         name="pitch"
                         type="text"
-                        value={decodeURIComponent(this.state.pitch) || ''}
+                        value={decodeURIComponent(this.state.pitch || '')}
                         editing={this.props.isEditing}
-                        handleEdit={this.handleEdit.bind(this)}
+                        handleEdit={this.handleEdit}
                     />
                     <Field
                         name="multi"
                         type="checkbox"
                         checked={Boolean(this.state.multi)}
                         editing={this.props.isEditing}
-                        handleEdit={this.handleEdit.bind(this)}
+                        handleEdit={this.handleEdit}
                     />
                     <Field
                         name="description"
                         type="text"
-                        value={decodeURIComponent(this.state.description) || ''}
+                        value={decodeURIComponent(this.state.description || '')}
                         editing={this.props.isEditing}
-                        handleEdit={this.handleEdit.bind(this)}
+                        handleEdit={this.handleEdit}
+                    />
+                    <Field
+                        name="author"
+                        type="text"
+                        value={decodeURIComponent(this.state.author || 'unknown')}
+                        editing={false}
+                        handleEdit={this.handleEdit}
                     />
                     <input
                         className={(this.props.isEditing) ? "submit" : "submit hidden"}
