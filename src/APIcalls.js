@@ -15,7 +15,7 @@ function userHasAccess(action) {
     }
 
     if (!user.isAuthorizedFor(action)) {
-        alert(`You do not have permission to ${action}.\nIf you believe this is an error, please contact an administrator.`);
+        alert(`You do not have permission to ${Actions.properties[action].name}.\nIf you believe this is an error, please contact an administrator.`);
         return false;
     }
     return true;
@@ -65,7 +65,6 @@ function validateReturnedData(d) {
     return typeof d !== "undefined" &&
         typeof d.token !== "undefined" &&
         typeof d.user !== "undefined" &&
-        typeof d.user.email !== "undefined" &&
         typeof d.user.permissionsLevel !== "undefined";
 }
 
@@ -87,12 +86,12 @@ const APIcalls = {
             xhr("POST", LOGIN_URL, 'm='+email+'&s='+ password)
                 .then(d => {
                     if (validateReturnedData(d)) {
-                        user.login(d.token, d.email, d.user.permissionsLevel);
+                        user.login(d.token, email, d.user.permissionsLevel);
                         if (user.isLoggedIn) {
                             return resolve(d);
                         }
                     }
-                    alert(this.errorMsg('user not logged in'));
+                    alert('Error: user not logged in');
                     resolve({});
                 });
         });

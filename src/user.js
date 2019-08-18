@@ -65,7 +65,7 @@ export default class User {
         this._loggedIn = false;
         this.token = 'woof';
         this.email = '';
-        this.permissionsLevel = Roles.READ_ONLY;
+        this._role = Roles.READ_ONLY;
     }
 
     get permissionsLevel() {
@@ -73,10 +73,12 @@ export default class User {
     }
 
     set permissionsLevel(x) {
-        this._role = RolesMap[x];
+        this._role = x;
     }
 
     get permissions() { 
+        console.info('role; ', this._role);
+        console.info('properties: ', Roles.properties);
         return Roles.properties[this._role].permissions;
     }
 
