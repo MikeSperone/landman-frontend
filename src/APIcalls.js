@@ -1,29 +1,24 @@
-// const API_URL = "http://api.mikesperone.com/landman";
+import User, { Actions } from './user';
+// const BASE_URL = "http://api.mikesperone.com/landman";
 const BASE_URL = "http://localhost:3000";
 const API_URL = BASE_URL + "/v1/alto/";
 const LOGIN_URL = BASE_URL + "/users/login";
 
-const PERMISSIONS = {
-    create: [0, 1, 2, 3],
-    update: [0, 1, 2],
-    delete: [0]
-};
-const user = {
-    token: 'woof',
-    email: '',
-    permissionsLevel: '8'
-};
+
+const user = new User();
 
 function userHasAccess(action) {
 
-    if (user.token === 'woof') {
-        alert("You must be logged in to " + action);
-        return;
+    if (!user.isLoggedIn) {
+        alert("You must be logged in to " + Actions.properties[action].name);
+        return false;
     }
 
-    if (!PERMISSIONS[action].includes(user.permissionsLevel)) {
+    if (!user.isAuthorizedFor(action)) {
         alert(`You do not have permission to ${action}.\nIf you believe this is an error, please contact an administrator.`);
+        return false;
     }
+    return true;
 
 }
 
@@ -37,14 +32,17 @@ function xhr(type, url, data, options={}) {
         } else if (type === "PUT") {
             req.setRequestHeader("Content-type", "application/json");
         }
+
         if (type !== "GET" && !url.match('users/login')) {
             // authorization needed
-            if (user.token === 'woof') {
+            if (user.isLoggedIn) {
+                req.setRequestHeader("Authorization", "Bearer " + user.token);
+            } else {
                 alert('Not logged in');
                 return reject({status: 401});
             }
-            req.setRequestHeader("Authorization", "Bearer " + user.token);
         }
+
         req.onreadystatechange = () => {
             if (req.readyState === 4) {
                 if (req.status === 200) {
@@ -64,10 +62,11 @@ function xhr(type, url, data, options={}) {
 }
 
 function validateReturnedData(d) {
-    return d.token !== "undefined" &&
-        d.user !== "undefined" &&
-        d.user.email !== "undefined" &&
-        d.user.permissionsLevel !== "undefined";
+    return typeof d !== "undefined" &&
+        typeof d.token !== "undefined" &&
+        typeof d.user !== "undefined" &&
+        typeof d.user.email !== "undefined" &&
+        typeof d.user.permissionsLevel !== "undefined";
 }
 
 const APIcalls = {
@@ -87,16 +86,14 @@ const APIcalls = {
         return new Promise(resolve => {
             xhr("POST", LOGIN_URL, 'm='+email+'&s='+ password)
                 .then(d => {
-                    if (typeof d !== "undefined") {
-                        if (validateReturnedData(d)) {
-                            user.token = d.token;
-                            user.email = d.email;
-                            user.permissionsLevel = d.user.permissionsLevel;
-                        } else {
-                            alert('Invalid data from the server');
+                    if (validateReturnedData(d)) {
+                        user.login(d.token, d.email, d.user.permissionsLevel);
+                        if (user.isLoggedIn) {
+                            return resolve(d);
                         }
                     }
-                    resolve(d);
+                    alert(errorMsg('user not logged in'));
+                    resolve({});
                 });
         });
     },
@@ -104,7 +101,7 @@ const APIcalls = {
     search: bin => xhr("GET", API_URL + bin),
 
     createData: function(data) {
-        if (!PERMISSIONS.create.includes(user.permissionsLevel)) {
+        if (!user.isAuthorizedFor(Actions.CREATE)) {
             this.errorMsg('You do not have access to complete this action');
             return new Promise((resolve, reject) => reject({ error: "Incorrect permissions" }));
         }
@@ -134,7 +131,7 @@ const APIcalls = {
     updateData: function(data) {
         // TODO: handle checking if this is the users' submitted data
         // if (ownContent && user.permissionsLevel === 5)
-        if (!PERMISSIONS.update.includes(user.permissionsLevel)) {
+        if (!user.isAuthorizedFor(Actions.UPDATE, data.email)) {
             this.errorMsg('You do not have access to complete this action.');
             return new Promise((_, reject) => reject({ error: 'incorrect permissions' }));
         }
@@ -143,7 +140,7 @@ const APIcalls = {
     },
 
     deleteEntry: function(data) {
-        if (!PERMISSIONS.delete.includes(user.permissionsLevel)) {
+        if (!user.isAuthorizedFor(Actions.DELETE), data.email) {
             this.errorMsg('You do not have access to complete this action.');
             return new Promise((_, reject) => reject({ error: 'incorrect permissions' }));
         }
