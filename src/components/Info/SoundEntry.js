@@ -4,17 +4,13 @@ import styled from 'styled-components';
 import './index.css';
 import SoundData from './SoundData';
 import AudioPlayer from './AudioPlayer';
+import { userHasAccess } from '../../APIcalls.js';
 
 
 const SoundEntryWrapper = styled.div`
     border-bottom: 1px solid black;
     clear: both;
 `;
-// TODO: connect this to jwt log in system somehow
-const user = {
-    isLoggedIn: true,
-    hasPermissions: true 
-};
 
 class SoundEntry extends React.Component {
     constructor(props) {
@@ -30,25 +26,15 @@ class SoundEntry extends React.Component {
         };
     }
 
-    checkIfUserLoggedIn(fn) {
-        if (user.isLoggedIn) {
-            if (user.hasPermissions) {
-                return fn();
-            }
-            alert('You do not have access to complete this action');
-        } else {
-            alert('You must be logged in to complete this action');
-        }
-    }
-
     handleClick(e) {
         if (this.hasSoundData) {
             return this.setState(prevState => ({selected: !prevState.selected}));
         }
 
-        this.checkIfUserLoggedIn(() => {
+        // if there is no soundData, this leads to an "Add new data",
+        // which is restricted to logged in users with access
+        userHasAccess('create') &&
             this.setState(prevState => ({selected: !prevState.selected}));
-        });
     }
 
     _stopEditing() {
@@ -66,9 +52,8 @@ class SoundEntry extends React.Component {
 
     handleEdit(e) {
         e.preventDefault();
-        this.checkIfUserLoggedIn(() => {
+        userHasAccess('update') &&
             this.setState(() => ({ buttonText: "Edit", isEditing: true }));
-        });
     }
 
     render() {
