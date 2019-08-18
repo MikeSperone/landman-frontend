@@ -27,10 +27,10 @@ function xhr(type, url, data, options={}) {
     return new Promise((resolve, reject) => {
         let req = new XMLHttpRequest();
         req.open(type, url, true);
-        if (!(data instanceof FormData)) {
-            req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        } else if (type === "PUT") {
+        if (type === "PUT") {
             req.setRequestHeader("Content-type", "application/json");
+        } else if (!(data instanceof FormData)) {
+            req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         }
 
         if (type !== "GET" && !url.match('users/login')) {
