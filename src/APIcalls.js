@@ -105,6 +105,7 @@ const APIcalls = {
             this.errorMsg('You do not have access to complete this action');
             return new Promise((resolve, reject) => reject({ error: "Incorrect permissions" }));
         }
+        data.author = user.email;
         const params = this._verifyCreateData(data);
         if (params === false) return;
 
@@ -161,12 +162,11 @@ const APIcalls = {
     _verifyCreateData: function(data) {
         console.log("data: ", data);
         let finalData = {};
-        if (this._validateBin(data.bin)) {
-            finalData["bin"] = data.bin;
-        } else {
-            alert(this.errorMsg("bin data does not match"));
-            return;
+        if (!this._validateBin(data.bin)) {
+            return alert(this.errorMsg("bin data does not match"));
         }
+        finalData["bin"] = data.bin;
+        if (data.author) finalData['author'] = data.author;
         finalData['multi'] = Boolean(data.multi);
         finalData['pitch'] = data.pitch || '';
         finalData['description'] = data.description || '';
