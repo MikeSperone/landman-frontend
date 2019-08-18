@@ -75,7 +75,7 @@ const APIcalls = {
 
     login: (email, password) => {
         return new Promise(resolve => {
-            xhr("POST", LOGIN_URL, 'email='+email+'&password='+ password)
+            xhr("POST", LOGIN_URL, 'm='+email+'&s='+ password)
                 .then(d => {
                     if (typeof d !== "undefined") {
                         if (d.token) user.token = d.token;
