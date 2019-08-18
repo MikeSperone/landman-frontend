@@ -10,10 +10,12 @@ const PERMISSIONS = {
 };
 const user = {
     token: 'woof',
+    email: '',
     permissionsLevel: '8'
 };
 
 function userHasAccess(action) {
+
     if (user.token === 'woof') {
         alert("You must be logged in to " + action);
         return;
@@ -22,6 +24,7 @@ function userHasAccess(action) {
     if (!PERMISSIONS[action].includes(user.permissionsLevel)) {
         alert(`You do not have permission to ${action}.\nIf you believe this is an error, please contact an administrator.`);
     }
+
 }
 
 function xhr(type, url, data, options={}) {
@@ -60,6 +63,13 @@ function xhr(type, url, data, options={}) {
     });
 }
 
+function validateReturnedData(d) {
+    return d.token !== "undefined" &&
+        d.user !== "undefined" &&
+        d.user.email !== "undefined" &&
+        d.user.permissionsLevel !== "undefined";
+}
+
 const APIcalls = {
     errorMsg: (msg) => "Error: Invalid Data - " + msg,
 
@@ -78,10 +88,13 @@ const APIcalls = {
             xhr("POST", LOGIN_URL, 'm='+email+'&s='+ password)
                 .then(d => {
                     if (typeof d !== "undefined") {
-                        if (d.token) user.token = d.token;
-                        user.permissionsLevel = (d.user && d.user.permissionsLevel) ?
-                            d.user.permissionsLevel :
-                            8;
+                        if (validateReturnedData(d)) {
+                            user.token = d.token;
+                            user.email = d.email;
+                            user.permissionsLevel = d.user.permissionsLevel;
+                        } else {
+                            alert('Invalid data from the server');
+                        }
                     }
                     resolve(d);
                 });
