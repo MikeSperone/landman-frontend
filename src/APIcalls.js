@@ -1,6 +1,5 @@
 import User, { Actions } from './user';
-// const BASE_URL = "https://api.mikesperone.com/landman";
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.BASE_URL;
 const API_URL = BASE_URL + "/v1/alto/";
 const LOGIN_URL = BASE_URL + "/users/login";
 

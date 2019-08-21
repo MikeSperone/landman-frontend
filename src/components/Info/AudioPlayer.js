@@ -22,7 +22,7 @@ const AudioName = styled.span`
 class AudioPlayer extends React.Component {
     constructor(props) {
         super(props);
-        this.audioSrc = '/audio/' + this.props.src;
+        this.audioSrc = process.env.BASE_URL + '/audio/' + this.props.src;
         this.mimeType = this.getMimeTypeFromFilename();
     }
 
