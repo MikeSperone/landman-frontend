@@ -1,5 +1,5 @@
 import User, { Actions } from './user';
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const API_URL = BASE_URL + "/v1/alto/";
 const LOGIN_URL = BASE_URL + "/users/login";
 
