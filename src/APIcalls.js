@@ -46,16 +46,27 @@ function xhr(type, url, data, options={}) {
 
         req.onreadystatechange = () => {
             if (req.readyState === 4) {
-                if (req.status === 200) {
-                    return resolve(JSON.parse(req.responseText));
-                } else if (req.status === 401) {
-                    alert('you must be logged in to complete this action');
-                } else if (req.status === 400) {
-                    alert('Authorization Issue');
-                } else {
-                    console.log('unhandled response status', req.status);
-                    return reject(JSON.parse(req.responseText));
+                switch (req.status) {
+                    case 200:
+                        console.info('req: ', req);
+                        break;
+                    case 400:
+                        alert('Authorization Issue');
+                        break;
+                    case 401:
+                        alert('you must be logged in to complete this action');
+                        break;
+                    case 404:
+                        console.info('not found');
+                        break;
+                    case 500:
+                        alert('server error');
+                        break;
+                    default:
+                        console.log('unhandled response status', req.status);
+                        return reject(JSON.parse(req.responseText));
                 }
+                return resolve(JSON.parse(req.responseText));
             }
         };
         req.send(data);
@@ -64,7 +75,7 @@ function xhr(type, url, data, options={}) {
 
 function validateReturnedData(d) {
     return typeof d !== "undefined" &&
-        typeof d.token !== "undefined" &&
+        typeof d.access_token !== "undefined" &&
         typeof d.user !== "undefined" &&
         typeof d.user.permissionsLevel !== "undefined";
 }
@@ -88,7 +99,7 @@ const APIcalls = {
             xhr("POST", LOGIN_URL, 'm='+email+'&s='+ password)
                 .then(d => {
                     if (validateReturnedData(d)) {
-                        user.login(d.token, email, d.user.permissionsLevel);
+                        user.login(d.access_token, email, d.user.permissionsLevel);
                         if (user.isLoggedIn) {
                             return resolve(d);
                         }

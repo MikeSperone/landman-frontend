@@ -23,9 +23,11 @@ const Spinner = styled.div`
 
 const NotFound = styled.div`
     display: ${props => props.found ? 'none' : 'block'};
-    height: 10rem;
-    width: 30rem;
+    width: calc(100% - 250px);
+    padding: 0.5rem 0;
+    text-align: center;
     background-color: dodgerblue;
+    float: right;
 `;
 
 class Edit extends React.Component {
@@ -37,6 +39,7 @@ class Edit extends React.Component {
             soundData: [],
             buttonText: 'Edit',
             found: true,
+            errorMessage: 'oops',
             spinner: false,
             showDeleteConfirmation: false
         };
@@ -87,29 +90,39 @@ class Edit extends React.Component {
         const newState = (String(keyState[i]) === "0") ? "1" : "0";
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
         
-        const _successState = resp => this.setState(() => ({
-            bin: resp.bin,
-            soundData: resp.soundData,
+        const _successState = soundData => this.setState(() => ({
+            bin: soundData.bin,
+            soundData: soundData,
             buttonText: 'Edit',
             spinner: false,
             found: true 
         }));
-        const _failureState = () => this.setState(prevState => ({
+        const _failureState = resp => this.setState(prevState => ({
             bin: prevState.bin,
             soundData: [],
             spinner: false,
+            errorMessage: resp,
             found: false 
         }));
         this.setState(
             () => ({ bin: newKeyState}),
             () => APIcalls.search(this.state.bin)
                 .then(d => {
-                    console.log('type of d', typeof d);
-                    console.log('success! ', d.response);
-                    if (d.response) _successState(d.response);
-                    else _failureState();
+                    console.log('success! ', d);
+                    var error = 'Error retrieving data';
+                    if (typeof d === "undefined") {
+                        error = 'No response';
+                    } else if (typeof d.message === "undefined") {
+                        error = 'Malformed response';
+                    } else if (typeof d.message.success !== "undefined") {
+                        //TODO: check if the data is coming through as expected
+                        _successState(d.sound);
+                        return;
+                    } else if (typeof d.message.error !== "undefined") {
+                        error = d.message.error;
+                    }
+                    _failureState(error);
                 })
-                // .catch(_failureState);
         );
     }
 
@@ -143,8 +156,8 @@ class Edit extends React.Component {
                         onChange={this.handleDataChange.bind(this)}
                         handleConfirmDelete={() => this.toggleDelete.call(this, true)}
                     />
+                    <NotFound found={this.state.found} children={this.state.errorMessage} />
                 </div>
-                <NotFound found={this.state.found} children={"Not Found"} />
             </EditWrapper>
         );
     }
