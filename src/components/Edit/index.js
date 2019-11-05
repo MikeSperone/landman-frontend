@@ -40,6 +40,8 @@ class Edit extends React.Component {
             spinner: false,
             showDeleteConfirmation: false
         };
+        this.newEntry = this.newEntry.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
     
     handleDelete() {
@@ -117,8 +119,8 @@ class Edit extends React.Component {
             <EditWrapper>
                 <DeleteConfirmation
                     className={this.state.showDeleteConfirmation ? "" : "hidden"}
-                    onCancel={this.toggleDelete.bind(this, false)}
-                    onConfirm={this.handleDelete.bind(this)}
+                    onCancel={() => this.toggleDelete(false)}
+                    onConfirm={this.handleDelete}
                 />
                 <Spinner className={this.state.spinner ? "spinner" : "spinner hidden"}>
                     <Loader 
@@ -136,10 +138,10 @@ class Edit extends React.Component {
                     <Info
                         soundData={this.state.soundData}
                         bin={this.state.bin}
-                        handleNewEntry={this.newEntry.bind(this)}
+                        handleNewEntry={this.newEntry}
                         editType={this.state.editType}
                         onChange={this.handleDataChange.bind(this)}
-                        handleConfirmDelete={this.toggleDelete.bind(this, true)}
+                        handleConfirmDelete={() => this.toggleDelete.call(this, true)}
                     />
                 </div>
                 <NotFound found={this.state.found} children={"Not Found"} />

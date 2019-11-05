@@ -1,7 +1,9 @@
 import User, { Actions } from './user';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const API_URL = BASE_URL + "/v1/alto/";
-const LOGIN_URL = BASE_URL + "/users/login";
+// const API_URL = BASE_URL + "/v1/alto/";
+const API_URL = "http://localhost:3333/sounds/";
+// const LOGIN_URL = BASE_URL + "/users/login";
+const LOGIN_URL = 'http://localhost:3333' + "/login";
 
 
 const user = new User();
@@ -32,7 +34,7 @@ function xhr(type, url, data, options={}) {
             req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         }
 
-        if (type !== "GET" && !url.match('users/login')) {
+        if (type !== "GET" && !url.match('login')) {
             // authorization needed
             if (user.isLoggedIn) {
                 req.setRequestHeader("Authorization", "Bearer " + user.token);
@@ -81,6 +83,7 @@ const APIcalls = {
     },
 
     login: (email, password) => {
+        console.info('logging in');
         return new Promise(resolve => {
             xhr("POST", LOGIN_URL, 'm='+email+'&s='+ password)
                 .then(d => {

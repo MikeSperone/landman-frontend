@@ -39,6 +39,6 @@ Info.propTypes = {
     bin: PropTypes.string.isRequired,
     soundData: PropTypes.array.isRequired,
     handleNewEntry: PropTypes.func.isRequired,
-    handleConfirmDelte: PropTypes.func.isRequired,
+    handleConfirmDelete: PropTypes.func.isRequired,
 };
 export default Info;

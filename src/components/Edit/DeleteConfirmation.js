@@ -36,7 +36,9 @@ const DeleteConfirmation = props => (
     <ConfirmationWrapper className={props.className}>
         <p>
             Please confirm you would like to delete this.
-            <hr />
+        </p>
+        <hr />
+        <p>
             <b>This can not be undone!</b>
         </p>
         <div>
