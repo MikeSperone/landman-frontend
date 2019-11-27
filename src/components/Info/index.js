@@ -12,11 +12,12 @@ const InfoWrapper = styled.div`
 `;
 
 function listSoundsData(props) {
+    console.info(props.soundData);
     return props.soundData.map(d => (
         d ?
         <SoundEntry
             soundData={d}
-            key={d.soundID}
+            key={d.id}
             handleConfirmDelete={props.handleConfirmDelete}
         /> :
         null

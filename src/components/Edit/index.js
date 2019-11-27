@@ -91,8 +91,8 @@ class Edit extends React.Component {
         const newKeyState = keyState.substr(0, i) + newState + keyState.substr(i + 1);
         
         const _successState = soundData => this.setState(() => ({
-            bin: soundData.bin,
-            soundData: soundData,
+            bin: soundData.query.id,
+            soundData: soundData.data,
             buttonText: 'Edit',
             spinner: false,
             found: true 
@@ -104,21 +104,20 @@ class Edit extends React.Component {
             errorMessage: resp,
             found: false 
         }));
+
         this.setState(
             () => ({ bin: newKeyState}),
             () => APIcalls.search(this.state.bin)
                 .then(d => {
-                    console.log('success! ', d);
                     var error = 'Error retrieving data';
                     if (typeof d === "undefined") {
                         error = 'No response';
                     } else if (typeof d.message === "undefined") {
                         error = 'Malformed response';
-                    } else if (typeof d.message.success !== "undefined") {
-                        //TODO: check if the data is coming through as expected
-                        _successState(d.sound);
+                    } else if (d.message.success !== false) {
+                        _successState(d);
                         return;
-                    } else if (typeof d.message.error !== "undefined") {
+                    } else if (d.message.error !== false) {
                         error = d.message.error;
                     }
                     _failureState(error);

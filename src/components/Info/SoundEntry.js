@@ -16,16 +16,24 @@ const SoundEntryWrapper = styled.div`
 class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
-        this.soundID = this.props.soundData && this.props.soundData.soundID; 
+        this.soundID = this.props.soundData && this.props.soundData.id; 
         this.author = this.props.soundData && this.props.soundData.author;
         this.hasSoundData = Boolean(this.soundID);
-        this.name = this.soundID || 'Add new sound...';
+        this.name = this.props.soundData &&
+            this.props.soundData.name;
+        this.createAudioURL();
         this.state = {
             buttonText: 'Edit',
             isEditing: false,
             selected: false,
             loaded: 0
         };
+    }
+
+    createAudioURL() {
+        this.audioFileUrl = this.props.soundData ?
+            'audio/' + this.props.soundData.fingering_id + '.' + this.props.name + '.mp3' :
+            '';
     }
 
     handleClick(e) {
@@ -63,8 +71,8 @@ class SoundEntry extends React.Component {
         return (
             <SoundEntryWrapper>
                 <AudioPlayer
-                    name={this.name}
-                    src={this.props.soundData && this.props.soundData.name || ''}
+                    name={this.name || 'Add new sound...'}
+                    src={this.audioFileUrl || ''}
                     isEditing={this.state.isEditing}
                     isNew={this.props.new}
                     selected={this.state.selected}

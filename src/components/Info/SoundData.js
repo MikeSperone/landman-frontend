@@ -72,14 +72,14 @@ class SoundData extends React.Component {
                     <Field
                         name="pitch"
                         type="text"
-                        value={decodeURIComponent(this.state.pitch || '')}
+                        value={decodeURIComponent(this.state.pitches || '')}
                         editing={this.props.isEditing}
                         handleEdit={this.handleEdit}
                     />
                     <Field
                         name="multi"
                         type="checkbox"
-                        checked={Boolean(this.state.multi)}
+                        checked={Boolean(this.state.multiphonic)}
                         editing={this.props.isEditing}
                         handleEdit={this.handleEdit}
                     />

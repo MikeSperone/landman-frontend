@@ -1,4 +1,9 @@
 import User, { Actions } from './user';
+import {
+    incomingValidations,
+    incomingTransformation,
+    validateUserData
+} from './validate';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 // const API_URL = BASE_URL + "/v1/alto/";
 const API_URL = "http://localhost:3333/sounds/";
@@ -23,6 +28,9 @@ function userHasAccess(action) {
 
 }
 
+function checkResult(data) {
+}
+
 function xhr(type, url, data, options={}) {
     console.log('xhr ' + type);
     return new Promise((resolve, reject) => {
@@ -34,7 +42,8 @@ function xhr(type, url, data, options={}) {
             req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         }
 
-        if (type !== "GET" && !url.match('login')) {
+        const authorizationIsRequired = type !== "GET" && !url.match('login');
+        if (authorizationIsRequired) {
             // authorization needed
             if (user.isLoggedIn) {
                 req.setRequestHeader("Authorization", "Bearer " + user.token);
@@ -66,18 +75,12 @@ function xhr(type, url, data, options={}) {
                         console.log('unhandled response status', req.status);
                         return reject(JSON.parse(req.responseText));
                 }
+                console.info('responseText: ', req.responseText);
                 return resolve(JSON.parse(req.responseText));
             }
         };
         req.send(data);
     });
-}
-
-function validateReturnedData(d) {
-    return typeof d !== "undefined" &&
-        typeof d.access_token !== "undefined" &&
-        typeof d.user !== "undefined" &&
-        typeof d.user.permissionsLevel !== "undefined";
 }
 
 const APIcalls = {
@@ -94,23 +97,39 @@ const APIcalls = {
     },
 
     login: (email, password) => {
-        console.info('logging in');
         return new Promise(resolve => {
             xhr("POST", LOGIN_URL, 'm='+email+'&s='+ password)
                 .then(d => {
-                    if (validateReturnedData(d)) {
-                        user.login(d.access_token, email, d.user.permissionsLevel);
+                    if (!d || !d.message) {
+                        alert('error, malformed response');
+                        return resolve({});
+                    }
+                    if (d.message.error !== false) {
+                        alert((d.message && d.message.error) || 'Error logging in');
+                        return resolve({});
+                    }
+                    const data = d.data;
+                    if (validateUserData(data)) {
+                        user.login(data.access_token.token, email, data.user.permissionsLevel);
                         if (user.isLoggedIn) {
-                            return resolve(d);
+                            return resolve(data);
                         }
                     }
-                    alert('Error: user not logged in');
-                    resolve({});
+                    console.info('invalid user');
                 });
         });
     },
 
-    search: bin => xhr("GET", API_URL + bin),
+    search: bin => new Promise((resolve, reject) => { 
+        xhr("GET", API_URL + bin)
+            .then(d => {
+                if (incomingValidations.search(d)) {
+                    return resolve(incomingTransformation.search(d));
+                } else {
+                    return reject('Invalid data from the database.');
+                }
+            });
+    }),
 
     createData: function(data) {
         if (!user.isAuthorizedFor(Actions.CREATE)) {
@@ -132,7 +151,7 @@ const APIcalls = {
             console.log(kv);
         }
 
-        xhr("POST", API_URL + "upload/" + params.bin, formData)
+        xhr("POST", API_URL, formData)
             .then(() => {
                 alert("Success, new data added");
                 window.location.reload();
@@ -177,7 +196,7 @@ const APIcalls = {
         if (!this._validateBin(data.bin)) {
             return alert(this.errorMsg("bin data does not match"));
         }
-        finalData["bin"] = data.bin;
+        finalData["fingering_id"] = data.bin;
         if (data.author) finalData['author'] = data.author;
         finalData['multi'] = Boolean(data.multi);
         finalData['pitch'] = data.pitch || '';
