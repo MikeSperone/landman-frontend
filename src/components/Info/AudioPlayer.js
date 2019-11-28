@@ -1,6 +1,60 @@
 import React from 'react';
+import Field from './Field';
+import APIcalls from '../../APIcalls';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+class AddNewAudio extends React.Component {
+    constructor(props) {
+        super(props);
+        this.props = props;
+        this.state = {
+            entryName: ''
+        }
+        this.handleSelectedFile = this.handleSelectedFile.bind(this);
+    }
+
+    handleEdit(name, value, checked) {
+        this.setState(prevState => { prevState[name] = value || checked; });
+    }
+
+    handleSelectedFile(audioFile) {
+        APIcalls.uploadAudio(audioFile, this.state.entryName, this.props.bin);
+    }
+
+    render() {
+        return (
+            <div className={ "upload" }>
+                <Field
+                    name="entryName"
+                    type="text"
+                    value={decodeURIComponent(this.state.entryName || '')}
+                    editing={true}
+                    handleEdit={this.handleEdit}
+                />
+                <input
+                    type="file"
+                    accept="audio/*"
+                    name=""
+                    id=""
+                    onChange={
+                        e => this.handleSelectedFile(e.target.files[0])
+                    }
+                />
+                <div> {this.state.loaded ? Math.round(this.state.loaded,2) : 100 } %</div>
+            </div>
+        );
+    }
+}
+
+AddNewAudio.propTypes = {
+    handleSelectedFile: PropTypes.func.isRequired,
+    bin: PropTypes.string.isRequired,
+    entryName: PropTypes.string.isRequired,
+    isEditing: PropTypes.bool,
+    handleEdit: PropTypes.func.isRequired,
+    loaded: PropTypes.bool
+};
 
 const Audio = styled.audio`
     vertical-align: middle;
@@ -57,19 +111,23 @@ class AudioPlayer extends React.Component {
 
     render() {
         const bgColor = this.props.selected ? 'LightSteelBlue' : 'LightGrey';
-        const { name, handleClick, isNew } = this.props;
         return (
             <AudioPlayerWrapper style={{backgroundColor: bgColor}}>
-                <AudioName onClick={handleClick} >{name}</AudioName>
+                <AudioName onClick={this.props.handleClick} >{this.props.name}</AudioName>
                 {
-                    isNew ? (
-                        <Audio></Audio>
-                    ) : (
-                        <Audio controls="controls">
-                            <source src={this.audioSrc} type={"audio/" + this.mimeType} />
-                            Your browser does not support the <code>audio</code> element.
-                        </Audio>
-                    )
+                    this.props.isEditing ?
+                        this.props.isNew ? (
+                            <AddNewAudio
+                                bin={this.props.bin}
+                                loaded={false}
+                            />
+                        ) : (
+                            <Audio controls="controls">
+                                <source src={this.audioSrc} type={"audio/" + this.mimeType} />
+                                Your browser does not support the <code>audio</code> element.
+                            </Audio>
+                        )
+                    : <audio></audio>
                 }
             </AudioPlayerWrapper>
         );
@@ -77,6 +135,7 @@ class AudioPlayer extends React.Component {
 }
 
 AudioPlayer.propTypes = {
+    bin: PropTypes.string.isRequired,
     src: PropTypes.string.isRequired,
     handleClick: PropTypes.func,
     handleNewEntry: PropTypes.func,

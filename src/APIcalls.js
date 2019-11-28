@@ -59,6 +59,9 @@ function xhr(type, url, data, options={}) {
                     case 200:
                         console.info('req: ', req);
                         break;
+                    case 204:
+                        console.info('success');
+                        break;
                     case 400:
                         alert('Authorization Issue');
                         break;
@@ -110,7 +113,8 @@ const APIcalls = {
                     }
                     const data = d.data;
                     if (validateUserData(data)) {
-                        user.login(data.access_token.token, email, data.user.permissionsLevel);
+                        console.info(d);
+                        user.login(data.access_token.token, data.user);
                         if (user.isLoggedIn) {
                             return resolve(data);
                         }
@@ -131,17 +135,29 @@ const APIcalls = {
             });
     }),
 
+    uploadAudio: function(audioFile, fileName, bin) {
+        audioFile.fileName = fileName;
+        console.info('audioFile: ', audioFile);
+        var formData = new FormData();
+        formData.append('audio_file', audioFile, fileName);
+        formData.append('fingering_id', bin);
+        return xhr("POST", API_URL + 'upload', formData)
+            .then(() => {
+                alert('uploaded');
+            })
+            .catch(status => alert('Error uploading file: ', status));
+    },
+
     createData: function(data) {
         if (!user.isAuthorizedFor(Actions.CREATE)) {
             this.errorMsg('You do not have access to complete this action');
-            return new Promise((resolve, reject) => reject({ error: "Incorrect permissions" }));
+            return new Promise((_, reject) => reject({ error: "Incorrect permissions" }));
         }
-        data.author = user.email;
+        data.author = user.id;
         const params = this._verifyCreateData(data);
         if (params === false) return;
 
         var formData = new FormData();
-        formData.append('audio', data.audio, data.audio.name);
         Object.entries(params).forEach(([k, v]) => {
             console.log('appending ' + k, ": " + v)
             formData.append(k, v);
@@ -151,6 +167,7 @@ const APIcalls = {
             console.log(kv);
         }
 
+        console.info('formData: ', formData);
         xhr("POST", API_URL, formData)
             .then(() => {
                 alert("Success, new data added");
@@ -191,15 +208,14 @@ const APIcalls = {
     },
 
     _verifyCreateData: function(data) {
-        console.log("data: ", data);
         let finalData = {};
         if (!this._validateBin(data.bin)) {
             return alert(this.errorMsg("bin data does not match"));
         }
         finalData["fingering_id"] = data.bin;
-        if (data.author) finalData['author'] = data.author;
-        finalData['multi'] = Boolean(data.multi);
-        finalData['pitch'] = data.pitch || '';
+        if (data.author) finalData['addedBy'] = data.author;
+        finalData['multiphonic'] = Boolean(data.multi);
+        finalData['pitches'] = data.pitch || '';
         finalData['description'] = data.description || '';
         return finalData;
     },
@@ -229,7 +245,7 @@ const APIcalls = {
         return bin;
     },
     _verifyData: function(data) {
-        console.log("data: ", data);
+        console.log("verifying data: ", data);
         let finalData = {};
         if (this._validateBin(data.bin)) {
             finalData["bin"] = data.bin;

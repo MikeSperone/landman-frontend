@@ -64,6 +64,7 @@ export default class User {
     constructor() {
         this._loggedIn = false;
         this.token = 'woof';
+        this.id = null;
         this.email = '';
         this._role = Roles.READ_ONLY;
     }
@@ -103,10 +104,12 @@ export default class User {
         return true;
     }
 
-    login(token, email, permissions) {
+    login(token, { username, email, id, permissionsLevel }) {
         this.token = token;
         this.email = email;
-        this.permissionsLevel = permissions;
+        this.id = id;
+        this.username = username;
+        this.permissionsLevel = permissionsLevel;
         this._loggedIn = true;
     }
 }

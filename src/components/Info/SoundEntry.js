@@ -71,6 +71,7 @@ class SoundEntry extends React.Component {
         return (
             <SoundEntryWrapper>
                 <AudioPlayer
+                    bin={this.props.bin}
                     name={this.name || 'Add new sound...'}
                     src={this.audioFileUrl || ''}
                     isEditing={this.state.isEditing}

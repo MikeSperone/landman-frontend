@@ -5,17 +5,6 @@ import Field from './Field';
 import Button from '../Button';
 import APIcalls from '../../APIcalls';
 
-const AddNewAudio = props => (
-    <div className={ "upload" }>
-        <input type="file" accept="audio/*" name="" id="" onChange={e => props.handleSelectedFile(e.target.files[0]) } />
-        <div> {props.loaded ? Math.round(props.loaded,2) : 100 } %</div>
-    </div>
-);
-
-AddNewAudio.propTypes = {
-    handleSelectedFile: PropTypes.func.isRequired,
-    loaded: PropTypes.bool
-};
 
 const ButtonSection = styled.div`
     float: right;
@@ -34,17 +23,13 @@ class SoundData extends React.Component {
         super(props);
         const { data } = this.props;
         this.state = data;
+        console.info('SoundData state: ', this.state);
         this.handleEdit = this.handleEdit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSelectedFile = this.handleSelectedFile.bind(this);
     }
 
     handleEdit(name, value, checked) {
         this.setState(prevState => { prevState[name] = value || checked; });
-    }
-
-    handleSelectedFile(file) {
-        this.setState(() => ({audio: file}));
     }
 
     handleSubmit(e) {
@@ -62,22 +47,15 @@ class SoundData extends React.Component {
         return (
             <div id="soundDataSection">
                 <Form onSubmit={this.handleSubmit}>
-                    {this.props.isNew && this.props.isEditing ? (
-                        <AddNewAudio
-                            handleSelectedFile={this.handleSelectedFile}
-                            { ...this.props }
-                        />
-                    ) : null
-                    }
                     <Field
-                        name="pitch"
+                        name="pitches"
                         type="text"
                         value={decodeURIComponent(this.state.pitches || '')}
                         editing={this.props.isEditing}
                         handleEdit={this.handleEdit}
                     />
                     <Field
-                        name="multi"
+                        name="multiphonic"
                         type="checkbox"
                         checked={Boolean(this.state.multiphonic)}
                         editing={this.props.isEditing}
