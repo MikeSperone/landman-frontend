@@ -1,6 +1,6 @@
 import React from 'react';
 import Field from './Field';
-import APIcalls from '../../APIcalls';
+import APIcalls from '../../api';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -19,7 +19,7 @@ class AddNewAudio extends React.Component {
     }
 
     handleSelectedFile(audioFile) {
-        APIcalls.uploadAudio(audioFile, this.state.entryName, this.props.bin);
+        APIcalls.sounds.upload(audioFile, this.state.entryName, this.props.bin);
     }
 
     render() {

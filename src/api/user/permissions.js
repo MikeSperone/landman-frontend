@@ -60,58 +60,8 @@ if (Object.freeze) {
     Object.freeze(RolesMap);
 };
 
-export default class User {
-    constructor() {
-        this._loggedIn = false;
-        this.token = 'woof';
-        this.id = null;
-        this.email = '';
-        this._role = Roles.READ_ONLY;
-    }
-
-    get permissionsLevel() {
-        return this._role;
-    }
-
-    set permissionsLevel(x) {
-        this._role = x;
-    }
-
-    get permissions() { 
-        console.info('role; ', this._role);
-        console.info('properties: ', Roles.properties);
-        return Roles.properties[this._role].permissions;
-    }
-
-    get isLoggedIn() {
-        return this._loggedIn;
-    }
-
-    isAuthorizedFor(action, contentAuthor=this.email) {
-        // contentAuthor set to self by default
-        // so by not passing in the author, you are
-        // saying content Authorization is not needed
-
-        if (!this.isLoggedIn) return false;
-
-        if (!this.permissions.includes(action)) return false;
-
-        if (contentAuthor !== this.email && [Actions.UPDATE, Actions.DELETE].includes(action)) {
-            // this indicates user must be a moderator
-            return this.permissions.includes(Actions.MODERATE_DATA);
-        }
-
-        return true;
-    }
-
-    login(token, { username, email, id, permissionsLevel }) {
-        this.token = token;
-        this.email = email;
-        this.id = id;
-        this.username = username;
-        this.permissionsLevel = permissionsLevel;
-        this._loggedIn = true;
-    }
-}
-
-export { Actions };
+export {
+    Actions,
+    Roles,
+    RolesMap
+};

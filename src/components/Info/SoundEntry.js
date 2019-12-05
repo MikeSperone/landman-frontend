@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import './index.css';
 import SoundData from './SoundData';
 import AudioPlayer from './AudioPlayer';
-import { Actions } from '../../user';
-import { userHasAccess } from '../../APIcalls.js';
+import { Actions, userHasAccess } from '../../api';
 
 
 const SoundEntryWrapper = styled.div`

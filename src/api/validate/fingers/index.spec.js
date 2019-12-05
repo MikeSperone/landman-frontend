@@ -1,0 +1,1 @@
+import fingers from '.';
