@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Button from '../Button';
-import APIcalls from '../../APIcalls';
+import APIcalls from '../../api';
 
 class Login extends Component {
 

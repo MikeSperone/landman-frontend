@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import './index.css';
 import SoundData from './SoundData';
 import AudioPlayer from './AudioPlayer';
-import { Actions, userHasAccess } from '../../api';
+import { Actions, user } from '../../api';
 
 
 const SoundEntryWrapper = styled.div`
@@ -15,8 +15,9 @@ const SoundEntryWrapper = styled.div`
 class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
+        console.info('sound entry props: ', props);
         this.soundID = this.props.soundData && this.props.soundData.id; 
-        this.author = this.props.soundData && this.props.soundData.author;
+        this.author = this.props.soundData && this.props.soundData.addedBy;
         this.hasSoundData = Boolean(this.soundID);
         this.name = this.props.soundData &&
             this.props.soundData.name;
@@ -42,7 +43,7 @@ class SoundEntry extends React.Component {
 
         // if there is no soundData, this leads to an "Add new data",
         // which is restricted to logged in users with access
-        userHasAccess(Actions.CREATE) &&
+        user.hasAccess(Actions.CREATE) &&
             this.setState(prevState => ({selected: !prevState.selected}));
     }
 
@@ -61,7 +62,7 @@ class SoundEntry extends React.Component {
 
     handleEdit(e) {
         e.preventDefault();
-        userHasAccess(Actions.UPDATE, this.author) &&
+        user.hasAccess(Actions.UPDATE, this.author) &&
             this.setState(() => ({ buttonText: "Edit", isEditing: true }));
     }
 
@@ -70,14 +71,14 @@ class SoundEntry extends React.Component {
         return (
             <SoundEntryWrapper>
                 <AudioPlayer
-                    bin={this.props.bin}
-                    name={this.name || 'Add new sound...'}
-                    src={this.audioFileUrl || ''}
-                    isEditing={this.state.isEditing}
-                    isNew={this.props.new}
-                    selected={this.state.selected}
-                    handleClick={this.handleClick.bind(this)}
-                    handleNewEntry={this.props.handleNewEntry}
+                    bin={ this.props.bin }
+                    name={ this.name || 'Add new sound...' }
+                    src={ this.audioFileUrl || '' }
+                    isEditing={ this.state.isEditing }
+                    isNew={ this.props.new }
+                    selected={ this.state.selected }
+                    handleClick={ this.handleClick.bind(this) }
+                    handleNewEntry={ this.props.handleNewEntry }
                 />
                 {this.state.selected ? (
                     <div>

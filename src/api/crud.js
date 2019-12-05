@@ -1,6 +1,6 @@
 import xhr from './xhr';
 import user from '.';
-import { Actions } from 'user/permissions';
+import { Actions } from './user/permissions';
 
 const crud = {
 
@@ -17,6 +17,7 @@ const crud = {
     },
 
     read: function(endpoint) {
+        console.info('GET ' + endpoint);
         return xhr("GET", endpoint);
     },
 

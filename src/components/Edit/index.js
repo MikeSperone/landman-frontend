@@ -5,7 +5,7 @@ import DeleteConfirmation from "./DeleteConfirmation";
 import FingeringDisplay from '../FingeringDisplay';
 import Info from '../Info';
 
-import APIcalls from '../../APIcalls';
+import APIcalls from '../../api';
 import styled from 'styled-components';
 import './index.css';
 
@@ -50,7 +50,8 @@ class Edit extends React.Component {
     handleDelete() {
         this.setState(
             () => ({showDeleteConfirmation: false}),
-            () => APIcalls.deleteEntry()
+            () => alert('deleting this thing (not really)')
+            // () => APIcalls.deleteEntry()
         );
     }
 
@@ -73,7 +74,7 @@ class Edit extends React.Component {
                 const data = new FormData();
                 data.append('file', this.selectedFile, this.selectedFile.name);
 
-                APIcalls.upload(data, this.updateProgress)
+                APIcalls.sounds.upload(data, this.updateProgress)
                     .then(res => {
                         console.log(res.statusText);
                     });
@@ -107,7 +108,7 @@ class Edit extends React.Component {
 
         this.setState(
             () => ({ bin: newKeyState}),
-            () => APIcalls.search(this.state.bin)
+            () => APIcalls.sounds.read(this.state.bin)
                 .then(d => {
                     var error = 'Error retrieving data';
                     if (typeof d === "undefined") {
