@@ -18,7 +18,7 @@ export default class Button extends React.Component {
     render() {
         
         return (
-            <button style={{margin: '0.5rem'}}
+            <button
                 id={this.id}
                 className={"pure-button pure-button-primary " + this.props.className}
                 onClick={this.props.onClick}

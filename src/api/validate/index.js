@@ -1,6 +1,6 @@
 import fingerData from './fingers';
 import soundData from './sounds';
-import commentData, from './comments';
+import commentData from './comments';
 
 function crossTests(data) {
     return !!data.multiphonic === (data.pitches.split(',').length > 1);
@@ -45,7 +45,7 @@ function validate(dataValidation) {
 
 };
 
-export {
+export default {
     fingers: validate(fingerData),
     sounds: validate(soundData),
     comments: validate(commentData)

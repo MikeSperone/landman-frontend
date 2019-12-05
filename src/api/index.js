@@ -1,9 +1,10 @@
 import User from './user';
 import { Actions } from './user/permissions';
-import * as validate from './validate';
+import * as validate from './validate/index.js';
 import crud from './crud';
 import xhr from './xhr';
 
+import { incomingValidations, incomingTransformation, validateUserData } from './validate.js';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 // const API_URL = BASE_URL + "/v1/alto/";
 const API_URL = "http://localhost:3333/sounds/";
@@ -32,7 +33,7 @@ const APIcalls = {
         return new Promise((resolve, reject) => {
             xhr("POST", LOGIN_URL, 'm='+email+'&s='+ password)
                 .then(d => {
-                    if (!validateResponse(d)) return resolve({});
+                    // if (!validateResponse(d)) return resolve({});
                     const data = d.data;
                     if (validateUserData(data)) {
                         console.info(d);
@@ -61,14 +62,14 @@ const APIcalls = {
         delete: id => crud.delete(API_URL + '/comments', id)
     },
     fingers: {
-        read: bin => crud.read(API_URL + '/' + bin);
+        read: bin => crud.read(API_URL + '/' + bin)
     },
     sounds: {
 
         create: function(data) {
 
             var formData = new FormData();
-            Object.entries(params).forEach(([k, v]) => {
+            Object.entries(data).forEach(([k, v]) => {
                 console.log('appending ' + k, ": " + v)
                 formData.append(k, v);
             });
@@ -97,11 +98,12 @@ const APIcalls = {
         },
         delete: function(data) {
             alert('TODO: make this delete work');
-            crud.delete(API_URL + '/' data.bin  + '/' + data.sound_id)
+            crud.delete(API_URL + '/' + data.bin  + '/' + data.sound_id)
         },
-    }
+    },
 
-    uploadAudio: Sounds.upload,
+    // TODO: fix this
+    // uploadAudio: Sounds.upload,
 
     _verifyData: function(data) {
         console.log("verifying data: ", data);

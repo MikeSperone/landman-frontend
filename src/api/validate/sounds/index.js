@@ -6,7 +6,7 @@ const SOUND_DATA = {
             min: 4,
             max: 255 
         },
-        clean: n => n.replace(/\s+/, '_').replace('"', '').replace('\'', '');
+        clean: n => n.replace(/\s+/, '_').replace('"', '').replace('\'', '')
     },
     fingering_id: fingerData['fingering_id'],
     pitches: {
@@ -30,7 +30,7 @@ const SOUND_DATA = {
             });
             return p;
         },
-        clean: n => n.toUpperCase().replace(/\s+/, '');
+        clean: n => n.toUpperCase().replace(/\s+/, '')
     },
     description: {
         type: 'string',
