@@ -25,7 +25,7 @@ const LoginMenuWrapper = styled.li.attrs({
 
 const MenuItem = props => (
     <li className={'pure-menu-item ' + (props.selected ? 'pure-menu-selected' : '')}>
-        <a href='#' className='pure-menu-link'>{props.name}</a>
+        <a href={props.href} className='pure-menu-link'>{props.name}</a>
     </li>
 );
 
@@ -54,13 +54,13 @@ class NavBar extends Component {
             <HorizontalMenu>
                 <div className='pure-menu-heading'>Geoffery Landman Saxophone Database</div>
                 <MenuList>
-                    <MenuItem name='About' />
-                    <MenuItem name='Saxophone' selected />
+                    <MenuItem name='About' href='example.com' />
+                    <MenuItem name='Saxophone' href='example.com' selected />
                     { this.state.isLoggedIn ? (
                         <MenuItem name={'Greetings ' + this.state.user.firstName} />
                     ) : (
                         <LoginMenuWrapper>
-                            <a href='#' id='menuLink1' className='pure-menu-link'>Login</a>
+                            <div id='menuLink1' className='pure-menu-link'>Login</div>
                             <ul className="pure-menu-children">
                                 <li className='pure-menu-item'>
                                     <Login handleUser={this.handleUser} />
