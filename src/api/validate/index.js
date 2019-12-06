@@ -27,6 +27,7 @@ function validate(dataValidation) {
             const k = Object.keys(datum)[0];
             const v = datum[k];
             const testData = dataValidation[k];
+            console.info('testData: ', testData);
             if (typeof testData !== "undefined") {
                 const value = !!testData.clean ? testData.clean(v) : v;
                 return test(testData, value);
@@ -36,10 +37,19 @@ function validate(dataValidation) {
             }
         },
         all: function(data) {
-            Object.entries(data).forEach(([k, v]) => {
-                this.item(k, v);
+            console.info('data: ', data);
+            //TODO: fix validate data
+            let cleanAndValidData = {};
+            let keys = Object.keys(data);
+            keys.forEach(k => {
+                const entry = {};
+                entry[k] = data[k];
+                this.item(entry);
             });
-            crossTests();
+            // Object.entries(data).forEach(([k, v]) => {
+            //     this.item(k, v);
+            // });
+            // crossTests(data);
         }
     };
 

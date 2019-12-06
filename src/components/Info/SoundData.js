@@ -35,7 +35,7 @@ class SoundData extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         if (this.props.isNew) {
-            APIcalls.createData(this.state);
+            APIcalls.sounds.create(this.state);
         } else {
             APIcalls.updateData(this.state).then(d => {
                 d.response && d.response.updated && this.props.handleUpdate();

@@ -6,6 +6,7 @@ const SOUND_DATA = {
             min: 4,
             max: 255 
         },
+        test: n => n,
         clean: n => n.replace(/\s+/, '_').replace('"', '').replace('\'', '')
     },
     fingering_id: fingerData['fingering_id'],
@@ -37,13 +38,16 @@ const SOUND_DATA = {
         length: {
             min: 4,
             max: 511 
-        }
+        },
+        test: d => d
     },
     multiphonic: {
         type: 'boolean',
+        test: m => m
     },
     kientzy_id: {
         type: 'number',
+        test: k => k
     }
 };
 

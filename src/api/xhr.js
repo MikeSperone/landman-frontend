@@ -1,6 +1,6 @@
-function xhr(type, url, data, options={ user: {} }) {
+import { user } from '.';
+function xhr(type, url, data, options={ }) {
 
-    const user = options.user;
     return new Promise((resolve, reject) => {
         let req = new XMLHttpRequest();
         req.open(type, url, true);
@@ -14,6 +14,7 @@ function xhr(type, url, data, options={ user: {} }) {
         if (authorizationIsRequired) {
             // authorization needed
             if (user.isLoggedIn) {
+                console.info('isLoggedIn');
                 req.setRequestHeader("Authorization", "Bearer " + user.token);
             } else {
                 alert('Not logged in');

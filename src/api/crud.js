@@ -1,19 +1,21 @@
 import xhr from './xhr';
-import user from '.';
+import { user } from '.';
 import { Actions } from './user/permissions';
 
 const crud = {
 
     user: {},
 
-    auth: function(action, email) {
-        return this.user.isAuthorizedFor(action, email);
+    auth: function(action) {
+        return user.isAuthorizedFor(action);
     },
 
     create: function(endpoint, formData) {
-        if (this.auth(Actions.CREATE))
+        if (this.auth(Actions.CREATE)) {
             return xhr("POST", endpoint, formData);
-        else return new Promise((_, rej) => rej({message: { error: 'Invalid authorization' }}));
+        } else {
+            return new Promise((_, rej) => rej({message: { error: 'Invalid authorization' }}));
+        }
     },
 
     read: function(endpoint) {

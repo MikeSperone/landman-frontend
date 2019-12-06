@@ -12,6 +12,7 @@ class AddNewAudio extends React.Component {
             entryName: ''
         }
         this.handleSelectedFile = this.handleSelectedFile.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
     }
 
     handleEdit(name, value, checked) {
@@ -48,11 +49,8 @@ class AddNewAudio extends React.Component {
 }
 
 AddNewAudio.propTypes = {
-    handleSelectedFile: PropTypes.func.isRequired,
     bin: PropTypes.string.isRequired,
-    entryName: PropTypes.string.isRequired,
     isEditing: PropTypes.bool,
-    handleEdit: PropTypes.func.isRequired,
     loaded: PropTypes.bool
 };
 
