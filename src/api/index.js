@@ -1,6 +1,6 @@
 import User from './user';
 import { Actions } from './user/permissions';
-import validate from './validate/index.js';
+import * as validate from './validate/index.js';
 import crud from './crud';
 import xhr from './xhr';
 
@@ -66,7 +66,7 @@ const APIcalls = {
 
         create: function(data) {
 
-            const validatedData = validate.sounds.all(data);
+            const validatedData = validate.sounds(data);
             console.info('validatedData: ', validatedData);
             var formData = new FormData();
             Object.entries(validatedData).forEach(([k, v]) => {

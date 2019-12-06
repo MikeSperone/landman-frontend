@@ -1,15 +1,25 @@
+import { validate, sanitize } from '../validate';
+
+const sanitize_functions = {
+    sound_id: i => i,
+    comment: c => c.replace('"', ''),
+};
 const DATA_VALIDATION = {
     sound_id: {
         type: 'number',
     },
     comment: {
         type: 'string',
-        clean: function(c) {
-            c = c.replace('"', '');
-            c = c.trim();
-            return c;
+        length: {
+            min: 2,
+            max: 511
         }
     }
 };
 
-export default DATA_VALIDATION;
+const commentValidation = validate(DATA_VALIDATION);
+const commentSanitize = sanitize(sanitize_functions);
+export {
+    commentValidation,
+    commentSanitize
+}
