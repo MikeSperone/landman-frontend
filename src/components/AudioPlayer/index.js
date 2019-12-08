@@ -1,5 +1,5 @@
 import React from 'react';
-import Field from './Field';
+import Field from '../Field';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 

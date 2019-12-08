@@ -17,7 +17,7 @@ const Form = styled.form.attrs({
     float: left;
 `;
 
-class SoundData extends React.Component {
+class CommentData extends React.Component {
 
     constructor(props) {
         super(props);
@@ -33,13 +33,12 @@ class SoundData extends React.Component {
         return {
             // The following data is required, and can not change
             id: this.props.data.id,
-            fingering_id: this.props.data.fingering_id,
+            sound_id: this.props.data.sound_id,
             // This is required even if it has not changed
-            name: this.state.name,
-            pitches: this.state.pitches,
-            multiphonic: this.state.multiphonic,
-            kientzy_id: this.state.kientzy_id,
-            description: this.state.description,
+            comment: this.state.comment,
+            // TODO: update backend to allow this, similar to how sound entry did it
+            // user_id: this.state.author.id,
+            user_id: this.state.user_id,
         }
     }
 
@@ -52,7 +51,7 @@ class SoundData extends React.Component {
         this.setState(
             () => ({name: this.props.name}),
             () => {
-                console.info('SoundData state: ', this.state)
+                console.info('CommentData state: ', this.state)
                 if (this.props.isNew) {
                     APIcalls.sounds.create(this.state)
                         .then(this.props.handleUpdate);
@@ -72,33 +71,19 @@ class SoundData extends React.Component {
         submitButtonClass += this.props.audioLoaded ? '' : 'pure-button-disabled ';
 
         return (
-            <div id="soundDataSection">
+            <div id="commentDataSection">
                 <Form onSubmit={this.handleSubmit}>
                     <Field
-                        name="pitches"
+                        name="comment"
                         type="text"
-                        value={decodeURIComponent(this.state.pitches || '')}
-                        editing={this.props.isEditing}
-                        handleEdit={this.handleEdit}
-                    />
-                    <Field
-                        name="multiphonic"
-                        type="checkbox"
-                        checked={Boolean(this.state.multiphonic)}
-                        editing={this.props.isEditing}
-                        handleEdit={this.handleEdit}
-                    />
-                    <Field
-                        name="description"
-                        type="text"
-                        value={decodeURIComponent(this.state.description || '')}
+                        value={decodeURIComponent(this.state.comment|| '')}
                         editing={this.props.isEditing}
                         handleEdit={this.handleEdit}
                     />
                     <Field
                         name="author"
                         type="text"
-                        value={decodeURIComponent((this.state.author && this.state.author.username) || 'unknown')}
+                        value={decodeURIComponent(/*this.state.author.username // TODO: update adonis backend to allow this*/this.state.user_id || 'unknown')}
                         editing={false}
                         handleEdit={this.handleEdit}
                     />
@@ -130,7 +115,7 @@ class SoundData extends React.Component {
     }
 
 }
-SoundData.propTypes = {
+CommentData.propTypes = {
     isEditing: PropTypes.bool,
     new: PropTypes.bool,
     audioLoaded: PropTypes.number,
@@ -139,6 +124,7 @@ SoundData.propTypes = {
     handleUpdate: PropTypes.func,
     handleCancel: PropTypes.func,
     handleConfirmDelete: PropTypes.func,
-    soundData: PropTypes.object
+    commentData: PropTypes.object
 };
-export default SoundData;
+export default CommentData;
+

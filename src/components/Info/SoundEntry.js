@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import './index.css';
+import AudioPlayer from '../AudioPlayer';
 import SoundData from './SoundData';
+import Comments from '../Comments';
+
 import APIcalls from '../../api';
-import AudioPlayer from './AudioPlayer';
 import { Actions, user } from '../../api';
 
 
@@ -17,13 +19,15 @@ class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
         const soundData = this.props.soundData;
+        const commentData = soundData && soundData.comments;
         this.soundID = soundData && soundData.id; 
-        this.author = soundData && soundData.addedBy;
+        this.author = soundData && soundData.author;
         this.hasSoundData = Boolean(this.soundID);
         this.createAudioURL();
         this.state = {
             buttonText: 'Edit',
             soundData,
+            commentData,
             name: soundData && soundData.name,
             isEditing: false,
             selected: false,
@@ -129,17 +133,22 @@ class SoundEntry extends React.Component {
                     handleSelectedFile={ this.handleSelectedFile }
                 />
                 {this.state.selected && this.state.loaded ? (
-                    <SoundData
-                        data={this.state.soundData || {fingering_id: this.props.fingering_id}}
-                        name={this.state.name}
-                        isEditing={this.state.isEditing}
-                        permissions={this.props.permissions}
-                        isNew={this.props.new}
-                        audioLoaded={this.state.loaded}
-                        handleEdit={this.handleEdit.bind(this)}
-                        handleUpdate={this.handleUpdate}
-                        handleCancel={this.handleCancel}
-                    />
+                    <div>
+                        <SoundData
+                            data={this.state.soundData || {fingering_id: this.props.fingering_id}}
+                            name={this.state.name}
+                            isEditing={this.state.isEditing}
+                            permissions={this.props.permissions}
+                            isNew={this.props.new}
+                            audioLoaded={this.state.loaded}
+                            handleEdit={this.handleEdit.bind(this)}
+                            handleUpdate={this.handleUpdate}
+                            handleCancel={this.handleCancel}
+                        />
+                        <Comments
+                            commentData={this.state.commentData || []}
+                        />
+                    </div>
                 ) : null}
             </SoundEntryWrapper>
         );
