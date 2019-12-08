@@ -9,6 +9,10 @@ const sanitize_functions = {
 };
 
 const DATA_TESTS = {
+    id: {
+        type: 'number',
+        customTest: n => true
+    },
     name: {
         type: 'string',
         length: {

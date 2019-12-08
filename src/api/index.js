@@ -23,6 +23,15 @@ Object.freeze(api);
 
 const user = new User();
 
+function objectToFormData(validatedData) {
+    var formData = new FormData();
+    Object.entries(validatedData).forEach(([k, v]) => {
+        // console.log('appending ' + k, ": " + v)
+        formData.append(k, v);
+    });
+    return formData;
+}
+
 const APIcalls = {
 
     readyStateChange: (req, successCallback, failureCallback) => {
@@ -74,17 +83,10 @@ const APIcalls = {
 
         create: function(data) {
 
-            console.info('creating: ', data);
             const validatedData = validate.sounds(data);
-            console.info('validatedData: ', validatedData);
-            if (!validatedData) {
-                alert('Invalid data');
-            }
-            var formData = new FormData();
-            Object.entries(validatedData).forEach(([k, v]) => {
-                // console.log('appending ' + k, ": " + v)
-                formData.append(k, v);
-            });
+            if (!validatedData) return alert('Invalid data');
+
+            const formData = objectToFormData(validatedData);
 
             crud.create(api.SOUNDS, formData)
                 .then(() => {
@@ -107,8 +109,10 @@ const APIcalls = {
                 });
         }),
         update: function(data) {
-            const params = JSON.stringify(data);
-            return crud.update(api.SOUNDS + data.bin + '/' + data.sound_id, params);
+            const validatedData = validate.sounds(data);
+            if (!validatedData) return alert('Invalid data');
+            const params = JSON.stringify(validatedData);
+            return crud.update(api.SOUNDS + '/' + data.id, params);
         },
         delete: function(data) {
             alert('TODO: make this delete work');
@@ -119,12 +123,8 @@ const APIcalls = {
             console.info('formData: ', formData);
             console.info('instance of FormData? ', formData instanceof FormData);
             return crud.upload(api.AUDIO_UPLOAD, formData, callback);
-            // alert('TODO: upload');
         }
     },
-
-    // TODO: fix this
-    // uploadAudio: Sounds.upload,
 
     _verifyData: function(data) {
         console.log("verifying data: ", data);

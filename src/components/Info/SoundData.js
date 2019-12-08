@@ -23,8 +23,24 @@ class SoundData extends React.Component {
         super(props);
         this.props = props;
         this.state = this.props.data;
+
+        this.getUpdates = this.getUpdates.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    getUpdates() {
+        return {
+            // The following data is required, and can not change
+            id: this.props.data.id,
+            fingering_id: this.props.data.fingering_id,
+            // This is required even if it has not changed
+            name: this.state.name,
+            pitches: this.state.pitches,
+            multiphonic: this.state.multiphonic,
+            kientzy_id: this.state.kientzy_id,
+            description: this.state.description,
+        }
     }
 
     handleEdit(name, value, checked) {
@@ -38,11 +54,13 @@ class SoundData extends React.Component {
             () => {
                 console.info('SoundData state: ', this.state)
                 if (this.props.isNew) {
-                    APIcalls.sounds.create(this.state);
+                    APIcalls.sounds.create(this.state)
+                        .then(this.props.handleUpdate);
                 } else {
-                    APIcalls.sounds.update(this.state).then(d => {
-                        d.response && d.response.updated && this.props.handleUpdate();
-                    });
+                    const updatedData = this.getUpdates();
+
+                    APIcalls.sounds.update(updatedData)
+                        .then(this.props.handleUpdate);
                 }
             }
         );

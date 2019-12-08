@@ -6,7 +6,8 @@ function xhr(type, url, data, options={ }) {
         req.open(type, url, true);
         if (type === "PUT") {
             req.setRequestHeader("Content-type", "application/json");
-        } else if (data instanceof FormData) {
+        } else
+            if (data instanceof FormData) {
             // req.setRequestHeader("Content-type", "multipart/form-data");
         } else {
             req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
