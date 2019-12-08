@@ -27,30 +27,32 @@ class SoundData extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-        this.setState(() => ({ name: this.props.name }));
-        console.info('SoundData state: ', this.state);
-    }
-
     handleEdit(name, value, checked) {
         this.setState(prevState => { prevState[name] = value || checked; });
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        if (this.props.isNew) {
-            APIcalls.sounds.create(this.state);
-        } else {
-            APIcalls.updateData(this.state).then(d => {
-                d.response && d.response.updated && this.props.handleUpdate();
-            });
-        }
+        this.setState(
+            () => ({name: this.props.name}),
+            () => {
+                console.info('SoundData state: ', this.state)
+                if (this.props.isNew) {
+                    APIcalls.sounds.create(this.state);
+                } else {
+                    APIcalls.sounds.update(this.state).then(d => {
+                        d.response && d.response.updated && this.props.handleUpdate();
+                    });
+                }
+            }
+        );
     }
 
     render() {
         var submitButtonClass = 'pure-button submit ';
         submitButtonClass += this.props.isEditing ? '' : 'hidden ';
         submitButtonClass += this.props.audioLoaded ? '' : 'pure-button-disabled ';
+
         return (
             <div id="soundDataSection">
                 <Form onSubmit={this.handleSubmit}>
@@ -99,7 +101,7 @@ class SoundData extends React.Component {
                             text="Cancel"
                         />
                         <Button
-                            className={(this.props.isEditing || !this.props.permissions.delete) ? "delete" : "delete hidden"}
+                            className={(this.props.isEditing && this.props.permissions.delete) ? "delete" : "delete hidden"}
                             onClick={this.props.handleConfirmDelete}
                             text="Delete"
                         />

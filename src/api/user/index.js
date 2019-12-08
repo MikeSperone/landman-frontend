@@ -51,15 +51,20 @@ export default class User {
     hasAccess(action) {
 
         if (!this.isLoggedIn) {
-            alert("You must be logged in to " + Actions.properties[action].name);
-            return false;
+            
+            return {
+                access: false,
+                message: "You must be logged in to " + Actions.properties[action].name
+            };
         }
 
         if (!this.isAuthorizedFor(action)) {
-            alert(`You do not have permission to ${Actions.properties[action].name}.\nIf you believe this is an error, please contact an administrator.`);
-            return false;
+            return {
+                access: false,
+                message: `You do not have permission to ${Actions.properties[action].name}.\nIf you believe this is an error, please contact an administrator.`
+            };
         }
-        return true;
+        return { access: true };
 
     }
 

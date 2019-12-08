@@ -116,20 +116,21 @@ class AudioPlayer extends React.Component {
             <AudioPlayerWrapper style={{backgroundColor: bgColor}}>
                 <AudioName onClick={this.props.handleClick} >{this.props.name}</AudioName>
                 {
-                    this.props.isEditing ?
-                        this.props.isNew ? (
+                    this.props.isEditing && this.props.isNew ? (
                             <AddNewAudio
                                 bin={this.props.bin}
                                 handleSelectedFile={this.props.handleSelectedFile}
                                 audioLoaded={this.props.audioLoaded}
                             />
-                        ) : (
+                        ) : null
+                }
+                {
+                    !this.props.isNew ? (
                             <Audio controls="controls">
                                 <source src={this.audioSrc} type={"audio/" + this.mimeType} />
                                 Your browser does not support the <code>audio</code> element.
                             </Audio>
-                        )
-                    : <audio></audio>
+                        ) : null
                 }
             </AudioPlayerWrapper>
         );

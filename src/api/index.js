@@ -74,16 +74,17 @@ const APIcalls = {
 
         create: function(data) {
 
+            console.info('creating: ', data);
             const validatedData = validate.sounds(data);
             console.info('validatedData: ', validatedData);
             if (!validatedData) {
                 alert('Invalid data');
             }
             var formData = new FormData();
-            // Object.entries(validatedData).forEach(([k, v]) => {
-            //     console.log('appending ' + k, ": " + v)
-            //     formData.append(k, v);
-            // });
+            Object.entries(validatedData).forEach(([k, v]) => {
+                // console.log('appending ' + k, ": " + v)
+                formData.append(k, v);
+            });
 
             crud.create(api.SOUNDS, formData)
                 .then(() => {

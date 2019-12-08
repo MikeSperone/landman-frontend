@@ -44,9 +44,9 @@ class SoundEntry extends React.Component {
 
     setPermissions() {
         this.permissions = {
-            create: user.hasAccess(Actions.CREATE),
-            update: user.hasAccess(Actions.UPDATE, this.author),
-            delete: user.hasAccess(Actions.DELETE, this.author)
+            create: user.hasAccess(Actions.CREATE).access,
+            update: user.hasAccess(Actions.UPDATE, this.author).access,
+            delete: user.hasAccess(Actions.DELETE, this.author).access
         }
     }
 
@@ -63,7 +63,8 @@ class SoundEntry extends React.Component {
 
         // if there is no soundData, this leads to an "Add new data",
         // which is restricted to logged in users with access
-        user.hasAccess(Actions.CREATE) &&
+        const hasAccess = user.hasAccess(Actions.CREATE);
+        if (hasAccess.access) {
             this.setState(
                 prevState => ({selected: !prevState.selected}),
                 () => {
@@ -76,6 +77,9 @@ class SoundEntry extends React.Component {
                     );
                 }
             );
+        } else {
+            alert(hasAccess.message);
+        }
     }
 
     _stopEditing() {
@@ -94,8 +98,12 @@ class SoundEntry extends React.Component {
 
     handleEdit(e) {
         e.preventDefault();
-        user.hasAccess(Actions.UPDATE, this.author) &&
+        const hasAccess = user.hasAccess(Actions.UPDATE, this.author);
+        if (hasAccess.access) {
             this.setState(() => ({ buttonText: "Edit", isEditing: true }));
+        } else {
+            alert(hasAccess.message);
+        }
     }
 
     updateProgress(ProgressEvent) {
