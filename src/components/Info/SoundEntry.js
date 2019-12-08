@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import './index.css';
 import SoundData from './SoundData';
+import APIcalls from '../../api';
 import AudioPlayer from './AudioPlayer';
 import { Actions, user } from '../../api';
 
@@ -15,19 +16,38 @@ const SoundEntryWrapper = styled.div`
 class SoundEntry extends React.Component {
     constructor(props) {
         super(props);
-        console.info('sound entry props: ', props);
-        this.soundID = this.props.soundData && this.props.soundData.id; 
-        this.author = this.props.soundData && this.props.soundData.addedBy;
+        const soundData = this.props.soundData;
+        this.soundID = soundData && soundData.id; 
+        this.author = soundData && soundData.addedBy;
         this.hasSoundData = Boolean(this.soundID);
-        this.name = this.props.soundData &&
-            this.props.soundData.name;
         this.createAudioURL();
         this.state = {
             buttonText: 'Edit',
+            soundData,
+            name: soundData && soundData.name,
             isEditing: false,
             selected: false,
-            loaded: 0
+            loaded: (this.props.isNew) ? 0 : 100
         };
+
+        this.setPermissions();
+
+        this.bindFunctions();
+    }
+
+    bindFunctions() {
+        this.handleSelectedFile = this.handleSelectedFile.bind(this);
+        this.updateProgress = this.updateProgress.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+    }
+
+    setPermissions() {
+        this.permissions = {
+            create: user.hasAccess(Actions.CREATE),
+            update: user.hasAccess(Actions.UPDATE, this.author),
+            delete: user.hasAccess(Actions.DELETE, this.author)
+        }
     }
 
     createAudioURL() {
@@ -44,10 +64,22 @@ class SoundEntry extends React.Component {
         // if there is no soundData, this leads to an "Add new data",
         // which is restricted to logged in users with access
         user.hasAccess(Actions.CREATE) &&
-            this.setState(prevState => ({selected: !prevState.selected}));
+            this.setState(
+                prevState => ({selected: !prevState.selected}),
+                () => {
+                    this.setState(
+                        prevState => {
+                            return (prevState.selected) ?
+                                { isEditing: true } :
+                                prevState;
+                        }
+                    );
+                }
+            );
     }
 
     _stopEditing() {
+        console.info('editing done');
         this.setState(() => ({ buttonText: "Edit", isEditing: false }));
     }
 
@@ -66,31 +98,51 @@ class SoundEntry extends React.Component {
             this.setState(() => ({ buttonText: "Edit", isEditing: true }));
     }
 
+    updateProgress(ProgressEvent) {
+        this.setState(() => ({
+            // percentage loaded
+            loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
+        }));
+    }
+
+    handleSelectedFile(selectedFile, name) {
+        this.setState(() => ({ name }));
+
+        const data = new FormData();
+        data.append('audio_file', selectedFile, selectedFile.name);
+        data.append('name', name);
+        data.append('fingering_id', this.props.fingering_id);
+
+        APIcalls.sounds.upload(data, this.updateProgress);
+    }
+
     render() {
         console.log("rendering: ", this.props.soundData);
         return (
             <SoundEntryWrapper>
                 <AudioPlayer
-                    bin={ this.props.bin }
-                    name={ this.name || 'Add new sound...' }
+                    bin={ this.props.fingering_id}
+                    name={ this.state.name || 'Add new sound...' }
                     src={ this.audioFileUrl || '' }
+                    audioLoaded={this.state.loaded}
                     isEditing={ this.state.isEditing }
                     isNew={ this.props.new }
                     selected={ this.state.selected }
                     handleClick={ this.handleClick.bind(this) }
-                    handleNewEntry={ this.props.handleNewEntry }
+                    handleSelectedFile={ this.handleSelectedFile }
                 />
-                {this.state.selected ? (
-                    <div>
-                        <SoundData
-                            data={this.props.soundData || {bin: this.props.bin}}
-                            isEditing={this.state.isEditing}
-                            isNew={this.props.new}
-                            handleEdit={this.handleEdit.bind(this)}
-                            handleUpdate={this.handleUpdate.bind(this)}
-                            handleCancel={this.handleCancel.bind(this)}
-                        />
-                    </div>
+                {this.state.selected && this.state.loaded ? (
+                    <SoundData
+                        data={this.state.soundData || {fingering_id: this.props.fingering_id}}
+                        name={this.state.name}
+                        isEditing={this.state.isEditing}
+                        permissions={this.permissions}
+                        isNew={this.props.new}
+                        audioLoaded={this.state.loaded}
+                        handleEdit={this.handleEdit.bind(this)}
+                        handleUpdate={this.handleUpdate}
+                        handleCancel={this.handleCancel}
+                    />
                 ) : null}
             </SoundEntryWrapper>
         );
@@ -100,7 +152,6 @@ class SoundEntry extends React.Component {
 SoundEntry.propTypes = {
     isEditing: PropTypes.bool,
     new: PropTypes.bool,
-    handleNewEntry: PropTypes.func,
     handleConfirmDelete: PropTypes.func,
     soundData: PropTypes.object
 };

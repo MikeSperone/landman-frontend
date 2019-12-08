@@ -1,6 +1,5 @@
 import React from 'react';
 import Field from './Field';
-import APIcalls from '../../api';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -9,40 +8,44 @@ class AddNewAudio extends React.Component {
         super(props);
         this.props = props;
         this.state = {
-            entryName: ''
+            entryName: '',
+            editing: true
         }
-        this.handleSelectedFile = this.handleSelectedFile.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleEdit(name, value, checked) {
         this.setState(prevState => { prevState[name] = value || checked; });
     }
-
-    handleSelectedFile(audioFile) {
-        APIcalls.sounds.upload(audioFile, this.state.entryName, this.props.bin);
+    handleSubmit(e) {
+        console.info('new audio state: ', this.state);
+        this.setState(() => ({editing: false }));
+        this.props.handleSelectedFile(e.target.files[0], this.state.entryName);
     }
 
     render() {
         return (
-            <div className={ "upload" }>
+            <div className={ 'upload' }>
                 <Field
                     name="entryName"
                     type="text"
                     value={decodeURIComponent(this.state.entryName || '')}
-                    editing={true}
+                    editing={this.state.editing}
                     handleEdit={this.handleEdit}
                 />
-                <input
-                    type="file"
-                    accept="audio/*"
-                    name=""
-                    id=""
-                    onChange={
-                        e => this.handleSelectedFile(e.target.files[0])
-                    }
-                />
-                <div> {this.state.loaded ? Math.round(this.state.loaded,2) : 100 } %</div>
+                {
+                    this.state.editing ? (
+                        <input
+                            type='file'
+                            accept='audio/*'
+                            name='audio_file'
+                            id='audio_file'
+                            onChange={this.handleSubmit}
+                        />
+                    ) : null
+                }
+                <div> {this.props.audioLoaded ? Math.round(this.props.audioLoaded,2) : 100 } %</div>
             </div>
         );
     }
@@ -51,7 +54,7 @@ class AddNewAudio extends React.Component {
 AddNewAudio.propTypes = {
     bin: PropTypes.string.isRequired,
     isEditing: PropTypes.bool,
-    loaded: PropTypes.bool
+    audioLoaded: PropTypes.number
 };
 
 const Audio = styled.audio`
@@ -117,7 +120,8 @@ class AudioPlayer extends React.Component {
                         this.props.isNew ? (
                             <AddNewAudio
                                 bin={this.props.bin}
-                                loaded={false}
+                                handleSelectedFile={this.props.handleSelectedFile}
+                                audioLoaded={this.props.audioLoaded}
                             />
                         ) : (
                             <Audio controls="controls">
@@ -135,6 +139,7 @@ class AudioPlayer extends React.Component {
 AudioPlayer.propTypes = {
     bin: PropTypes.string.isRequired,
     src: PropTypes.string.isRequired,
+    audioLoaded: PropTypes.number,
     handleClick: PropTypes.func,
     handleNewEntry: PropTypes.func,
     name: PropTypes.oneOfType([

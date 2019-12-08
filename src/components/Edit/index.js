@@ -43,7 +43,6 @@ class Edit extends React.Component {
             spinner: false,
             showDeleteConfirmation: false
         };
-        this.newEntry = this.newEntry.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
     }
     
@@ -65,23 +64,6 @@ class Edit extends React.Component {
         const data = { bin: this.state.bin, soundData: this.state.soundData };
         data[name] = (target.type === 'checkbox') ? target.checked : target.value;
         this.forceUpdate();
-    }
-
-    newEntry() {
-        return {
-            updateProgress: ProgressEvent => this.loaded = (ProgressEvent.loaded / ProgressEvent.total*100),
-            handleUpload: () => {
-                const data = new FormData();
-                data.append('file', this.selectedFile, this.selectedFile.name);
-
-                APIcalls.sounds.upload(data, this.updateProgress)
-                    .then(res => {
-                        console.log(res.statusText);
-                    });
-
-            },
-            loaded: 0
-        };
     }
 
     handleFingeringClick(i) {
@@ -151,7 +133,6 @@ class Edit extends React.Component {
                     <Info
                         soundData={this.state.soundData}
                         bin={this.state.bin}
-                        handleNewEntry={this.newEntry}
                         editType={this.state.editType}
                         onChange={this.handleDataChange.bind(this)}
                         handleConfirmDelete={() => this.toggleDelete.call(this, true)}

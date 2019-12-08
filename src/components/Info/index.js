@@ -16,7 +16,7 @@ function listSoundsData(props) {
     return props.soundData.map(d => (
         d ?
         <SoundEntry
-            bin={ props.bin }
+            fingering_id={ props.bin }
             soundData={d}
             key={d.id}
             handleConfirmDelete={props.handleConfirmDelete}
@@ -30,8 +30,7 @@ const Info = props => (
         { props.soundData.length ? listSoundsData(props) : null }
         <SoundEntry
             new
-            bin={props.bin}
-            handleNewEntry={props.handleNewEntry}
+            fingering_id={props.bin}
             key={'new'}
         />
     </InfoWrapper>
@@ -40,7 +39,6 @@ const Info = props => (
 Info.propTypes = {
     bin: PropTypes.string.isRequired,
     soundData: PropTypes.array.isRequired,
-    handleNewEntry: PropTypes.func.isRequired,
     handleConfirmDelete: PropTypes.func.isRequired,
 };
 export default Info;

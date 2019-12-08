@@ -30,7 +30,12 @@ const validate = testData => {
     return (data) => {
         console.info('data: ', data);
         let keys = Object.keys(data);
-        return keys.every(k => validateItem(testData[k], data[k]));
+        return keys.every(k => {
+            console.info('validating ' + k);
+            const isValidated = validateItem(testData[k], data[k]);
+            console.info('isValidated? ', isValidated);
+            return isValidated;
+        });
         // crossTests(data);
     }
 }

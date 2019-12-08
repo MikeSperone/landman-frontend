@@ -4,13 +4,21 @@ import * as validate from './validate/index.js';
 import crud from './crud';
 import xhr from './xhr';
 
-import { incomingValidations, incomingTransformation, validateUserData } from './validate.js';
+// import { incomingValidations, incomingTransformation, validateUserData } from './validate.js';
+import { validateUserData } from './validate.js';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 // const API_URL = BASE_URL + "/v1/alto/";
 const API_URL = "http://localhost:3333";
-const API_URL_SOUNDS = API_URL + "/sounds";
-// const LOGIN_URL = BASE_URL + "/users/login";
-const LOGIN_URL = 'http://localhost:3333' + "/login";
+// const API_URL_SOUNDS = API_URL + "/sounds";
+// const api.LOGIN = API_URL + "/login";
+
+const api = {
+    COMMENTS: API_URL + '/comments',
+    LOGIN: API_URL + '/login',
+    SOUNDS: API_URL + '/sounds',
+    AUDIO_UPLOAD: API_URL + '/sounds/upload',
+}
+Object.freeze(api);
 
 
 const user = new User();
@@ -29,7 +37,7 @@ const APIcalls = {
 
     login: (email, password) => {
         return new Promise((resolve, reject) => {
-            xhr("POST", LOGIN_URL, 'm='+email+'&s='+ password)
+            xhr("POST", api.LOGIN, 'm='+email+'&s='+ password)
                 .then(d => {
                     // if (!validateResponse(d)) return resolve({});
                     const data = d.data;
@@ -54,10 +62,10 @@ const APIcalls = {
     },
 
     comments: {
-        create: params => crud.create(API_URL + '/comments', params),
-        read: sound_id => crud.read(API_URL + '/comments/?sound_id=' + sound_id),
-        update: params => crud.update(API_URL + '/comments', params),
-        delete: id => crud.delete(API_URL + '/comments', id)
+        create: params => crud.create(api.COMMENTS, params),
+        read: sound_id => crud.read(api.COMMENTS + '?sound_id=' + sound_id),
+        update: params => crud.update(api.COMMENTS, params),
+        delete: id => crud.delete(api.COMMENTS, id)
     },
     fingers: {
         read: bin => crud.read(BASE_URL + '/alto-sax/' + bin)
@@ -68,13 +76,16 @@ const APIcalls = {
 
             const validatedData = validate.sounds(data);
             console.info('validatedData: ', validatedData);
+            if (!validatedData) {
+                alert('Invalid data');
+            }
             var formData = new FormData();
-            Object.entries(validatedData).forEach(([k, v]) => {
-                console.log('appending ' + k, ": " + v)
-                formData.append(k, v);
-            });
+            // Object.entries(validatedData).forEach(([k, v]) => {
+            //     console.log('appending ' + k, ": " + v)
+            //     formData.append(k, v);
+            // });
 
-            crud.create(API_URL_SOUNDS, formData)
+            crud.create(api.SOUNDS, formData)
                 .then(() => {
                     alert("Success, new data added");
                     window.location.reload();
@@ -87,23 +98,27 @@ const APIcalls = {
                 .then(d => {
                     console.info('read sound data - d: ', d);
                     return resolve(d);
-                    if (incomingValidations.search(d)) {
-                        return resolve(incomingTransformation.search(d));
-                    } else {
-                        return reject('Invalid data from the database.');
-                    }
+                    // if (incomingValidations.search(d)) {
+                    //     return resolve(incomingTransformation.search(d));
+                    // } else {
+                    //     return reject('Invalid data from the database.');
+                    // }
                 });
         }),
         update: function(data) {
             const params = JSON.stringify(data);
-            crud.update(API_URL_SOUNDS + data.bin + '/' + data.soundID, params);
+            return crud.update(api.SOUNDS + data.bin + '/' + data.sound_id, params);
         },
         delete: function(data) {
             alert('TODO: make this delete work');
-            crud.delete(API_URL_SOUNDS + '/' + data.bin  + '/' + data.sound_id)
+            return crud.delete(api.SOUNDS + '/' + data.bin  + '/' + data.sound_id);
         },
-        upload: function(file) {
-            alert('TODO: upload');
+        upload: function(formData, callback) {
+            console.info('api upload');
+            console.info('formData: ', formData);
+            console.info('instance of FormData? ', formData instanceof FormData);
+            return crud.upload(api.AUDIO_UPLOAD, formData, callback);
+            // alert('TODO: upload');
         }
     },
 

@@ -6,7 +6,9 @@ function xhr(type, url, data, options={ }) {
         req.open(type, url, true);
         if (type === "PUT") {
             req.setRequestHeader("Content-type", "application/json");
-        } else if (!(data instanceof FormData)) {
+        } else if (data instanceof FormData) {
+            // req.setRequestHeader("Content-type", "multipart/form-data");
+        } else {
             req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         }
 
@@ -22,17 +24,24 @@ function xhr(type, url, data, options={ }) {
             }
         }
 
+        if (typeof options.onprogress !== 'undefined') {
+            req.onprogress = options.onprogress;
+        }
+
         req.onreadystatechange = () => {
             if (req.readyState === 4) {
                 switch (req.status) {
                     case 200:
                         console.info('req: ', req);
                         break;
+                    case 201:
+                        console.info('req: ', req);
+                        break;
                     case 204:
                         console.info('success');
                         break;
                     case 400:
-                        alert('Authorization Issue');
+                        alert('Bad Request');
                         break;
                     case 401:
                         alert('You must be logged in to complete this action');

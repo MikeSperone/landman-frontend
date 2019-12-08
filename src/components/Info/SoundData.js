@@ -21,11 +21,15 @@ class SoundData extends React.Component {
 
     constructor(props) {
         super(props);
-        const { data } = this.props;
-        this.state = data;
-        console.info('SoundData state: ', this.state);
+        this.props = props;
+        this.state = this.props.data;
         this.handleEdit = this.handleEdit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState(() => ({ name: this.props.name }));
+        console.info('SoundData state: ', this.state);
     }
 
     handleEdit(name, value, checked) {
@@ -44,6 +48,9 @@ class SoundData extends React.Component {
     }
 
     render() {
+        var submitButtonClass = 'pure-button submit ';
+        submitButtonClass += this.props.isEditing ? '' : 'hidden ';
+        submitButtonClass += this.props.audioLoaded ? '' : 'pure-button-disabled ';
         return (
             <div id="soundDataSection">
                 <Form onSubmit={this.handleSubmit}>
@@ -76,13 +83,13 @@ class SoundData extends React.Component {
                         handleEdit={this.handleEdit}
                     />
                     <input
-                        className={(this.props.isEditing) ? "submit" : "submit hidden"}
+                        className={submitButtonClass}
                         type="submit"
                         value="Submit"
                     />
                     <ButtonSection>
                         <Button
-                            className={(this.props.isEditing) ? "edit hidden" : "edit"}
+                            className={(this.props.isEditing || !this.props.permissions.update) ? "edit hidden" : "edit"}
                             onClick={this.props.handleEdit}
                             text={this.props.isNew ? "Add" : "Edit"}
                         />
@@ -92,7 +99,7 @@ class SoundData extends React.Component {
                             text="Cancel"
                         />
                         <Button
-                            className={(this.props.isEditing) ? "delete" : "delete hidden"}
+                            className={(this.props.isEditing || !this.props.permissions.delete) ? "delete" : "delete hidden"}
                             onClick={this.props.handleConfirmDelete}
                             text="Delete"
                         />
@@ -103,4 +110,15 @@ class SoundData extends React.Component {
     }
 
 }
+SoundData.propTypes = {
+    isEditing: PropTypes.bool,
+    new: PropTypes.bool,
+    audioLoaded: PropTypes.number,
+    data: PropTypes.object,
+    handleEdit: PropTypes.func,
+    handleUpdate: PropTypes.func,
+    handleCancel: PropTypes.func,
+    handleConfirmDelete: PropTypes.func,
+    soundData: PropTypes.object
+};
 export default SoundData;

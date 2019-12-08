@@ -61,6 +61,18 @@ describe('sound data validations', () => {
         expect(soundValidation(mockData)).toBe(false);
     });
 
+    test('passes with uppercase flat', () => {
+        const mockData = {
+            name: "one",
+            fingering_id: "10001000000000000000000",
+            pitches: "GB4",
+            description: "Cool sound, but this is just a test.",
+            multiphonic: false,
+            kientzy_id: 1
+        };
+        expect(soundValidation(mockData)).toBe(true);
+    });
+        
     test('fails on name too short', () => {
         const mockData = {
             name: "one",

@@ -24,15 +24,28 @@ const crud = {
     },
 
     update: function(endpoint, params) {
-        if (this.auth(Actions.UPDATE))
+        if (this.auth(Actions.UPDATE)) {
             return xhr("PUT", endpoint, params);
-        else return new Promise((_, rej) => rej({message: { error: 'Invalid authorization' }}));
+        } else {
+            return new Promise((_, rej) => rej({message: { error: 'Invalid authorization' }}));
+        }
     },
 
     delete: function(endpoint) {
-        if (this.auth(Actions.DELETE))
+        if (this.auth(Actions.DELETE)) {
             return xhr("DELETE", endpoint);
-        else return new Promise((_, rej) => rej({message: { error: 'Invalid authorization' }}));
+        } else {
+            return new Promise((_, rej) => rej({message: { error: 'Invalid authorization' }}));
+        }
+    },
+
+    upload: function(endpoint, formData, progressCallback) {
+        // TODO: authorization issues, and callback goes to xhr updates thing
+        if (this.auth(Actions.CREATE)) {
+            return xhr("POST", endpoint, formData, { onprogress: progressCallback });
+        } else {
+            return new Promise((_, rej) => rej({message: { error: 'Invalid authorization' }}));
+        }
     }
 };
 

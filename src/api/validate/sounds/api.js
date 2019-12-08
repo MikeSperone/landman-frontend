@@ -6,6 +6,7 @@ import { API_URL } from '../urls';
 class Sounds extends Api {
 
     constructor(user) {
+        super();
         this._fileName = '';
         this.user = user;
         this.state = {};
