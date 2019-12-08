@@ -20,18 +20,11 @@ class CommentEntry extends React.Component {
         this.author = this.props.author && this.props.author;
         this.hasSoundData = Boolean(this.soundID);
         this.state = {
-            buttonText: 'Edit',
             comment,
             isEditing: false,
             selected: true, // fix this for a "Show Comments button"
         };
 
-        this.bindFunctions();
-    }
-
-    bindFunctions() {
-        this.handleUpdate = this.handleUpdate.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
     }
 
     handleClick(e) {
@@ -59,20 +52,6 @@ class CommentEntry extends React.Component {
         }
     }
 
-    _stopEditing() {
-        console.info('editing done');
-        this.setState(() => ({ buttonText: "Edit", isEditing: false }));
-    }
-
-    handleCancel(e) {
-        e.preventDefault();
-        this._stopEditing();
-    }
-
-    handleUpdate() {
-        this._stopEditing();
-    }
-
     handleEdit(e) {
         e.preventDefault();
         const hasAccess = user.hasAccess(Actions.UPDATE, this.author.id);
@@ -90,7 +69,6 @@ class CommentEntry extends React.Component {
                 {this.state.selected ? (
                     <CommentData
                         data={this.state.comment || {}}
-                        isEditing={this.state.isEditing}
                         permissions={this.props.permissions}
                         isNew={this.props.new}
                     />

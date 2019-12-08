@@ -73,7 +73,12 @@ const APIcalls = {
     comments: {
         create: params => crud.create(api.COMMENTS, params),
         read: sound_id => crud.read(api.COMMENTS + '?sound_id=' + sound_id),
-        update: params => crud.update(api.COMMENTS, params),
+        update: data => {
+            const validatedData = validate.comments(data);
+            if (!validatedData) return alert('Invalid data');
+            const params = JSON.stringify(validatedData);
+            return crud.update(api.COMMENTS + '/' + data.id, params)
+        },
         delete: id => crud.delete(api.COMMENTS, id)
     },
     fingers: {

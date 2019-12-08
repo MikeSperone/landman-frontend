@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Field from '../Field';
 import Button from '../Button';
 import APIcalls from '../../api';
+import { Actions, user } from '../../api';
 
 
 const ButtonSection = styled.div`
@@ -24,24 +25,40 @@ class CommentData extends React.Component {
         this.props = props;
         this.state = this.props.data;
 
+        this.author = {
+            id: this.props.user_id
+        };
+        this.bindFunctions();
+    }
+
+    bindFunctions() {
         this.getUpdates = this.getUpdates.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleEditMode = this.handleEditMode.bind(this);
+        this.editingComplete = this.editingComplete.bind(this);
     }
 
     getUpdates() {
         return {
-            // The following data is required, and can not change
             id: this.props.data.id,
-            sound_id: this.props.data.sound_id,
-            // This is required even if it has not changed
-            comment: this.state.comment,
-            // TODO: update backend to allow this, similar to how sound entry did it
-            // user_id: this.state.author.id,
-            user_id: this.state.user_id,
+            comment: this.state.comment
         }
     }
 
+    editingComplete() {
+        this.setState(() => ({ buttonText: "Edit", isEditing: false }));
+    }
+
+    handleEditMode(e) {
+        e.preventDefault();
+        const hasAccess = user.hasAccess(Actions.UPDATE, this.author.id);
+        if (hasAccess.access) {
+            this.setState(() => ({ buttonText: "Edit", isEditing: true }));
+        } else {
+            alert(hasAccess.message);
+        }
+    }
     handleEdit(name, value, checked) {
         this.setState(prevState => { prevState[name] = value || checked; });
     }
@@ -49,26 +66,23 @@ class CommentData extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         this.setState(
-            () => ({name: this.props.name}),
             () => {
-                console.info('CommentData state: ', this.state)
                 if (this.props.isNew) {
-                    APIcalls.sounds.create(this.state)
-                        .then(this.props.handleUpdate);
+                    APIcalls.comments
+                        .create(this.state)
+                        .then(this.editingComplete);
                 } else {
                     const updatedData = this.getUpdates();
 
-                    APIcalls.sounds.update(updatedData)
-                        .then(this.props.handleUpdate);
+                    APIcalls.comments
+                        .update(updatedData)
+                        .then(this.editingComplete);
                 }
             }
         );
     }
 
     render() {
-        var submitButtonClass = 'pure-button submit ';
-        submitButtonClass += this.props.isEditing ? '' : 'hidden ';
-        submitButtonClass += this.props.audioLoaded ? '' : 'pure-button-disabled ';
 
         return (
             <div id="commentDataSection">
@@ -77,52 +91,49 @@ class CommentData extends React.Component {
                         name="comment"
                         type="text"
                         value={decodeURIComponent(this.state.comment|| '')}
-                        editing={this.props.isEditing}
+                        editing={this.state.isEditing}
                         handleEdit={this.handleEdit}
                     />
                     <Field
                         name="author"
                         type="text"
-                        value={decodeURIComponent(/*this.state.author.username // TODO: update adonis backend to allow this*/this.state.user_id || 'unknown')}
+                        value={decodeURIComponent(this.author.id || 'unknown')}
                         editing={false}
                         handleEdit={this.handleEdit}
                     />
                     <input
-                        className={submitButtonClass}
+                        className={'pure-button submit ' + (this.state.isEditing ? '' : 'hidden ')}
                         type="submit"
                         value="Submit"
                     />
-                    <ButtonSection>
-                        <Button
-                            className={(this.props.isEditing || !this.props.permissions.update) ? "edit hidden" : "edit"}
-                            onClick={this.props.handleEdit}
-                            text={this.props.isNew ? "Add" : "Edit"}
-                        />
-                        <Button
-                            className={(this.props.isEditing) ? "cancel" : "cancel hidden"}
-                            onClick={this.props.handleCancel}
-                            text="Cancel"
-                        />
-                        <Button
-                            className={(this.props.isEditing && this.props.permissions.delete) ? "delete" : "delete hidden"}
-                            onClick={this.props.handleConfirmDelete}
-                            text="Delete"
-                        />
-                    </ButtonSection>
                 </Form>
+                <ButtonSection>
+                    <Button
+                        className={(this.state.isEditing || !this.props.permissions.update) ? "edit hidden" : "edit"}
+                        onClick={this.handleEditMode}
+                        text={this.props.isNew ? "Add" : "Edit"}
+                    />
+                    <Button
+                        className={(this.state.isEditing) ? "cancel" : "cancel hidden"}
+                        onClick={this.editingComplete}
+                        text="Cancel"
+                    />
+                    <Button
+                        className={(this.state.isEditing && this.props.permissions.delete) ? "delete" : "delete hidden"}
+                        onClick={this.handleConfirmDelete}
+                        text="Delete"
+                    />
+                </ButtonSection>
             </div>
         );
     }
 
 }
 CommentData.propTypes = {
-    isEditing: PropTypes.bool,
+    // isEditing: PropTypes.bool,
     new: PropTypes.bool,
     audioLoaded: PropTypes.number,
     data: PropTypes.object,
-    handleEdit: PropTypes.func,
-    handleUpdate: PropTypes.func,
-    handleCancel: PropTypes.func,
     handleConfirmDelete: PropTypes.func,
     commentData: PropTypes.object
 };
