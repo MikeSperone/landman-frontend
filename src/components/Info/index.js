@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SoundEntry from './SoundEntry';
+import { user } from '../../api';
 
 const InfoWrapper = styled.div`
     width: calc(100% - 250px);
@@ -17,6 +18,7 @@ function listSoundsData(props) {
         d ?
         <SoundEntry
             fingering_id={ props.bin }
+            permissions={ user.getAccess() }
             soundData={d}
             key={d.id}
             handleConfirmDelete={props.handleConfirmDelete}
@@ -25,16 +27,22 @@ function listSoundsData(props) {
     ));
 };
 
-const Info = props => (
+const Info = props => {
+    console.info('user.access ', user.getAccess());
+    return (
     <InfoWrapper>
         { props.soundData.length ? listSoundsData(props) : null }
-        <SoundEntry
-            new
-            fingering_id={props.bin}
-            key={'new'}
-        />
+        {user.getAccess().create ?
+            (<SoundEntry
+                new
+                fingering_id={props.bin}
+                key={'new'}
+                permissions={ user.getAccess() }
+            />) :
+            null
+        }
     </InfoWrapper>
-);
+);}
 
 Info.propTypes = {
     bin: PropTypes.string.isRequired,

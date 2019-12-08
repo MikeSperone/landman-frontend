@@ -1,7 +1,6 @@
 import {
     Actions,
     Roles,
-    RolesMap
 } from './permissions';
 
 export default class User {
@@ -22,8 +21,6 @@ export default class User {
     }
 
     get permissions() { 
-        console.info('role; ', this._role);
-        console.info('properties: ', Roles.properties);
         return Roles.properties[this._role].permissions;
     }
 
@@ -31,7 +28,7 @@ export default class User {
         return this._loggedIn;
     }
 
-    isAuthorizedFor(action, contentAuthor=this.email) {
+    isAuthorizedFor(action, contentAuthor=this.id) {
         // contentAuthor set to self by default
         // so by not passing in the author, you are
         // saying content Authorization is not needed
@@ -40,7 +37,7 @@ export default class User {
 
         if (!this.permissions.includes(action)) return false;
 
-        if (contentAuthor !== this.email && [Actions.UPDATE, Actions.DELETE].includes(action)) {
+        if (contentAuthor !== this.id && [Actions.UPDATE, Actions.DELETE].includes(action)) {
             // this indicates user must be a moderator
             return this.permissions.includes(Actions.MODERATE_DATA);
         }
@@ -48,7 +45,15 @@ export default class User {
         return true;
     }
 
-    hasAccess(action) {
+    getAccess() {
+        return {
+            create: this.hasAccess(Actions.CREATE).access,
+            update: this.hasAccess(Actions.UPDATE).access,
+            delete: this.hasAccess(Actions.DELETE).access
+        }
+    }
+
+    hasAccess(action, author=this.id) {
 
         if (!this.isLoggedIn) {
             
@@ -58,7 +63,7 @@ export default class User {
             };
         }
 
-        if (!this.isAuthorizedFor(action)) {
+        if (!this.isAuthorizedFor(action, author)) {
             return {
                 access: false,
                 message: `You do not have permission to ${Actions.properties[action].name}.\nIf you believe this is an error, please contact an administrator.`

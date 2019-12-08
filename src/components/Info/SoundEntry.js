@@ -30,8 +30,6 @@ class SoundEntry extends React.Component {
             loaded: (this.props.isNew) ? 0 : 100
         };
 
-        this.setPermissions();
-
         this.bindFunctions();
     }
 
@@ -40,14 +38,6 @@ class SoundEntry extends React.Component {
         this.updateProgress = this.updateProgress.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-    }
-
-    setPermissions() {
-        this.permissions = {
-            create: user.hasAccess(Actions.CREATE).access,
-            update: user.hasAccess(Actions.UPDATE, this.author).access,
-            delete: user.hasAccess(Actions.DELETE, this.author).access
-        }
     }
 
     createAudioURL() {
@@ -63,8 +53,7 @@ class SoundEntry extends React.Component {
 
         // if there is no soundData, this leads to an "Add new data",
         // which is restricted to logged in users with access
-        const hasAccess = user.hasAccess(Actions.CREATE);
-        if (hasAccess.access) {
+        if (this.props.permissions.create) {
             this.setState(
                 prevState => ({selected: !prevState.selected}),
                 () => {
@@ -78,7 +67,7 @@ class SoundEntry extends React.Component {
                 }
             );
         } else {
-            alert(hasAccess.message);
+            alert('Insufficient permissions to create');
         }
     }
 
@@ -98,7 +87,7 @@ class SoundEntry extends React.Component {
 
     handleEdit(e) {
         e.preventDefault();
-        const hasAccess = user.hasAccess(Actions.UPDATE, this.author);
+        const hasAccess = user.hasAccess(Actions.UPDATE, this.author.id);
         if (hasAccess.access) {
             this.setState(() => ({ buttonText: "Edit", isEditing: true }));
         } else {
@@ -144,7 +133,7 @@ class SoundEntry extends React.Component {
                         data={this.state.soundData || {fingering_id: this.props.fingering_id}}
                         name={this.state.name}
                         isEditing={this.state.isEditing}
-                        permissions={this.permissions}
+                        permissions={this.props.permissions}
                         isNew={this.props.new}
                         audioLoaded={this.state.loaded}
                         handleEdit={this.handleEdit.bind(this)}
@@ -161,7 +150,8 @@ SoundEntry.propTypes = {
     isEditing: PropTypes.bool,
     new: PropTypes.bool,
     handleConfirmDelete: PropTypes.func,
-    soundData: PropTypes.object
+    soundData: PropTypes.object,
+    permissions: PropTypes.object
 };
 
 export default SoundEntry;
