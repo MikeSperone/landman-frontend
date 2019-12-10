@@ -91,14 +91,17 @@ class CommentData extends React.Component {
                     <Field
                         name="comment"
                         type="text"
-                        value={decodeURIComponent(this.state.data.comment|| '')}
+                        value={decodeURIComponent(this.state.data.comment || '')}
                         editing={this.state.isEditing}
                         handleEdit={this.handleEdit}
                     />
                     <Field
                         name="author"
                         type="text"
-                        value={decodeURIComponent(this.state.data.author.username || 'unknown')}
+                        value={decodeURIComponent(
+                            (this.state.data.author && this.state.data.author.username) ||
+                            ''
+                        )}
                         editing={false}
                         handleEdit={this.handleEdit}
                     />
