@@ -37,15 +37,11 @@ class CommentEntry extends React.Component {
         if (this.props.permissions.create) {
             this.setState(
                 prevState => ({selected: !prevState.selected}),
-                () => {
-                    this.setState(
-                        prevState => {
-                            return (prevState.selected) ?
-                                { isEditing: true } :
-                                prevState;
-                        }
-                    );
-                }
+                () => this.setState(
+                    prevState => (prevState.selected) ?
+                        { isEditing: true } :
+                        prevState
+                )
             );
         } else {
             alert('Insufficient permissions to create');
@@ -63,12 +59,12 @@ class CommentEntry extends React.Component {
     }
 
     render() {
-        console.log("rendering comment: ", this.props.comment);
         return (
             <CommentEntryWrapper>
                 {this.state.selected ? (
                     <CommentData
                         data={this.state.comment || {}}
+                        sound_id={this.props.sound_id}
                         permissions={this.props.permissions}
                         isNew={this.props.new}
                     />
@@ -79,11 +75,10 @@ class CommentEntry extends React.Component {
 }
 
 CommentEntry.propTypes = {
-    // isEditing: PropTypes.bool,
     new: PropTypes.bool,
-    sound_id: PropTypes.number,
+    sound_id: PropTypes.number.isRequired,
     comment: PropTypes.object,
-    permissions: PropTypes.object
+    permissions: PropTypes.object.isRequired
 };
 
 export default CommentEntry;

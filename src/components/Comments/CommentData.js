@@ -23,7 +23,9 @@ class CommentData extends React.Component {
     constructor(props) {
         super(props);
         this.props = props;
-        this.state = this.props.data;
+        this.state = {
+            data: this.props.data
+        };
 
         this.author = {
             id: this.props.user_id
@@ -32,16 +34,16 @@ class CommentData extends React.Component {
     }
 
     bindFunctions() {
-        this.getUpdates = this.getUpdates.bind(this);
+        this.compileData = this.compileData.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleEditMode = this.handleEditMode.bind(this);
         this.editingComplete = this.editingComplete.bind(this);
     }
 
-    getUpdates() {
+    compileData() {
         return {
-            id: this.props.data.id,
+            sound_id: this.props.sound_id,
             comment: this.state.comment
         }
     }
@@ -65,17 +67,16 @@ class CommentData extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        const compiledData = this.compileData();
         this.setState(
             () => {
                 if (this.props.isNew) {
                     APIcalls.comments
-                        .create(this.state)
+                        .create(compiledData)
                         .then(this.editingComplete);
                 } else {
-                    const updatedData = this.getUpdates();
-
                     APIcalls.comments
-                        .update(updatedData)
+                        .update(compiledData)
                         .then(this.editingComplete);
                 }
             }
@@ -90,7 +91,7 @@ class CommentData extends React.Component {
                     <Field
                         name="comment"
                         type="text"
-                        value={decodeURIComponent(this.state.comment|| '')}
+                        value={decodeURIComponent(this.state.data.comment|| '')}
                         editing={this.state.isEditing}
                         handleEdit={this.handleEdit}
                     />
@@ -130,12 +131,10 @@ class CommentData extends React.Component {
 
 }
 CommentData.propTypes = {
-    // isEditing: PropTypes.bool,
     new: PropTypes.bool,
     audioLoaded: PropTypes.number,
-    data: PropTypes.object,
+    data: PropTypes.object.isRequired,
     handleConfirmDelete: PropTypes.func,
-    commentData: PropTypes.object
 };
 export default CommentData;
 

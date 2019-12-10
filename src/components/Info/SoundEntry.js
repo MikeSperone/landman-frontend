@@ -147,6 +147,7 @@ class SoundEntry extends React.Component {
                         />
                         <Comments
                             commentData={this.state.commentData || []}
+                            sound_id={this.soundID}
                         />
                     </div>
                 ) : null}

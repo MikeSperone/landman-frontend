@@ -28,24 +28,28 @@ function listCommentData(props) {
 };
 
 const Comment = props => {
-    console.info('user.access ', user.getAccess());
-    return (
-    <CommentWrapper>
-        { props.commentData.length ? listCommentData(props) : null }
-        {user.getAccess().create ?
-            (<CommentEntry
-                new
-                sound_id={props.sound_id}
-                key={'new'}
-                permissions={ user.getAccess() }
-            />) :
-            null
+    return <CommentWrapper>
+        {
+            props.commentData.length ?
+                listCommentData(props) :
+                null
+        }
+        {
+            user.getAccess().create ?
+                <CommentEntry
+                    new
+                    sound_id={props.sound_id}
+                    key={'new'}
+                    permissions={ user.getAccess() }
+                /> :
+                null
         }
     </CommentWrapper>
-);}
+}
 
 Comment.propTypes = {
     commentData: PropTypes.array.isRequired,
+    sound_id: PropTypes.number.isRequired
     // handleConfirmDelete: PropTypes.func.isRequired,
 };
 export default Comment;

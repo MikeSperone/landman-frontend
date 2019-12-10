@@ -71,7 +71,14 @@ const APIcalls = {
     },
 
     comments: {
-        create: params => crud.create(api.COMMENTS, params),
+        create: data => {
+            const validatedData = validate.comments(data);
+            if (!validatedData) return alert('Invalid data');
+            console.info('validatedData: ', validatedData);
+
+            const formData = objectToFormData(validatedData);
+            return crud.create(api.COMMENTS, formData);
+        },
         read: sound_id => crud.read(api.COMMENTS + '?sound_id=' + sound_id),
         update: data => {
             const validatedData = validate.comments(data);
