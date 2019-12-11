@@ -19,7 +19,6 @@ class AddNewAudio extends React.Component {
         this.setState(prevState => { prevState[name] = value || checked; });
     }
     handleSubmit(e) {
-        console.info('new audio state: ', this.state);
         this.setState(() => ({editing: false }));
         this.props.handleSelectedFile(e.target.files[0], this.state.entryName);
     }

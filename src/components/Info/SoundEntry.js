@@ -20,15 +20,16 @@ class SoundEntry extends React.Component {
         super(props);
         const soundData = this.props.soundData;
         const commentData = soundData && soundData.comments;
+        const name = soundData && soundData.name;
         this.soundID = soundData && soundData.id; 
         this.author = soundData && soundData.author;
         this.hasSoundData = Boolean(this.soundID);
-        this.createAudioURL();
+        this.createAudioURL(name);
         this.state = {
             buttonText: 'Edit',
             soundData,
             commentData,
-            name: soundData && soundData.name,
+            name,
             isEditing: false,
             selected: false,
             loaded: (this.props.isNew) ? 0 : 100
@@ -44,9 +45,9 @@ class SoundEntry extends React.Component {
         this.handleCancel = this.handleCancel.bind(this);
     }
 
-    createAudioURL() {
+    createAudioURL(name) {
         this.audioFileUrl = this.props.soundData ?
-            'audio/' + this.props.soundData.fingering_id + '.' + this.props.name + '.mp3' :
+            this.props.soundData.fingering_id + '/' + name + '.mp3' :
             '';
     }
 
