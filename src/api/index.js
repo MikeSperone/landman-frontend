@@ -126,14 +126,11 @@ const APIcalls = {
             const params = JSON.stringify(validatedData);
             return crud.update(api.SOUNDS + '/' + data.id, params);
         },
-        delete: function(data) {
-            alert('TODO: make this delete work');
-            return crud.delete(api.SOUNDS + '/' + data.bin  + '/' + data.sound_id);
+        delete: function(id) {
+            if (id === undefined) return alert('ID is undefined');
+            return crud.delete(api.SOUNDS + '/' + id);
         },
         upload: function(formData, callback) {
-            console.info('api upload');
-            console.info('formData: ', formData);
-            console.info('instance of FormData? ', formData instanceof FormData);
             return crud.upload(api.AUDIO_UPLOAD, formData, callback);
         }
     },

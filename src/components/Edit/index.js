@@ -43,18 +43,26 @@ class Edit extends React.Component {
             spinner: false,
             showDeleteConfirmation: false
         };
+        this.soundIdToDelete = null;
         this.handleDelete = this.handleDelete.bind(this);
     }
     
     handleDelete() {
+        console.info('Edit/i id: ', this.soundIdToDelete);
         this.setState(
             () => ({showDeleteConfirmation: false}),
-            () => alert('deleting this thing (not really)')
-            // () => APIcalls.deleteEntry()
+            () => {
+                if (this.soundIdToDelete) {
+                    APIcalls.sounds.delete(this.soundIdToDelete);
+                } else {
+                    alert('No Sound ID to delete');
+                }
+            }
         );
     }
 
     toggleDelete(v) {
+        console.info('toggleDelete');
         this.setState(() => ({showDeleteConfirmation: v}));
     }
 
@@ -67,7 +75,6 @@ class Edit extends React.Component {
     }
 
     handleFingeringClick(i) {
-        console.log('handleFingeringClick');
         this.setState(() => ({spinner: true}));
         const keyState = this.state.bin;
         const newState = (String(keyState[i]) === "0") ? "1" : "0";
@@ -135,7 +142,10 @@ class Edit extends React.Component {
                         bin={this.state.bin}
                         editType={this.state.editType}
                         onChange={this.handleDataChange.bind(this)}
-                        handleConfirmDelete={() => this.toggleDelete.call(this, true)}
+                        handleConfirmDelete={id => {
+                            this.toggleDelete.call(this, true);
+                            this.soundIdToDelete = id;
+                        }}
                     />
                     <NotFound found={this.state.found} children={this.state.errorMessage} />
                 </div>

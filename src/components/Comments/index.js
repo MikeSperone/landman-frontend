@@ -19,9 +19,9 @@ function listCommentData(props) {
         (<CommentEntry
             sound_id={ props.sound_id}
             permissions={ user.getAccess() }
-            comment={d}
+            commentData={d}
             key={d.id}
-            handleConfirmDelete={props.handleConfirmDelete}
+            confirmDeleteComment={props.confirmDeleteComment}
         />) :
         null
     ));
@@ -49,7 +49,7 @@ const Comment = props => {
 
 Comment.propTypes = {
     commentData: PropTypes.array.isRequired,
-    sound_id: PropTypes.number.isRequired
-    // handleConfirmDelete: PropTypes.func.isRequired,
+    sound_id: PropTypes.number.isRequired,
+    confirmDeleteComment: PropTypes.func.isRequired,
 };
 export default Comment;

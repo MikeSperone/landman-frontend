@@ -70,6 +70,7 @@ class SoundData extends React.Component {
         var submitButtonClass = 'pure-button submit ';
         submitButtonClass += this.props.isEditing ? '' : 'hidden ';
         submitButtonClass += this.props.audioLoaded ? '' : 'pure-button-disabled ';
+        console.info('data: ', this.props.data);
 
         return (
             <div id="soundDataSection">
@@ -107,24 +108,24 @@ class SoundData extends React.Component {
                         type="submit"
                         value="Submit"
                     />
-                    <ButtonSection>
-                        <Button
-                            className={(this.props.isEditing || !this.props.permissions.update) ? "edit hidden" : "edit"}
-                            onClick={this.props.handleEdit}
-                            text={this.props.isNew ? "Add" : "Edit"}
-                        />
-                        <Button
-                            className={(this.props.isEditing) ? "cancel" : "cancel hidden"}
-                            onClick={this.props.handleCancel}
-                            text="Cancel"
-                        />
-                        <Button
-                            className={(this.props.isEditing && this.props.permissions.delete) ? "delete" : "delete hidden"}
-                            onClick={this.props.handleConfirmDelete}
-                            text="Delete"
-                        />
-                    </ButtonSection>
                 </Form>
+                <ButtonSection>
+                    <Button
+                        className={(this.props.isEditing || !this.props.permissions.update) ? "edit hidden" : "edit"}
+                        onClick={this.props.handleEdit}
+                        text={this.props.isNew ? "Add" : "Edit"}
+                    />
+                    <Button
+                        className={(this.props.isEditing) ? "cancel" : "cancel hidden"}
+                        onClick={this.props.handleCancel}
+                        text="Cancel"
+                    />
+                    <Button
+                        className={(this.props.isEditing && this.props.permissions.delete) ? "delete" : "delete hidden"}
+                        onClick={() => this.props.handleConfirmDelete(this.props.data.id)}
+                        text="Delete"
+                    />
+                </ButtonSection>
             </div>
         );
     }

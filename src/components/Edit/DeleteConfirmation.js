@@ -12,7 +12,7 @@ const ConfirmationWrapper = styled.div`
     font-size: 1.5rem;
     padding: 1rem;
     margin: 0 auto;
-    z-index: 999;
+    z-index: 99999;
     > div {
         position: absolute;
         width: 200px;

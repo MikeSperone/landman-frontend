@@ -13,7 +13,6 @@ const InfoWrapper = styled.div`
 `;
 
 function listSoundsData(props) {
-    console.info('list: ', props.soundData);
     return props.soundData.map(d => (
         d ?
         <SoundEntry
@@ -21,7 +20,10 @@ function listSoundsData(props) {
             permissions={ user.getAccess() }
             soundData={d}
             key={d.id}
-            handleConfirmDelete={props.handleConfirmDelete}
+            handleConfirmDelete={id => {
+                console.info('Info/i id: ', id);
+                return props.handleConfirmDelete(id);
+            }}
         /> :
         null
     ));

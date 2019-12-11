@@ -15,12 +15,11 @@ const CommentEntryWrapper = styled.div`
 class CommentEntry extends React.Component {
     constructor(props) {
         super(props);
-        const comment = this.props.comment;
-        this.soundID = comment && comment.id; 
+        const commentData = this.props.commentData;
+        this.soundID = commentData && commentData.id; 
         this.author = this.props.author && this.props.author;
         this.hasSoundData = Boolean(this.soundID);
         this.state = {
-            comment,
             isEditing: false,
             selected: true, // fix this for a "Show Comments button"
         };
@@ -63,7 +62,7 @@ class CommentEntry extends React.Component {
             <CommentEntryWrapper>
                 {this.state.selected ? (
                     <CommentData
-                        data={this.state.comment || {}}
+                        data={this.props.commentData || {}}
                         sound_id={this.props.sound_id}
                         permissions={this.props.permissions}
                         isNew={this.props.new}
@@ -77,7 +76,7 @@ class CommentEntry extends React.Component {
 CommentEntry.propTypes = {
     new: PropTypes.bool,
     sound_id: PropTypes.number.isRequired,
-    comment: PropTypes.object,
+    commentData: PropTypes.object,
     permissions: PropTypes.object.isRequired
 };
 

@@ -76,7 +76,6 @@ class SoundEntry extends React.Component {
     }
 
     _stopEditing() {
-        console.info('editing done');
         this.setState(() => ({ buttonText: "Edit", isEditing: false }));
     }
 
@@ -118,7 +117,6 @@ class SoundEntry extends React.Component {
     }
 
     render() {
-        console.log("rendering: ", this.props.soundData);
         return (
             <SoundEntryWrapper>
                 <AudioPlayer
@@ -144,6 +142,10 @@ class SoundEntry extends React.Component {
                             handleEdit={this.handleEdit.bind(this)}
                             handleUpdate={this.handleUpdate}
                             handleCancel={this.handleCancel}
+                            handleConfirmDelete={id => {
+                                console.info('SoundEntry id: ', id);
+                                return this.props.handleConfirmDelete(id)
+                            }}
                         />
                         <Comments
                             commentData={this.state.commentData || []}
@@ -159,9 +161,9 @@ class SoundEntry extends React.Component {
 SoundEntry.propTypes = {
     isEditing: PropTypes.bool,
     new: PropTypes.bool,
-    handleConfirmDelete: PropTypes.func,
     soundData: PropTypes.object,
-    permissions: PropTypes.object
+    permissions: PropTypes.object,
+    handleConfirmDelete: PropTypes.func
 };
 
 export default SoundEntry;

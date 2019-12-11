@@ -44,7 +44,7 @@ class CommentData extends React.Component {
     compileData() {
         return {
             sound_id: this.props.sound_id,
-            comment: this.state.comment
+            comment: this.state.data.comment
         }
     }
 
@@ -62,7 +62,7 @@ class CommentData extends React.Component {
         }
     }
     handleEdit(name, value, checked) {
-        this.setState(prevState => { prevState[name] = value || checked; });
+        this.setState(prevState => { prevState.data[name] = value || checked; });
     }
 
     handleSubmit(e) {
