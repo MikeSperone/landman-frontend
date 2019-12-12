@@ -6,14 +6,18 @@ import Button from '../Button';
 import APIcalls from '../../api';
 
 
+const SoundDataSection = styled.div`
+   overflow: auto; 
+`;
+
 const ButtonSection = styled.div`
     float: right;
-    margin: 2rem;
 `;
 
 const Form = styled.form.attrs({
     className: "pure-form pure-form-aligned"
 })`
+    width: 100%;
     float: left;
 `;
 
@@ -73,7 +77,7 @@ class SoundData extends React.Component {
         console.info('data: ', this.props.data);
 
         return (
-            <div id="soundDataSection">
+            <SoundDataSection>
                 <Form onSubmit={this.handleSubmit}>
                     <Field
                         name="pitches"
@@ -126,7 +130,7 @@ class SoundData extends React.Component {
                         text="Delete"
                     />
                 </ButtonSection>
-            </div>
+            </SoundDataSection>
         );
     }
 

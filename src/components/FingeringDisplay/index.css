@@ -1,16 +1,17 @@
 .fingeringDisplay {
+    padding: 1rem;
     width: 250px;
     float: left;
 }
 .fingeringItem {
-    min-width: 136px;
+    min-width: 200px;
     float: left;
-    margin: 0 25%;
+    margin: 0 10%;
 }
 .fingeringItem button {
     font-size: 1rem;
     font-weight: bold;
-    border: 1px solid black;
+    border: 2px solid black;
 }
 .open { background-color: white; }
 .closed { background-color: black; }
@@ -23,7 +24,7 @@
     float: left;
 }
 .rightColumn {
-    width: 40px;
+    width: 80px;
     float: left;
 }
 .octave {

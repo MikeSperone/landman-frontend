@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import './index.css';
 
 const SaxKey = props => {
-    const openClosed = (props.keyPressed === "0") ? "open" : "closed";
+    const openClosed = (props.keyPressed === "0") ? " open" : " closed";
     return (
         <button
-            className={props.keyName + " " + openClosed}
-            onClick={() => props.onClick()}
+            className={props.keyName + openClosed}
+            onClick={props.onClick}
         ></button>
     );
 };
@@ -29,8 +29,7 @@ export default class FingeringDisplay extends React.Component {
     }
 
     render() {
-        return (
-            <div className="fingeringDisplay">
+        return <div className="fingeringDisplay" >
             <div className="fingeringItem">
                 <div className="leftColumn">
                     <div>
@@ -79,8 +78,7 @@ export default class FingeringDisplay extends React.Component {
                     </div>
                 </div>
             </div>
-            </div>
-        );
+        </div>
     }
 }
 

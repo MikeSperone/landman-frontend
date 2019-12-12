@@ -7,12 +7,19 @@ import Info from '../Info';
 
 import APIcalls from '../../api';
 import styled from 'styled-components';
+import colors from '../../colors';
 import './index.css';
 
 const EditWrapper = styled.div.attrs({
     className: 'edit'
 })`
+    background: ${colors.golden_4};
+    background: linear-gradient(90deg, ${colors.golden_4} 0%, ${colors.yellow_3} 59%, ${colors.yellow_3} 100%);
     position: relative;
+`;
+
+const MainDisplay = styled.div`
+    display: flex;
 `;
 
 const Spinner = styled.div`
@@ -132,7 +139,7 @@ class Edit extends React.Component {
                         width="300"
                     />
                 </Spinner>
-                <div> 
+                <MainDisplay> 
                     <FingeringDisplay
                         bin={this.state.bin}
                         handleClick={this.handleFingeringClick.bind(this)}
@@ -148,7 +155,7 @@ class Edit extends React.Component {
                         }}
                     />
                     <NotFound found={this.state.found} children={this.state.errorMessage} />
-                </div>
+                </MainDisplay>
             </EditWrapper>
         );
     }

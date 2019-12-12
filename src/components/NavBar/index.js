@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import Login from '../Login';
 import styled from 'styled-components';
+import colors from '../../colors';
 
+const Heading = styled.div.attrs({
+    className: 'pure-menu-heading'
+})`
+    color: white;
+`;
 const HorizontalMenu = styled.div.attrs({
     className: 'pure-menu pure-menu-horizontal'
 })`
+    background: ${colors.blue_1};
     display: flex;
 `;
 class MenuList extends Component {
@@ -73,7 +80,7 @@ class NavBar extends Component {
     render() {
         return (
             <HorizontalMenu>
-                <div className='pure-menu-heading'>Geoffery Landman Saxophone Database</div>
+                <Heading>Geoffery Landman Saxophone Database</Heading>
                 <MenuList>
                     <MenuItem name='About' />
                     <MenuItem name='Saxophone' selected />

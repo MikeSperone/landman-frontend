@@ -5,7 +5,7 @@ import SoundEntry from './SoundEntry';
 import { user } from '../../api';
 
 const InfoWrapper = styled.div`
-    width: calc(100% - 250px);
+    flex-grow: 1;
     float: right;
     @media (max-width: 640px) {
         width: 100%;

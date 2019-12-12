@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import colors from '../colors';
 
-const FormWrapper = styled.div.attrs({
-    className: "pure-control-group"
-})`
-    padding: 1rem;
-    display: block;
+const FormWrapper = styled.div`
+    display: flex;
     clear: both;
+    overflow: auto;
+    margin: 0;
+    border-bottom: 1px solid grey;
 `;
 
 const Label = styled.div`
@@ -14,12 +15,14 @@ const Label = styled.div`
         props.name ? 'block' : 'none'
     };
     float: left;
-    margin: 1rem 0.5rem;
-    width: 75px;
+    padding: 0.5rem;
+    width: 80px;
+    border-right: 1px solid ${colors.blue_1};
 `;
 const Value = styled.div`
+    flex-grow: 1;
+    padding: 0.5rem;
     float: left;
-    margin: 1rem 0.5rem;
 `;
 
 class Form extends React.Component {
