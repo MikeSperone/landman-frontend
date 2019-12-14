@@ -23,12 +23,16 @@ class MenuList extends Component {
 
     clickHandler(e) {
         const me = e.target.parentNode;
-        const allItems = e.target.parentNode.parentNode.children;
+        const allItems = me.parentNode.children;
         const sel = 'pure-menu-selected';
         Array.prototype.forEach.call(allItems, m => {
             if (m.classList.contains(sel)) m.classList.remove(sel);
         });
         me.classList.add(sel);
+        const text = e.target.innerText;
+        if (text && text.toLowerCase() === 'about') {
+            document.querySelector('#about-modal').classList.remove('hidden');
+        }
     }
 
     render() {
