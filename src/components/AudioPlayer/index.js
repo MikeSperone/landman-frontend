@@ -2,6 +2,7 @@ import React from 'react';
 import Field from '../Field';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import colors from '../../colors';
 
 class AddNewAudio extends React.Component {
     constructor(props) {
@@ -68,7 +69,10 @@ const AudioPlayerWrapper = styled.div`
 
 const AudioName = styled.span`
     display: inline-block;
-    background-color: SteelBlue;
+    background-color: ${colors.blue_2};
+    border: black 1px solid;
+    border-left: 0;
+    border-top: 0;
     padding: 0.5rem 1rem;
     cursor: pointer;
 `;

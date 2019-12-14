@@ -5,7 +5,8 @@ import CommentEntry from './CommentEntry';
 import { user } from '../../api';
 
 const CommentWrapper = styled.div`
-    width: calc(100% - 250px);
+    border-left: red 1px solid;
+    border-bottom: red 1px solid;
     float: right;
     @media (max-width: 640px) {
         width: 100%;

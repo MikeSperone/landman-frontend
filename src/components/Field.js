@@ -52,7 +52,7 @@ class Form extends React.Component {
 
 function setLabel(name) {
     return (typeof name === "string")
-        ?  name.charAt(0).toUpperCase() + name.slice(1) + ":"
+        ?  name.charAt(0).toUpperCase() + name.slice(1)
         : '';
 }
 
@@ -80,24 +80,4 @@ const Field = props => {
     }
 };
 
-const CommentField = props => {
-    console.log("props.value: ", props.value);
-    return (null);
-};
-
-/*
-        <FormWrapper>
-            <h3>Comments</h3>
-            {props.value.map((v, ind) => (
-                <CommentBox
-                    key={ind}
-                    name={ind}
-                >{v}</CommentBox>
-            ))}
-        </FormWrapper>
-    );
-};
-*/
-
 export default Field;
-export { CommentField };

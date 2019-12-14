@@ -29,11 +29,15 @@ const Spinner = styled.div`
 `;
 
 const NotFound = styled.div`
+    position: absolute;
     display: ${props => props.found ? 'none' : 'block'};
-    width: calc(100% - 250px);
-    padding: 0.5rem 0;
+    left: calc(50vw - 120px);
+    top: 4rem;
+    height: 4rem;
+    flex: 1;
+    padding: 0.5rem;
     text-align: center;
-    background-color: dodgerblue;
+    background-color: ${colors.blue_2};
     float: right;
 `;
 
