@@ -36,6 +36,8 @@ const Roles = {
     COMMENTER: 6,
     RESERVED: 7,
     READ_ONLY: 8,
+    UNASSIGNED: 9,
+    UNASSIGNED2: 10,
     properties: {
         0: { name: 'super admin', permissions: [Actions.SUPER, Actions.ADMIN, ...modPermissions]},
         1: { name: 'admin', permissions: [Actions.ADMIN, ...modPermissions] },
@@ -45,7 +47,9 @@ const Roles = {
         5: { name: 'normal use', permissions: cruc },
         6: { name: 'commenter', permissions: [Actions.COMMENT] },
         7: { name: 'reserved', permissions: [Actions.READ_ONLY] },
-        8: { name: 'read only', permissions: [Actions.READ_ONLY] }
+        8: { name: 'read only', permissions: [Actions.READ_ONLY] },
+        9: { name: 'unassigned 9', permissions: [Actions.READ_ONLY] },
+        10: { name: 'unassigned 10', permissions: [Actions.READ_ONLY] },
     }
 };
 const RolesMap = Object.entries(Roles)

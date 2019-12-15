@@ -4,6 +4,9 @@
 
 function test(testItem, valueToCheck) {
 
+    const missingValue = valueToCheck === null || typeof valueToCheck === 'undefined';
+    if (missingValue && !testItem.required) return true;
+
     const lengthCheck = !!testItem.length ?
         testItem.length.min <= valueToCheck.length && testItem.length.max >= valueToCheck.length :
         // if there's no length to check, this defaults to true

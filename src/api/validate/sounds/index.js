@@ -11,6 +11,7 @@ const sanitize_functions = {
 const DATA_TESTS = {
     id: {
         type: 'number',
+        required: true,
         customTest: n => true
     },
     name: {
@@ -19,6 +20,7 @@ const DATA_TESTS = {
             min: 4,
             max: 255 
         },
+        required: true,
         customTest: n => true,
     },
     fingering_id: fingerData['fingering_id'],
@@ -28,6 +30,7 @@ const DATA_TESTS = {
             min: 2,
             max: 32
         },
+        required: true,
         customTest: p => {
             console.info('customTest - pitches');
             // should be cleaned first before testing
@@ -54,14 +57,17 @@ const DATA_TESTS = {
             min: 4,
             max: 511 
         },
+        required: true,
         customTest: d => true
     },
     multiphonic: {
         type: 'boolean',
+        required: false,
         customTest: m => true
     },
     kientzy_id: {
         type: 'number',
+        required: false,
         customTest: k => true
     }
 };

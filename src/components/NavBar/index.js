@@ -89,7 +89,7 @@ class NavBar extends Component {
                     <MenuItem name='About' />
                     <MenuItem name='Saxophone' selected />
                     { this.state.isLoggedIn ? (
-                        <MenuItem name={'Greetings ' + this.state.user.firstName} />
+                        <MenuItem name={'Greetings ' + this.state.user.username} />
                     ) : (
                         <LoginMenuWrapper>
                             <div id='menuLink1' className='pure-menu-link'>Login</div>
