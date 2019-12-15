@@ -16,9 +16,9 @@ class CommentEntry extends React.Component {
     constructor(props) {
         super(props);
         const commentData = this.props.commentData;
-        this.soundID = commentData && commentData.id; 
+        this.commentID = commentData && commentData.id; 
         this.author = this.props.author && this.props.author;
-        this.hasSoundData = Boolean(this.soundID);
+        this.hasCommentData= Boolean(this.commentID);
         this.state = {
             isEditing: false,
             selected: true, // fix this for a "Show Comments button"
@@ -27,7 +27,7 @@ class CommentEntry extends React.Component {
     }
 
     handleClick(e) {
-        if (this.hasSoundData) {
+        if (this.hasCommentData) {
             return this.setState(prevState => ({selected: !prevState.selected}));
         }
 

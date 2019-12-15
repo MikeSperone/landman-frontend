@@ -44,6 +44,7 @@ class CommentData extends React.Component {
     compileData() {
         return {
             sound_id: this.props.sound_id,
+            id: this.state.data.id,
             comment: this.state.data.comment
         }
     }
