@@ -18,7 +18,6 @@ const ConfirmationWrapper = styled.div`
         width: 200px;
         left: 0;
         right: 0;
-        bottom: 1rem;
         margin: 0 auto;
         #yes { background-color: #ccc; }
     }

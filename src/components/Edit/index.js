@@ -67,7 +67,8 @@ class Edit extends React.Component {
             () => ({showDeleteConfirmation: false}),
             () => {
                 if (this.soundIdToDelete) {
-                    APIcalls.sounds.delete(this.soundIdToDelete);
+                    APIcalls.sounds.delete(this.soundIdToDelete)
+                        .then(() => window.location.reload(true));
                 } else {
                     alert('No Sound ID to delete');
                 }
