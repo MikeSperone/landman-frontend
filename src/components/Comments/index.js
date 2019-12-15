@@ -8,9 +8,7 @@ const CommentWrapper = styled.div`
     border-left: red 1px solid;
     border-bottom: red 1px solid;
     float: right;
-    @media (max-width: 640px) {
-        width: 100%;
-    }
+    @media (max-width: 640px) { width: 100%; }
 `;
 
 function listCommentData(props) {

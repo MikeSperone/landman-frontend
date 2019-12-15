@@ -10,9 +10,6 @@ const AboutModal = styled.div.attrs({
 })`
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     margin: 4rem;
     padding: 2rem;
     border: solid 3px ${colors.blue_1};
@@ -33,13 +30,16 @@ class About extends React.Component {
                 <h3>Saxophone Database</h3>
                 <Description>
                     <p>
-                        Geoffery Landman did this thing and it's cool.
-                        This database is all .
+                        Saxophonist <a href="https://www.geoffreylandman.com" alt="">Geoffrey Landman</a> approached me in 2016 with the idea of an online catalogue of saxophone sounds and fingerings.  Geoff structured the database in a way that he and others could access the sounds by looking up the fingerings used to create those sounds.  I ran with the idea and tried to setup an API that would be flexible and allow others to access the data directly to create their own front end for their own needs.  This page you are seeing is the front end I created to access the data as Geoffrey had imagined, but I am hoping to see other projects come out of the data that becomes available.
                     </p>
                     <p>
-                        The 'possible fingerings' were generated from a script taking into account all the rules of the saxophone.
-                        All sounds and related information are contributed by the music community.  Currently registration to contribute is by request/invitation only.
-
+                        No data is yet _in_ the database, but with the help of the community, I hope to see the data grow throughout the coming year and beyond.
+                    </p>
+                    <p>
+                        If you are interested in contributing sounds and associated data, please [contact me](mailto: mike@mikesperone.com) for access.
+                    </p>
+                    <p>
+                        If you are interested in accessing the API directly, or contributing to the open source code, you can find more information on the <a href="https://www.github.com/MikeSperone/landman-frontend" alt="github repo">github page</a>.
                     </p>
                 </Description>
                 <ul>

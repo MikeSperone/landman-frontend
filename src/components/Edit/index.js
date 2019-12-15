@@ -19,7 +19,10 @@ const EditWrapper = styled.div.attrs({
 `;
 
 const MainDisplay = styled.div`
-    display: flex;
+    display: inline-block;
+    @media (min-width: 641px) {
+        display: flex;
+    }
 `;
 
 const Spinner = styled.div`
