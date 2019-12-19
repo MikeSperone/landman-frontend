@@ -6,16 +6,13 @@ import xhr from './xhr';
 
 // import { incomingValidations, incomingTransformation, validateUserData } from './validate.js';
 import { validateUserData } from './validate.js';
-const BASE_URL = process.env.REACT_APP_BASE_URL;
-// const API_URL = BASE_URL + "/v1/alto/";
-const API_URL = "http://localhost:3333";
-// const API_URL_SOUNDS = API_URL + "/sounds";
-// const api.LOGIN = API_URL + "/login";
+const API_URL = process.env.DATABASE_URL;
 
 const api = {
+    FINGERS: API_URL + '/alto-sax/',
     COMMENTS: API_URL + '/comments',
     LOGIN: API_URL + '/login',
-    SOUNDS: API_URL + '/sounds',
+    SOUNDS: API_URL + '/sounds/',
     AUDIO_UPLOAD: API_URL + '/sounds/upload',
 }
 Object.freeze(api);
@@ -26,7 +23,6 @@ const user = new User();
 function objectToFormData(validatedData) {
     var formData = new FormData();
     Object.entries(validatedData).forEach(([k, v]) => {
-        // console.log('appending ' + k, ": " + v)
         formData.append(k, v);
     });
     return formData;
@@ -51,7 +47,6 @@ const APIcalls = {
                     // if (!validateResponse(d)) return resolve({});
                     const data = d.data;
                     if (validateUserData(data)) {
-                        console.info(d);
                         user.login(data.access_token.token, data.user);
                         if (user.isLoggedIn) {
                             crud.userEmail = user.email;
@@ -89,7 +84,7 @@ const APIcalls = {
         delete: id => crud.delete(api.COMMENTS, id)
     },
     fingers: {
-        read: bin => crud.read(BASE_URL + '/alto-sax/' + bin)
+        read: bin => crud.read(api.FINGERS + bin)
     },
     sounds: {
 
@@ -109,7 +104,7 @@ const APIcalls = {
 
         },
         read: bin => new Promise((resolve, reject) => { 
-            crud.read(API_URL + '/alto-sax/' + bin)
+            crud.read(api.FINGERS + bin)
                 .then(d => {
                     console.info('read sound data - d: ', d);
                     return resolve(d);
@@ -124,11 +119,11 @@ const APIcalls = {
             const validatedData = validate.sounds(data);
             if (!validatedData) return alert('Invalid data');
             const params = JSON.stringify(validatedData);
-            return crud.update(api.SOUNDS + '/' + data.id, params);
+            return crud.update(api.SOUNDS + data.id, params);
         },
         delete: function(id) {
             if (id === undefined) return alert('ID is undefined');
-            return crud.delete(api.SOUNDS + '/' + id);
+            return crud.delete(api.SOUNDS + id);
         },
         upload: function(formData, callback) {
             return crud.upload(api.AUDIO_UPLOAD, formData, callback);
@@ -136,7 +131,6 @@ const APIcalls = {
     },
 
     _verifyData: function(data) {
-        console.log("verifying data: ", data);
         let finalData = {};
         if (this._validateBin(data.bin)) {
             finalData["bin"] = data.bin;
@@ -150,7 +144,7 @@ const APIcalls = {
                 if (sound.pitches && sound.pitches.length) {
                     newSound["pitch"] = sound.pitch.split(",");
                 }
-                newSound["multi"] = sound.multi;
+                newSound["multiphonic"] = sound.multiphonic;
                 newSound["comments"] = sound.comments;
                 finalData["sounds"].push(newSound);
             });
