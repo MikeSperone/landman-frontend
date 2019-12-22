@@ -63,7 +63,7 @@ describe('sound data validations', () => {
 
     test('passes with uppercase flat', () => {
         const mockData = {
-            name: "one",
+            name: "Test",
             fingering_id: "10001000000000000000000",
             pitches: "GB4",
             description: "Cool sound, but this is just a test.",

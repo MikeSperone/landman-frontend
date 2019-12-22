@@ -21,12 +21,9 @@ function test(testItem, valueToCheck) {
 }
 
 function validateItem(testData, entry) {
-    if (typeof testData !== "undefined") {
-        return test(testData, entry);
-    } else {
-        alert('Invalid sound key');
-        return false;
-    }
+    return (typeof testData !== "undefined") ?
+        test(testData, entry) :
+        false;
 }
 
 const validate = testData => {
@@ -36,7 +33,10 @@ const validate = testData => {
         return keys.every(k => {
             console.info('validating ' + k);
             const isValidated = validateItem(testData[k], data[k]);
-            console.info('isValidated? ', isValidated);
+            if (!isValidated) {
+                // alert('Invalid ' + k + ' value of ' + data[k]);
+                console.info('Invalid ' + k + ' value of ' + data[k]);
+            }
             return isValidated;
         });
         // crossTests(data);
