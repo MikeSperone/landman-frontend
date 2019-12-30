@@ -6,7 +6,8 @@ import xhr from './xhr';
 
 // import { incomingValidations, incomingTransformation, validateUserData } from './validate.js';
 import { validateUserData } from './validate.js';
-const API_URL = process.env.DATABASE_URL;
+const API_URL = process.env.REACT_APP_DATABASE_URL;
+console.info('API_URL: ', API_URL);
 
 const api = {
     FINGERS: API_URL + '/alto-sax/',

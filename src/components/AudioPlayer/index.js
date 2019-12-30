@@ -80,7 +80,7 @@ const AudioName = styled.span`
 class AudioPlayer extends React.Component {
     constructor(props) {
         super(props);
-        this.audioSrc = process.env.DATABASE_URL + '/audio/' + this.props.src;
+        this.audioSrc = process.env.REACT_APP_DATABASE_URL + '/audio/' + this.props.src;
         this.mimeType = this.getMimeTypeFromFilename();
     }
 
